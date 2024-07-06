@@ -39,13 +39,19 @@
             padding: 3px;
             border-radius: 3px;
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, .2);
+            margin-bottom: 10px;
         }
         .progress {
             display: block;
             height: 22px;
-            background-color: #659cef;
             border-radius: 3px;
             transition: width 500ms ease-in-out;
+        }
+        .actual-progress {
+            background-color: #659cef;
+        }
+        .ideal-progress {
+            background-color: #ffd700;
         }
         .button-container {
             display: flex;
@@ -64,8 +70,8 @@
             background-color: #4CAF50;
             color: white;
         }
-        #addCustomHours {
-            background-color: #008CBA;
+        #removeOneHour {
+            background-color: #f44336;
             color: white;
         }
         button:hover {
@@ -77,56 +83,83 @@
             margin-top: 20px;
             border-radius: 5px;
         }
+        .ticket-count {
+            font-size: 48px;
+            text-align: center;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Arcade Tracker</h1>
+        <h1>Hack Club Arcade Tracker</h1>
         <div>
             <label for="ticketGoal">Ticket Goal:</label>
             <input type="number" id="ticketGoal" value="100">
         </div>
-        <div>
-            <label for="currentTickets">Current Tickets:</label>
-            <input type="number" id="currentTickets" value="0">
+        <div class="ticket-count">
+            <span id="currentTickets">0</span> 🎟️
         </div>
         <div>
-            <p>Progress:</p>
+            <p>Your Progress:</p>
             <div class="progress-bar">
-                <span class="progress" id="progressBar"></span>
+                <span class="progress actual-progress" id="progressBar"></span>
             </div>
             <p id="progressText"></p>
         </div>
+        <div>
+            <p>Ideal Progress:</p>
+            <div class="progress-bar">
+                <span class="progress ideal-progress" id="idealProgressBar"></span>
+            </div>
+            <p id="idealProgressText"></p>
+        </div>
         <p id="daysLeft"></p>
         <div class="button-container">
-            <button id="addOneHour">I Hacked for 1 Hour!</button>
-            <button id="addCustomHours">Add Custom Hours</button>
+            <button id="addOneHour">Add 1 Hour</button>
+            <button id="removeOneHour">Oops, remove 1 ticket</button>
         </div>
         <div class="about">
-            <h3>About Arcade:</h3>
-            <ul>
-                <li>Work on projects - Hack on something cool!</li>
-                <li>Bank your hours - Join the Hack Club Slack and use /hack in #arcade to log your hours!</li>
-                <li>Redeem your Prizes - Use your tickets to buy prizes for your next project!</li>
+            <h3>About Hack Club Arcade:</h3>
+            <a href="https://hackclub.com/arcade">Learn more about Arcade</a>
+                <ol>
+                    <li>Work on projects - Hack on something cool!</li>
+                    <li>Bank your hours - Join the Hack Club Slack and use /hack in #arcade to log your hours!</li>
+                    <li>Redeem your Prizes - Use your tickets to buy prizes for your next project!</li>
             </ul>
         </div>
     </div>
 
     <script>
         const ticketGoalInput = document.getElementById('ticketGoal');
-        const currentTicketsInput = document.getElementById('currentTickets');
+        const currentTicketsElement = document.getElementById('currentTickets');
         const progressBar = document.getElementById('progressBar');
         const progressText = document.getElementById('progressText');
+        const idealProgressBar = document.getElementById('idealProgressBar');
+        const idealProgressText = document.getElementById('idealProgressText');
         const daysLeftElement = document.getElementById('daysLeft');
         const addOneHourButton = document.getElementById('addOneHour');
-        const addCustomHoursButton = document.getElementById('addCustomHours');
+        const removeOneHourButton = document.getElementById('removeOneHour');
 
         const startDate = new Date('2024-06-18');
         const endDate = new Date('2024-08-31');
 
+        function loadFromStorage() {
+            const storedGoal = localStorage.getItem('ticketGoal');
+            const storedTickets = localStorage.getItem('currentTickets');
+            
+            if (storedGoal) ticketGoalInput.value = storedGoal;
+            if (storedTickets) currentTicketsElement.textContent = storedTickets;
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('ticketGoal', ticketGoalInput.value);
+            localStorage.setItem('currentTickets', currentTicketsElement.textContent);
+        }
+
         function updateProgress() {
             const ticketGoal = parseInt(ticketGoalInput.value);
-            const currentTickets = parseInt(currentTicketsInput.value);
+            const currentTickets = parseInt(currentTicketsElement.textContent);
             const progress = (currentTickets / ticketGoal) * 100;
             const cappedProgress = Math.min(progress, 100);
 
@@ -136,26 +169,33 @@
             const now = new Date();
             const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
             const passedDays = Math.ceil((now - startDate) / (1000 * 60 * 60 * 24));
-            const remainingDays = totalDays - passedDays;
-            daysLeftElement.textContent = `Days Left: ${Math.max(remainingDays, 0)}`;
+            const remainingDays = Math.max(totalDays - passedDays, 0);
+            daysLeftElement.textContent = `Days Left: ${remainingDays}`;
+
+            const idealProgress = (passedDays / totalDays) * 100;
+            const cappedIdealProgress = Math.min(idealProgress, 100);
+            idealProgressBar.style.width = `${cappedIdealProgress}%`;
+            idealProgressText.textContent = `Ideal: ${cappedIdealProgress.toFixed(1)}%`;
+
+            saveToStorage();
         }
 
         ticketGoalInput.addEventListener('input', updateProgress);
-        currentTicketsInput.addEventListener('input', updateProgress);
 
         addOneHourButton.addEventListener('click', () => {
-            currentTicketsInput.value = parseInt(currentTicketsInput.value) + 1;
+            currentTicketsElement.textContent = parseInt(currentTicketsElement.textContent) + 1;
             updateProgress();
         });
 
-        addCustomHoursButton.addEventListener('click', () => {
-            const hours = prompt("Enter the number of hours:");
-            if (hours !== null && !isNaN(hours)) {
-                currentTicketsInput.value = parseInt(currentTicketsInput.value) + parseInt(hours);
+        removeOneHourButton.addEventListener('click', () => {
+            const currentTickets = parseInt(currentTicketsElement.textContent);
+            if (currentTickets > 0) {
+                currentTicketsElement.textContent = currentTickets - 1;
                 updateProgress();
             }
         });
 
+        loadFromStorage();
         updateProgress();
     </script>
 </body>
