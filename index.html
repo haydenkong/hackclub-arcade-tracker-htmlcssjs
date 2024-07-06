@@ -4,21 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arcade Tracker</title>
+
+
+    <!-- Google fonts - Official Arcade fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Slackey&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+
+
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 20px;
-            background-color: #f4f4f4;
+            background-color: #fbefd6;
         }
         .container {
-            max-width: 600px;
+            max-width: 650px;
             margin: auto;
-            background: white;
             padding: 20px;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         h1 {
             text-align: center;
@@ -63,70 +70,134 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 1.4rem;
             transition: background-color 0.3s ease;
         }
         #addOneHour {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #ff5c16;
+            color: #fbefd6;
+            transition: 0.2s;
+            border: #fb8b3c 1px solid;
+        }
+        #addOneHour:hover {
+            /* background-color: #ff7f2a; */
+            transform: scale(1.05);
+        }
+        #addOneHour:active {
+            transform: scale(0.95);
         }
         #removeOneHour {
-            background-color: #f44336;
-            color: white;
+            background-color: #fbefd6;
+            color: #fb8b3c;
+            border: #fb8b3c 1px solid;
+            transition: 0.2s;
         }
-        button:hover {
+        #removeOneHour:hover {
+            /* background-color: #ff7f2a; */
+            transform: scale(1.05);
+        }
+        #removeOneHour:active {
+            transform: scale(0.95);
+        }
+        /* button:hover {
             opacity: 0.8;
-        }
+        } */
         .about {
-            background-color: #f9f9f9;
+            background-color: #00afb3;
+            color: #fbefd6;
             padding: 15px;
             margin-top: 20px;
             border-radius: 5px;
         }
         .ticket-count {
-            font-size: 48px;
+            font-size: 4rem;
             text-align: center;
-            margin: 20px 0;
+            margin: 5px 0;
+        }
+        .font-1{
+            font-family: 'Slackey';
+            color: #fb8b3c;
+        }
+        .font-2{
+            font-family: 'Gaegu';
+        }
+        .heading{
+            font-size: 2.5rem;
+            margin-bottom: 0px;
+        }
+        .description{
+            font-size: 1.4rem;
+            text-align: center;
+            margin: 0px;
+            margin-bottom: 30px;
+        }
+        a{
+            color: #ef3553;
+            text-decoration: underline;
+            text-underline-position: under;
+        }
+        a:hover{
+            color: #ef3553;
+            text-decoration: underline wavy;
+        }
+        .about-listed{
+            letter-spacing: 0.01px;
+            font-size: 1.2rem;
+        }
+        .progress-bar-header{
+            font-size: 1.5rem;
+            margin-bottom: 0px;
+        }
+        .progress-bar-text{
+            font-size: 1.0rem;
+            margin-top: 0px;
+        }
+        .days-remaining{
+            font-size: 1.8rem;
+            text-align: center;
+            margin: 5px 0px;
+            margin-bottom: 50px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Hack Club Arcade Tracker</h1>
+        <h1 class="font-1 heading">The Arcade Tracker</h1>
+        <p class="font-2 description">Track your progress towards your goal for the <a href="https://hackclub.com/arcade">Hack Club Arcade</a>!</p>
         <div>
             <label for="ticketGoal">Ticket Goal:</label>
             <input type="number" id="ticketGoal" value="100">
         </div>
-        <div class="ticket-count">
-            <span id="currentTickets">0</span> 🎟️
+        <div class="ticket-count font-1">
+            <span id="currentTickets" style="color: #00afb3;">0</span> 🎟️
         </div>
         <div>
-            <p>Your Progress:</p>
+            <p class="progress-bar-header font-2">Your Progress:</p>
             <div class="progress-bar">
                 <span class="progress actual-progress" id="progressBar"></span>
             </div>
-            <p id="progressText"></p>
+            <p id="progressText" class="progress-bar-text"></p>
         </div>
         <div>
-            <p>Ideal Progress:</p>
+            <p class="progress-bar-header font-2">Ideal Progress:</p>
             <div class="progress-bar">
                 <span class="progress ideal-progress" id="idealProgressBar"></span>
             </div>
-            <p id="idealProgressText"></p>
+            <p id="idealProgressText" class="progress-bar-text"></p>
         </div>
-        <p id="daysLeft"></p>
+        <p class="days-remaining font-2" style="color: #000000;" id="daysLeft"></p>
         <div class="button-container">
-            <button id="addOneHour">Add 1 Hour</button>
-            <button id="removeOneHour">Oops, remove 1 ticket</button>
+            <button class="font-1" id="addOneHour">Add 1 Hour</button>
+            <button class="font-1" id="removeOneHour">Oops, remove 1 ticket</button>
         </div>
         <div class="about">
-            <h3>About Hack Club Arcade:</h3>
-            <a href="https://hackclub.com/arcade">Learn more about Arcade</a>
-                <ol>
-                    <li>Work on projects - Hack on something cool!</li>
-                    <li>Bank your hours - Join the Hack Club Slack and use /hack in #arcade to log your hours!</li>
-                    <li>Redeem your Prizes - Use your tickets to buy prizes for your next project!</li>
-            </ul>
+            <h3 class="font-1" style="color: #fbefd6; font-size: 1.5rem; margin-bottom: 0px; text-align: center;">How it works</h3>
+            <!-- <a style="color: #dde6ff; text-align: center;" href="https://hackclub.com/arcade">Learn more about Arcade</a> -->
+                <ol class="font-2">
+                    <li class="about-listed"><b>Work on projects</b> - Hack on something cool!</li>
+                    <li class="about-listed"><b>Bank your hours</b> - Join the Hack Club Slack and use /hack in #arcade to log your hours!</li>
+                    <li class="about-listed"><b>Redeem your Prizes</b> - Use your tickets to buy prizes for your next project!</li>
+                </ol>    
         </div>
     </div>
 
@@ -164,7 +235,7 @@
             const cappedProgress = Math.min(progress, 100);
 
             progressBar.style.width = `${cappedProgress}%`;
-            progressText.textContent = `${cappedProgress.toFixed(1)}% complete`;
+            progressText.textContent = `You are ${cappedProgress.toFixed(1)}% complete to your goal of ${ticketGoal} tickets.`;
 
             const now = new Date();
             const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
@@ -175,7 +246,7 @@
             const idealProgress = (passedDays / totalDays) * 100;
             const cappedIdealProgress = Math.min(idealProgress, 100);
             idealProgressBar.style.width = `${cappedIdealProgress}%`;
-            idealProgressText.textContent = `Ideal: ${cappedIdealProgress.toFixed(1)}%`;
+            idealProgressText.textContent = `You should be ${cappedIdealProgress.toFixed(1)}% complete.`;
 
             saveToStorage();
         }
