@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcade Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            padding: 3px;
+            border-radius: 3px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, .2);
+        }
+        .progress {
+            display: block;
+            height: 22px;
+            background-color: #659cef;
+            border-radius: 3px;
+            transition: width 500ms ease-in-out;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        #addOneHour {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #addCustomHours {
+            background-color: #008CBA;
+            color: white;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        .about {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Arcade Tracker</h1>
+        <div>
+            <label for="ticketGoal">Ticket Goal:</label>
+            <input type="number" id="ticketGoal" value="100">
+        </div>
+        <div>
+            <label for="currentTickets">Current Tickets:</label>
+            <input type="number" id="currentTickets" value="0">
+        </div>
+        <div>
+            <p>Progress:</p>
+            <div class="progress-bar">
+                <span class="progress" id="progressBar"></span>
+            </div>
+            <p id="progressText"></p>
+        </div>
+        <p id="daysLeft"></p>
+        <div class="button-container">
+            <button id="addOneHour">I Hacked for 1 Hour!</button>
+            <button id="addCustomHours">Add Custom Hours</button>
+        </div>
+        <div class="about">
+            <h3>About Arcade:</h3>
+            <ul>
+                <li>Work on projects - Hack on something cool!</li>
+                <li>Bank your hours - Join the Hack Club Slack and use /hack in #arcade to log your hours!</li>
+                <li>Redeem your Prizes - Use your tickets to buy prizes for your next project!</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const ticketGoalInput = document.getElementById('ticketGoal');
+        const currentTicketsInput = document.getElementById('currentTickets');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const daysLeftElement = document.getElementById('daysLeft');
+        const addOneHourButton = document.getElementById('addOneHour');
+        const addCustomHoursButton = document.getElementById('addCustomHours');
+
+        const startDate = new Date('2024-06-18');
+        const endDate = new Date('2024-08-31');
+
+        function updateProgress() {
+            const ticketGoal = parseInt(ticketGoalInput.value);
+            const currentTickets = parseInt(currentTicketsInput.value);
+            const progress = (currentTickets / ticketGoal) * 100;
+            const cappedProgress = Math.min(progress, 100);
+
+            progressBar.style.width = `${cappedProgress}%`;
+            progressText.textContent = `${cappedProgress.toFixed(1)}% complete`;
+
+            const now = new Date();
+            const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+            const passedDays = Math.ceil((now - startDate) / (1000 * 60 * 60 * 24));
+            const remainingDays = totalDays - passedDays;
+            daysLeftElement.textContent = `Days Left: ${Math.max(remainingDays, 0)}`;
+        }
+
+        ticketGoalInput.addEventListener('input', updateProgress);
+        currentTicketsInput.addEventListener('input', updateProgress);
+
+        addOneHourButton.addEventListener('click', () => {
+            currentTicketsInput.value = parseInt(currentTicketsInput.value) + 1;
+            updateProgress();
+        });
+
+        addCustomHoursButton.addEventListener('click', () => {
+            const hours = prompt("Enter the number of hours:");
+            if (hours !== null && !isNaN(hours)) {
+                currentTicketsInput.value = parseInt(currentTicketsInput.value) + parseInt(hours);
+                updateProgress();
+            }
+        });
+
+        updateProgress();
+    </script>
+</body>
+</html>
