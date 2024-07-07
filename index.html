@@ -14,7 +14,6 @@
 
     <link rel="icon" href="favicon.png" type="image/x-icon">
 
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -35,31 +34,24 @@
         }
         label {
             display: block;
-            /* margin-bottom: 5px; */
         }
         input[type="number"] {
             max-width: 60px;
-            /* padding: 8px; */
-            /* margin-bottom: 10px; */
             background-color: #ede5d3;
             border-radius: 0px;
             border: none;
-            /* border-bottom: #00afb3 2px solid; */
             outline: none;
             border-radius: 5px;
             font-size: 1.4rem;
         }
         .inline-container {
-            display: inline-flex; /* Use inline-flex to allow centering within text-align center */
+            display: inline-flex;
             align-items: center;
-            gap: 10px; /* Adjust the gap between label and input if needed */
+            gap: 10px;
         }
-
         .inline-container label {
             margin: 0;
-            /* margin-bottom: 8px; */
         }
-
         .inline-container input[type="number"] {
             flex: 2;
             padding: 8px;
@@ -83,10 +75,10 @@
             left: 0;
         }
         .actual-progress {
-            background-color: #fb8b3c;
+            background-color: #00afb3;
         }
         .ideal-progress {
-            background-color: #00b0b3;
+            background-color: #fb8b3c;
         }
         .button-container {
             display: flex;
@@ -108,7 +100,6 @@
             border: #fb8b3c 1px solid;
         }
         #addOneHour:hover {
-            /* background-color: #ff7f2a; */
             transform: scale(1.05);
         }
         #addOneHour:active {
@@ -121,15 +112,11 @@
             transition: 0.2s;
         }
         #removeOneHour:hover {
-            /* background-color: #ff7f2a; */
             transform: scale(1.05);
         }
         #removeOneHour:active {
             transform: scale(0.95);
         }
-        /* button:hover {
-            opacity: 0.8;
-        } */
         .about {
             background-color: #00afb3;
             color: #fbefd6;
@@ -163,6 +150,7 @@
             color: #ef3553;
             text-decoration: underline;
             text-underline-position: under;
+            cursor: pointer;
         }
         a:hover{
             color: #ef3553;
@@ -187,6 +175,30 @@
             text-align: center;
             margin: 5px 0px;
         }
+        .progressbar-color{
+            min-width: 20px;
+            min-height: 20px;
+            max-width: 20px;
+            max-height: 20px;
+            background-color: #00afb3;
+            margin-top: 3px;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+        .idealprogressbar-color{
+            min-width: 20px;
+            min-height: 20px;
+            max-width: 20px;
+            max-height: 20px;
+            background-color: #fb8b3c;
+            margin-top: 3px;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+        .spanText{
+            font-size: 1.2rem;
+            /* font-weight: bold; */
+        }
     </style>
 </head>
 <body>
@@ -204,14 +216,26 @@
         <div class="ticket-count font-1">
             <span id="currentTickets" style="color: #00afb3;">0</span> 🎟️
         </div>
+        <div style="text-align: center;">
+            <a id="enterTicketsLink" class="font-2">Enter Tickets</a>
+        </div>
         <div>
             <p class="progress-bar-header font-2">Your Progress:</p>
             <div class="progress-bar">
                 <div class="progress actual-progress" id="progressBar"></div>
                 <div class="progress ideal-progress" id="idealProgressBar"></div>
             </div>
-            <p id="progressText" class="progress-bar-text"></p>
-            <p id="idealProgressText" class="progress-bar-text"></p>
+
+            <div style="display: flex;">
+                <div class="progressbar-color"></div>
+                <p id="progressText" class="progress-bar-text"></p>
+            </div>
+
+            <div style="display: flex;">
+                <div class="idealprogressbar-color"></div>
+                <p id="idealProgressText" class="progress-bar-text"></p>
+            </div>
+
         </div>
 
         
@@ -225,15 +249,20 @@
         </div>
         <div class="about">
             <h3 class="font-1" style="color: #fbefd6; font-size: 1.5rem; margin-bottom: 0px; text-align: center;">How it works</h3>
-            <!-- <a style="color: #dde6ff; text-align: center;" href="https://hackclub.com/arcade">Learn more about Arcade</a> -->
-                <ol class="font-2">
-                    <li class="about-listed"><b>Work on projects</b> - Hack on something cool!</li>
-                    <li class="about-listed"><b>Bank your hours</b> - Join the <a style="color: #fbefd6" href="https://hackclub.com/slack">Hack Club Slack</a> and use /hack in #arcade to log your hours!</li>
-                    <li class="about-listed"><b>Redeem your Prizes</b> - Use your tickets to buy prizes for your next project!</li>
-                </ol>    
+            <ol class="font-2">
+                <li class="about-listed"><b>Work on projects</b> - Hack on something cool!</li>
+                <li class="about-listed"><b>Bank your hours</b> - Join the <a style="color: #fbefd6" href="https://hackclub.com/slack">Hack Club Slack</a> and use /hack in #arcade to log your hours!</li>
+                <li class="about-listed"><b>Redeem your Prizes</b> - Use your tickets to buy prizes for your next project!</li>
+            </ol>    
         </div>
-    </div>
 
+        <h2 class="font-1" style="font-size: 2rem; text-align: center;">Faq</h2>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem;">I am still working on the FAQ, but in the meantime, you can have a look at the <a href="https://docs.google.com/document/d/1RXCe1nNrFdiolKCknkR5Ho1AG7Kf_2LsTAKTHxQodic/">official FAQ</a>, <a href="https://github.com/hackclub/arcade-constitution">Arcade Constitution</a>, or message the #arcade-help channel on the <a href="https://hackclub.com/slack">Hack Club Slack</a>! Alternatively, you can visit the FAQ section of the <a href="https://hackclub.com/arcade/">Hack Club Arcade Website</a>.</p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem;">If you have any suggestions or issues, contact me on the Hack Club Slack: @Hayden Kong</p>
+    </div>
+    
+
+    
     <script>
         const ticketGoalInput = document.getElementById('ticketGoal');
         const currentTicketsElement = document.getElementById('currentTickets');
@@ -245,6 +274,7 @@
         const addOneHourButton = document.getElementById('addOneHour');
         const removeOneHourButton = document.getElementById('removeOneHour');
         const ticketsLeftElement = document.getElementById('tickets-left');
+        const enterTicketsLink = document.getElementById('enterTicketsLink');
 
         const startDate = new Date('2024-06-18');
         const endDate = new Date('2024-08-31');
@@ -269,7 +299,8 @@
             const cappedProgress = Math.min(progress, 100);
 
             progressBar.style.width = `${cappedProgress}%`;
-            progressText.textContent = `You are ${cappedProgress.toFixed(1)}% complete to your goal of ${ticketGoal} tickets.`;
+            // progressText.textContent = `You are ${cappedProgress.toFixed(1)}% complete to your goal of ${ticketGoal} tickets.`;
+            progressText.innerHTML += `You are <span class="font-2 spanText">${cappedProgress.toFixed(1)}%</span> complete to your goal of ${ticketGoal} tickets.`;
 
             const now = new Date();
             const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
@@ -282,7 +313,7 @@
             const idealProgress = (passedDays / totalDays) * 100;
             const cappedIdealProgress = Math.min(idealProgress, 100);
             idealProgressBar.style.width = `${cappedIdealProgress}%`;
-            idealProgressText.textContent = `You should be ${cappedIdealProgress.toFixed(1)}% complete.`;
+            idealProgressText.innerHTML = `You should be <span class="font-2 spanText"> ${cappedIdealProgress.toFixed(1)}%</span> complete.`;
 
             // Update z-index dynamically
             if (cappedProgress >= cappedIdealProgress) {
@@ -308,6 +339,14 @@
             const currentTickets = parseInt(currentTicketsElement.textContent);
             if (currentTickets > 0) {
                 currentTicketsElement.textContent = currentTickets - 1;
+                updateProgress();
+            }
+        });
+
+        enterTicketsLink.addEventListener('click', () => {
+            const tickets = prompt('Enter the number of tickets:');
+            if (tickets !== null && !isNaN(tickets) && tickets >= 0) {
+                currentTicketsElement.textContent = tickets;
                 updateProgress();
             }
         });
