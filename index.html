@@ -300,7 +300,7 @@
 
             progressBar.style.width = `${cappedProgress}%`;
             // progressText.textContent = `You are ${cappedProgress.toFixed(1)}% complete to your goal of ${ticketGoal} tickets.`;
-            progressText.innerHTML += `You are <span class="font-2 spanText">${cappedProgress.toFixed(1)}%</span> complete to your goal of ${ticketGoal} tickets.`;
+            progressText.innerHTML = `You are <span class="font-2 spanText">${cappedProgress.toFixed(1)}%</span> complete to your goal of ${ticketGoal} tickets.`;
 
             const now = new Date();
             const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
