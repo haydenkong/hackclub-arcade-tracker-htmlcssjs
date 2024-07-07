@@ -11,68 +11,53 @@
     <link href="https://fonts.googleapis.com/css2?family=Slackey&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
 
-    <link rel="icon" href="favicon.png" type="image/x-icon">
 
     <style>
         body {
-            font-family: Phantom Sans, sans-serif;
-            background-color: #fbefd6;
-            height: 100vh;
-            margin: 0;
-            box-sizing: border-box; /* Ensure padding and borders are included in element's total width and height */
-        }
-
-        .shop-section {
+            font-family: Arial, sans-serif;
+            background-color: #fff8e7;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            height: 100vh;
+            margin: 0;
         }
         .container {
             display: flex;
-            flex-wrap: wrap;
-            gap: 50px;
-            justify-content: center;
+            gap: 20px;
         }
-
         .card {
-            width: 100%; /* Full width on smaller screens */
-            max-width: 250px; /* Set a maximum width */
-            background-color: #00afb3;
+            width: 200px;
+            /* height: 420px; */
+            background-color: #00b8b8;
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transform: rotate(3deg);
-            transition: all 0.5s ease;
+            transform: rotate(5deg);
+            transition: all 0.3s ease;
             position: relative;
             overflow: visible;
-            color: #ffefc7;
-            flex: 1 1 calc(33.333% - 50px); /* Responsive width with gap consideration */
         }
         .card:hover {
-            transform: rotate(0deg) scale(1.10);
+            transform: rotate(0deg) scale(1.05);
         }
         .ticket {
             position: absolute;
             top: 5px;
-            text-align: center;
-            min-width: 100px;
             transform: rotate(10deg);
             right: -10px;
-            background-color: #ff8d3d;
-            color: #ffefc7;
-            padding: 0px 15px 0px 15px;
-            font-size: 2rem;
+            background-color: #ff9933;
+            color: white;
+            padding: 5px 15px 5px 10px;
+            font-size: 1.5rem;
             font-weight: bold;
+            border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            padding-left: 15px;
             font-family: 'Gaegu';
-            margin-top: 0px;
-            margin-bottom: 0px;
         }
         .ticket::after {
             content: '🎟️';
-            margin: 0px;
-            margin-left: 10px;
         }
         .card-content {
             height: 100%;
@@ -80,7 +65,7 @@
             flex-direction: column;
         }
         .card-image {
-            height: 250px;
+            height: 180px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -94,16 +79,19 @@
             object-fit: contain;
         }
         h2 {
+            color: white;
             margin: 0 0 10px 0;
             font-size: 28px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
         h3 {
+            color: white;
             margin: 0 0 10px 0;
             font-size: 18px;
             font-weight: normal;
         }
         p {
+            color: white;
             font-size: 14px;
             margin: 0 0 10px 0;
         }
@@ -111,257 +99,47 @@
             margin-top: auto;
             font-size: 14px;
         }
-        .buy-section {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        select, button {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #ffefc7;
-            font-size: 16px;
-            cursor: pointer;
-            font-family: 'Gaegu';
-        }
-        button {
-            background-color: #00878a;
-            color: #ffefc7;
-            font-weight: bold;
-            transition: 0.2s;
-            padding: 10px 15px;
-        }
-        button:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            transform: scale(1.05);
-        }
-        .shipping {
-            position: absolute;
-            bottom: 12px;
-            right: 2px;
-            width: 30px;
-            font-size: 2.2rem;
-            height: 20px;
-            transform: rotate(-3deg);
-        }
         .font-1{
             font-family: 'Slackey';
         }
         .font-2{
             font-family: 'Gaegu';
         }
-        .heading{
-            font-size: 2rem;
-        }
-        .title{
-            font-size: 3rem;
-            text-align: center;
-            color: #ff8d3d;
-            margin-top: 50px;
-            margin-bottom: 50px;
-        }
     </style>
 </head>
 <body>
-    <h1 class="font-1 title">The Arcade Shop</h1>
-    <div class="shop-section">
-        <div class="container">
-
-            <div class="card">
-                <div class="ticket">1</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-c1gqq7ttf-hack-club-bot.vercel.app/0sticker_pile_2.png" alt="Soldering Kit">
-                    </div>
-                    <h2 class="font-1 heading">Pile of stickers</h2>
-                    <h3>Dealer's choice! We'll send you 3 random stickers. You can have whatever you want, as long as it's random!</h3>
-                    <p class="order-info">You can order up to 10 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
+    <div class="container">
+        <div class="card">
+            <div class="ticket">7</div>
+            <div class="card-content">
+                <div class="card-image">
+                    <img src="https://cloud-fyxfbdwdl-hack-club-bot.vercel.app/0multimeter.png" alt="Multimeter">
                 </div>
-                <div class="shipping">📦</div>
+                <h2 class="font-1">Multimeter</h2>
+                <p class="order-info">You can order up to 5 of these</p>
             </div>
-            <div class="card">
-                <div class="ticket">2</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-50x4zfjwx-hack-club-bot.vercel.app/0enjoy_1.png" alt="Arduino Starter Kit">
-                    </div>
-                    <h2 class="font-1 heading">Sticker</h2>
-                    <h3>of your choisce</h3>
-                    <p class="order-info">You can order up to 10 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
+        </div>
+        <div class="card">
+            <div class="ticket">7</div>
+            <div class="card-content">
+                <div class="card-image">
+                    <img src="https://cloud-for73aw9b-hack-club-bot.vercel.app/019719_3.png" alt="Arcade Ticket Counter">
                 </div>
-                <div class="shipping">📦</div>
+                <h2 class="font-1">Arcade Ticket Counter</h2>
+                <h3>(Timer)</h3>
+                <p>(formerly the Hack Hour Clock)</p>
+                <p class="order-info">You can order up to 1 of these</p>
             </div>
-            <div class="card">
-                <div class="ticket">4</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-nozsvexvx-hack-club-bot.vercel.app/0universal_paperclips_title_screen.png" alt="Raspberry Pi">
-                    </div>
-                    <h2 class="font-1 heading">OpenAI credits</h2>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
+        </div>
+        <div class="card">
+            <div class="ticket">8</div>
+            <div class="card-content">
+                <div class="card-image">
+                    <img src="https://cloud-elfpck7gj-hack-club-bot.vercel.app/0screenshot_2024-06-14_at_07.42.35.png" alt="YubiKey">
                 </div>
-                <div class="shipping">📦</div>
+                <h2 class="font-1">YubiKey</h2>
+                <p class="order-info">You can order up to 5 of these</p>
             </div>
-
-
-            <div class="card">
-                <div class="ticket">7</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img style="height: 250px;" src="https://cloud-fyxfbdwdl-hack-club-bot.vercel.app/0multimeter.png" alt="Multimeter">
-                    </div>
-                    <h2 class="font-1 heading">Multimeter</h2>
-                    <p class="order-info">You can order up to 5 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">7</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-for73aw9b-hack-club-bot.vercel.app/019719_3.png" alt="Arcade Ticket Counter">
-                    </div>
-                    <h2 class="font-1 heading">Arcade Ticket Counter</h2>
-                    <h3>(Timer)</h3>
-                    <p>(formerly the Hack Hour Clock)</p>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">8</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-elfpck7gj-hack-club-bot.vercel.app/0screenshot_2024-06-14_at_07.42.35.png" alt="YubiKey">
-                    </div>
-                    <h2 class="font-1 heading">YubiKey</h2>
-                    <p class="order-info">You can order up to 5 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            
-            
-
-            <div class="card">
-                <div class="ticket">5</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-h9w3u6z1v.vercel.app/01.png" alt="Soldering Kit">
-                    </div>
-                    <h2 class="font-1 heading">Soldering Kit</h2>
-                    <p class="order-info">You can order up to 2 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">10</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-h9w3u6z1v.vercel.app/02.png" alt="Arduino Starter Kit">
-                    </div>
-                    <h2 class="font-1 heading">Arduino Starter Kit</h2>
-                    <p class="order-info">You can order up to 3 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">6</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-h9w3u6z1v.vercel.app/03.png" alt="Raspberry Pi">
-                    </div>
-                    <h2 class="font-1 heading">Raspberry Pi</h2>
-                    <p class="order-info">You can order up to 2 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-
-
         </div>
     </div>
 </body>

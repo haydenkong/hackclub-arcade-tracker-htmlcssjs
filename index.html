@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Added maximum-scale -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arcade Tracker</title>
 
 
@@ -14,6 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
 
     <link rel="icon" href="favicon.png" type="image/x-icon">
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZD8ZCNJRQQ"></script>
@@ -182,9 +183,14 @@
             margin-bottom: 4px;
         }
         .days-remaining{
-            font-size: 1.4rem;
+            font-size: 1.8rem;
             text-align: center;
             margin: 5px 0px;
+        }
+        .required-daily{
+            font-size: 1.8rem;
+            text-align: center;
+            margin: 0px 0px;
         }
         .progressbar-color{
             min-width: 20px;
@@ -206,23 +212,28 @@
             border-radius: 4px;
             margin-right: 5px;
         }
-        .remainingprogressbar-color{
-            min-width: 20px;
-            min-height: 20px;
-            max-width: 20px;
-            max-height: 20px;
-            background-color: #e0e0e0;
-            margin-top: 3px;
-            border-radius: 4px;
-            margin-right: 5px;
-        }
         .spanText{
             font-size: 1.2rem;
             /* font-weight: bold; */
         }
-        .stats-info{
-            text-decoration: underline;
-            text-underline-position: under;
+        .addOne{
+            background: none;
+            font-size: 4rem;
+            border: none;
+            padding: 0px !important;
+        }
+        .addOne:hover{
+            transform: scale(1.05) ;
+            animation: ease 0.5s;
+        }
+
+        .addOne:active{
+            animation: pulse 0.3s linear 1;
+        }
+
+        @keyframes pulse{
+        25%  {transform: scale(0.8);}
+        75%  {transform: scale(1.3);}
         }
     </style>
 </head>
@@ -239,7 +250,9 @@
         </div>  
 
         <div class="ticket-count font-1">
-            <span id="currentTickets" style="color: #00afb3;">0</span> 🎟️
+            <span id="currentTickets" style="color: #00afb3;">0</span> 
+            <button class="addOne" id="addOne">🎟️</button>
+           
         </div>
         <div style="text-align: center;">
             <a id="enterTicketsLink" class="font-2">Enter Tickets</a>
@@ -261,18 +274,14 @@
                 <p id="idealProgressText" class="progress-bar-text"></p>
             </div>
 
-            <div style="display: flex;">
-                <div class="remainingprogressbar-color"></div>
-                <p id="remainingProgressText" class="progress-bar-text"></p>
-            </div>
-
         </div>
 
         
-        
+        <p class="ticket-count font-1" style="color: #2eb774; margin-top: 30px;" id="required-daily"></p>
+        <p class="required-daily font-2" style="color: #000000; margin-top: -25px;" id="">Required Daily Tickets</p>
+
         <p class="days-remaining font-2" style="color: #000000; margin-top: 30px;" id="daysLeft"></p>
-        <p class="days-remaining font-2" style="color: #000000; " id="tickets-left"></p>
-        <p class="days-remaining font-2" style="color: #000000; margin-bottom: 50px;" id="dailyTickets"></p>
+        <p class="days-remaining font-2" style="color: #000000; margin-bottom: 50px;" id="tickets-left"></p>
 
         
         <div class="button-container">
@@ -291,8 +300,6 @@
         <h2 class="font-1" style="font-size: 2rem; text-align: center;">Faq</h2>
         <p class="font-2" style="text-align: center; font-size: 1.2rem;">I am still working on the FAQ, but in the meantime, you can have a look at the <a href="https://docs.google.com/document/d/1RXCe1nNrFdiolKCknkR5Ho1AG7Kf_2LsTAKTHxQodic/">official FAQ</a>, <a href="https://github.com/hackclub/arcade-constitution">Arcade Constitution</a>, or message the #arcade-help channel on the <a href="https://hackclub.com/slack">Hack Club Slack</a>! Alternatively, you can visit the FAQ section of the <a href="https://hackclub.com/arcade/">Hack Club Arcade Website</a>.</p>
         <p class="font-2" style="text-align: center; font-size: 1.2rem;">If you have any suggestions or issues, contact me on the Hack Club Slack: @Hayden Kong</p>
-        <!-- <p class="font-2" style="text-align: center; font-size: 1.2rem;">When does Arcade end? When do my tickets expire?</p>
-        <p class="font-2" style="text-align: center; font-size: 1.2rem;">Arcade ends on 31st of August. You will not be able to earn any more ticket after that date and the shop will be closed on that date as well. Prizes may be shipped after that date.</p> -->
     </div>
     
 
@@ -307,10 +314,10 @@
         const daysLeftElement = document.getElementById('daysLeft');
         const addOneHourButton = document.getElementById('addOneHour');
         const removeOneHourButton = document.getElementById('removeOneHour');
+        const addOneButton = document.getElementById('addOne');
         const ticketsLeftElement = document.getElementById('tickets-left');
         const enterTicketsLink = document.getElementById('enterTicketsLink');
-        const dailyTicketsElement = document.getElementById('dailyTickets');
-        const remainingProgressText = document.getElementById('remainingProgressText');
+        const requiredDailyElement = document.getElementById('required-daily');
 
         const startDate = new Date('2024-06-18');
         const endDate = new Date('2024-08-31');
@@ -328,34 +335,32 @@
             localStorage.setItem('currentTickets', currentTicketsElement.textContent);
         }
 
-        
         function updateProgress() {
-            const ticketGoal = parseInt(ticketGoalInput.value);
+            const ticketGoal = parseInt(ticketGoalInput.value) || 0;
             const currentTickets = parseInt(currentTicketsElement.textContent);
-            const progress = (currentTickets / ticketGoal) * 100;
-            const cappedProgress = Math.min(progress, 100);
+            const progress = (currentTickets / ticketGoal) * 100 || 0;
+            const cappedProgress = Math.min(progress, 100) || 0;
 
             progressBar.style.width = `${cappedProgress}%`;
-            progressText.innerHTML = `You are <span class="font-2 spanText">${cappedProgress.toFixed(1)}%</span> complete to your goal of ${ticketGoal} tickets!`;
+            // progressText.textContent = `You are ${cappedProgress.toFixed(1)}% complete to your goal of ${ticketGoal} tickets.`;
+            progressText.innerHTML = `You are <span class="font-2 spanText">${cappedProgress.toFixed(1)}%</span> complete to your goal of ${ticketGoal} tickets.`;
 
             const now = new Date();
             const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
             const passedDays = Math.ceil((now - startDate) / (1000 * 60 * 60 * 24));
             const remainingDays = Math.max(totalDays - passedDays, 0);
-            const ticketsLeft = ticketGoal - currentTickets;
-            ticketsLeftElement.innerHTML = `You have <span class="stats-info">${ticketsLeft}</span> tickets left to earn`;
-            daysLeftElement.innerHTML = `<span class="stats-info">${remainingDays}</span> Days Left`;
+            const ticketsLeft = ticketGoal - currentTickets > 0 ? ticketGoal - currentTickets : 0;
+            const requiredDaily = Math.ceil(ticketsLeft / remainingDays) || 0;
+            const requiredDailyColour = requiredDaily < 4 ? '#2eb774' : '#ff5c16';
+            ticketsLeftElement.textContent = `You have ${ticketsLeft} tickets left to earn.`;
+            daysLeftElement.textContent = `Days Left: ${remainingDays}`;
+            requiredDailyElement.textContent = `${requiredDaily}`;
+            requiredDailyElement.style.color = requiredDailyColour;
 
-            const idealProgress = (passedDays / totalDays) * 100;
+            const idealProgress = (passedDays / totalDays) * 100 || 0;
             const cappedIdealProgress = Math.min(idealProgress, 100);
             idealProgressBar.style.width = `${cappedIdealProgress}%`;
-            idealProgressText.innerHTML = `You should be <span class="font-2 spanText"> ${cappedIdealProgress.toFixed(1)}%</span> complete!`;
-
-            remainingProgressText.innerHTML = `<span class="font-2 spanText">${(100 - cappedProgress).toFixed(2)}</span>% left until you reach your goal!`;
-
-            // Calculate and display required daily tickets
-            const dailyTickets = remainingDays > 0 ? (ticketsLeft / remainingDays).toFixed(2) : ticketsLeft;
-            dailyTicketsElement.innerHTML = `You need to earn <span class="stats-info">${dailyTickets}</span> tickets per day to reach your goal`;
+            idealProgressText.innerHTML = `You should be <span class="font-2 spanText"> ${cappedIdealProgress.toFixed(1)}%</span> complete.`;
 
             // Update z-index dynamically
             if (cappedProgress >= cappedIdealProgress) {
@@ -366,15 +371,30 @@
                 idealProgressBar.style.zIndex = 1;
             }
 
+
             saveToStorage();
         }
-
 
         ticketGoalInput.addEventListener('input', updateProgress);
 
         addOneHourButton.addEventListener('click', () => {
             currentTicketsElement.textContent = parseInt(currentTicketsElement.textContent) + 1;
             updateProgress();
+            confetti({
+                particleCount: 300,
+                spread: 300
+            });
+
+        });
+
+        addOneButton.addEventListener('click', () => {
+            currentTicketsElement.textContent = parseInt(currentTicketsElement.textContent) + 1;
+            updateProgress();
+            confetti({
+                particleCount: 300,
+                spread: 300
+            });
+
         });
 
         removeOneHourButton.addEventListener('click', () => {
