@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Shop UI</title>
+
+    <!-- Google fonts - Official Arcade fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Slackey&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff8e7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .card {
+            width: 200px;
+            /* height: 420px; */
+            background-color: #00b8b8;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: rotate(5deg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: visible;
+        }
+        .card:hover {
+            transform: rotate(0deg) scale(1.05);
+        }
+        .ticket {
+            position: absolute;
+            top: 5px;
+            transform: rotate(10deg);
+            right: -10px;
+            background-color: #ff9933;
+            color: white;
+            padding: 5px 15px 5px 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            padding-left: 15px;
+            font-family: 'Gaegu';
+        }
+        .ticket::after {
+            content: '🎟️';
+        }
+        .card-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-image {
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            overflow: visible;
+            background-color: #ffefc7;
+        }
+        .card-image img {
+            max-width: 120%;
+            max-height: 120%;
+            object-fit: contain;
+        }
+        h2 {
+            color: white;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        h3 {
+            color: white;
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            font-weight: normal;
+        }
+        p {
+            color: white;
+            font-size: 14px;
+            margin: 0 0 10px 0;
+        }
+        .order-info {
+            margin-top: auto;
+            font-size: 14px;
+        }
+        .font-1{
+            font-family: 'Slackey';
+        }
+        .font-2{
+            font-family: 'Gaegu';
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="ticket">7</div>
+            <div class="card-content">
+                <div class="card-image">
+                    <img src="https://cloud-fyxfbdwdl-hack-club-bot.vercel.app/0multimeter.png" alt="Multimeter">
+                </div>
+                <h2 class="font-1">Multimeter</h2>
+                <p class="order-info">You can order up to 5 of these</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="ticket">7</div>
+            <div class="card-content">
+                <div class="card-image">
+                    <img src="https://cloud-for73aw9b-hack-club-bot.vercel.app/019719_3.png" alt="Arcade Ticket Counter">
+                </div>
+                <h2 class="font-1">Arcade Ticket Counter</h2>
+                <h3>(Timer)</h3>
+                <p>(formerly the Hack Hour Clock)</p>
+                <p class="order-info">You can order up to 1 of these</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="ticket">8</div>
+            <div class="card-content">
+                <div class="card-image">
+                    <img src="https://cloud-elfpck7gj-hack-club-bot.vercel.app/0screenshot_2024-06-14_at_07.42.35.png" alt="YubiKey">
+                </div>
+                <h2 class="font-1">YubiKey</h2>
+                <p class="order-info">You can order up to 5 of these</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
