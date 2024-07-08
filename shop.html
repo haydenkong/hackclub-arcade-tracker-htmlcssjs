@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop UI - Hack Club Arcade Tracker</title>
+    <title>Test Shop UI</title>
 
     <!-- Google fonts - Official Arcade fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,16 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
 
     <link rel="icon" href="favicon.png" type="image/x-icon">
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZD8ZCNJRQQ"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-ZD8ZCNJRQQ');
-    </script>
+    <script src="max_order_quantity.js"></script>
 
     <style>
         body {
@@ -39,10 +30,26 @@
             padding: 20px;
         }
         .container {
-            display: flex;
+            display: grid;
             flex-wrap: wrap;
             gap: 50px;
             justify-content: center;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: auto;
+            grid-gap: 1fr;
+        }
+
+        @media screen and (max-width: 1000px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+        }
+        @media screen and (max-width: 650px) {
+            .container {
+                grid-template-columns: repeat(1, 1fr);
+            }
+            
         }
 
         .card {
@@ -218,585 +225,30 @@
         .subheading{
             font-size: 1.5rem;
         }
+        .stock {
+    position: absolute;
+    top: -5px;
+    text-align: center;
+    min-width: 100px;
+    transform: rotate(-12deg);
+    left: -35px;
+    background-color: #cd68e7;
+    color: #ffefc7;
+    padding: 0px 15px 0px 15px;
+    font-size: 2rem;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-family: 'Gaegu';
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
     </style>
 </head>
 <body>
-    <h1 class="font-1 title">Welcome to the shop</h1>
-    <p class="font-2 mini-title">Test shop UI. Stock and ticket prices are not updated realtime. <a style="color: black;" href="index.html">Go back</a></p>
+    <h1 class="font-1 title">The Arcade Shop</h1>
+    <p class="font-2 mini-title">Test shop UI. Stock and ticket prices are updated realtime.</p>
     <div class="shop-section">
         <div class="container">
-            
-
-            <div class="card">
-                <div class="ticket">1</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-c1gqq7ttf-hack-club-bot.vercel.app/0sticker_pile_2.png" alt="Soldering Kit">
-                    </div>
-                    <h2 class="font-1 heading">Pile of stickers</h2>
-                    <h3>Dealer's choice! We'll send you 3 random stickers. You can have whatever you want, as long as it's random!</h3>
-                    <p class="order-info">You can order up to 10 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">2</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-50x4zfjwx-hack-club-bot.vercel.app/0enjoy_1.png" alt="Arduino Starter Kit">
-                    </div>
-                    <h2 class="font-1 heading">Sticker</h2>
-                    <h3 class="subheading">of your choice</h3>
-                    <p class="order-info">You can order up to 10 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">4</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-nozsvexvx-hack-club-bot.vercel.app/0universal_paperclips_title_screen.png" alt="Raspberry Pi">
-                    </div>
-                    <h2 class="font-1 heading">OpenAI credits</h2>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-
-
-
-            <div class="card">
-                <div class="ticket">4</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-5ttcbislu-hack-club-bot.vercel.app/2screenshot_2024-06-16_at_19.34.55.png" alt="Soldering Kit">
-                    </div>
-                    <h2 class="font-1 heading">Domain</h2>
-                    <h3 class="subheading">for 1 year</h3>
-                    <p class="order-info">You can order up to 10 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">5</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-re8ou8f0i-hack-club-bot.vercel.app/0image.png" alt="Arduino Starter Kit">
-                    </div>
-                    <h2 class="font-1 heading">Logic Analyzer</h2>
-                    <p class="order-info">You can order up to 5 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">6</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-ogt9k4r4u-hack-club-bot.vercel.app/0breadboard.png" alt="Raspberry Pi">
-                    </div>
-                    <h2 class="font-1 heading">Breadboard</h2>
-                    <h3 class="subheading">+ jumper wires</h3>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-
-
-
-            <div class="card">
-                <div class="ticket">7</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img style="height: 250px;" src="https://cloud-fyxfbdwdl-hack-club-bot.vercel.app/0multimeter.png" alt="Multimeter">
-                    </div>
-                    <h2 class="font-1 heading">Multimeter</h2>
-                    <p class="order-info">You can order up to 5 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">7</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-for73aw9b-hack-club-bot.vercel.app/019719_3.png" alt="Arcade Ticket Counter">
-                    </div>
-                    <h2 class="font-1 heading">Arcade Ticket Counter</h2>
-                    <h3 class="subheading">(Timer)</h3>
-                    <p>(formerly the Hack Hour Clock)</p>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">8</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-elfpck7gj-hack-club-bot.vercel.app/0screenshot_2024-06-14_at_07.42.35.png" alt="YubiKey">
-                    </div>
-                    <h2 class="font-1 heading">YubiKey</h2>
-                    <p class="order-info">You can order up to 5 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            
-
-            
-
-            <div class="card">
-                <div class="ticket">8</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img style="height: 250px;" src="https://cloud-amz50nt0a-hack-club-bot.vercel.app/0soldering_iron.png" alt="Soldering Kit">
-                    </div>
-                    <h2 class="font-1 heading">Soldering iron</h2>
-                    <h3 class="subheading">+ solder</h3>
-                    <p class="order-info">You can order up to 5 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">9</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-5di8nhlvy-hack-club-bot.vercel.app/0image.png" alt="Arduino Starter Kit">
-                    </div>
-                    <h2 class="font-1 heading">Raspberry Pi</h2>
-                    <h3 class="subheading">Zero 2 W</h3>
-                    <p>The Raspberry Pi Zero 2 sold by <a href="https://www.adafruit.com/product/5291">Adafruit</a>. 
-                        Also includes a <a href="https://www.adafruit.com/product/2775">Mini HDMI cable</a>, <a href="https://www.adafruit.com/product/2991">USB Power + Hub</a>
-                         and <a href="https://a.co/d/04qwlEps">Micro SD card</a></p>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">14</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-3lhacr9fo-hack-club-bot.vercel.app/061ix8eet_dl._ac_sx679_.png" alt="Raspberry Pi">
-                    </div>
-                    <h2 class="font-1 heading">Pinecil</h2>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-
-
-
-
-            <div class="card">
-                <div class="ticket">15</div>
-                <div class="stock">Only 9 left!</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-q3hnx73my-hack-club-bot.vercel.app/01542509_z_copy.png" alt="Soldering Kit">
-                    </div>
-                    <h2 class="font-1 heading">GitHub Keycaps</h2>
-                    <h3 class="subheading">x8</h3>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">15</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img style="height: 250px;" src="https://cloud-bi9lc9poq-hack-club-bot.vercel.app/0intuos.png" alt="Arduino Starter Kit">
-                    </div>
-                    <h2 class="font-1 heading">Wacom</h2>
-                    <h3 class="subheading">Intuos S</h3>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">15</div>
-                <div class="stock">Only 20 left!</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-n716uf1pe-hack-club-bot.vercel.app/0gh_0008_z_dd7b_copy.png" alt="Raspberry Pi">
-                    </div>
-                    <h2 class="font-1 heading">Octocat</h2>
-                    <h3 class="subheading">Plushie</h3>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-
-
-
-
-            <div class="card">
-                <div class="ticket">50</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-ephagrx6o-hack-club-bot.vercel.app/1keeb.png" alt="Soldering Kit">
-                    </div>
-                    <h2 class="font-1 heading">Keychron</h2>
-                    <h3 class="subheading">K6 Pro</h3>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">70</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-p2gdpsmd3-hack-club-bot.vercel.app/0top.png" alt="Arduino Starter Kit">
-                    </div>
-                    <h2 class="font-1 heading">Flipper</h2>
-                    <h3 class="subheading">Zero</h3>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">75</div>
-                <div class="stock">Only 50 left!</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-gt96uxjmh-hack-club-bot.vercel.app/061__ok6aqtl._ac_uf894_1000_ql80_.png" alt="Raspberry Pi">
-                    </div>
-                    <h2 class="font-1 heading">Logitech</h2>
-                    <h3 class="subheading">MX Mechanical</h3>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-
-
-
-
-            <div class="card">
-                <div class="ticket">90</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-c6nos84m4-hack-club-bot.vercel.app/061zj7gvrvsl._ac_sx679_.png" alt="Soldering Kit">
-                    </div>
-                    <h2 class="font-1 heading">Wacom</h2>
-                    <h3 class="subheading">One display</h3>
-                    <h4>Drawing tablet & the exact model we used on this project!</h4>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">120</div>
-                <div class="stock">Only 6 left!</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-elfpck7gj-hack-club-bot.vercel.app/1screenshot_2024-06-14_at_07.39.22.png" alt="Arduino Starter Kit">
-                    </div>
-                    <h2 class="font-1 heading">Framework</h2>
-                    <h3 class="subheading">factory seconds</h3>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">130</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img style="height: 250px;" src="https://cloud-cqnd9gu78-hack-club-bot.vercel.app/1prusa.png" alt="Raspberry Pi">
-                    </div>
-                    <h2 class="font-1 heading">Prusa</h2>
-                    <h3 class="subheading">MINI+</h3>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-
-
-            <div class="card">
-                <div class="ticket">135</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img style="height: 250px;" src="https://cloud-n8ijhwk64-hack-club-bot.vercel.app/0a1_mini.png" alt="Soldering Kit">
-                    </div>
-                    <h2 class="font-1 heading">Bambu Lab</h2>
-                    <h3 class="subheading">A1 mini</h3>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">160</div>
-                <div class="stock">Only 6 left!</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-k0uz9sh1c-hack-club-bot.vercel.app/2ipad.png" alt="Arduino Starter Kit">
-                    </div>
-                    <h2 class="font-1 heading">iPad</h2>
-                    <h3 class="subheading">10th Gen + 1st Gen Apple Pencil</h3>
-                    <h4>Tablet (+ more) & what we wish we'd had for making this project! This comes with the 1st gen pencil + a lightning to USB-C converter</h4>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">200</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-7x2qyu0b9-hack-club-bot.vercel.app/0screenshot_2024-06-14_at_08.46.20.png" alt="Raspberry Pi">
-                    </div>
-                    <h2 class="font-1 heading">Quest 3</h2>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-
-
-
-
-            <div class="card">
-                <div class="ticket">90</div>
-                <div class="stock">Only 1 left!</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img style="height: 250px;" src="https://cloud-cqnd9gu78-hack-club-bot.vercel.app/0framework.png" alt="Soldering Kit">
-                    </div>
-                    <h2 class="font-1 heading">Framework</h2>
-                    <h3 class="subheading">16 inch</h3>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-            <div class="card">
-                <div class="ticket">120</div>
-                <div class="stock">Only 6 left!</div>
-                <div class="stock">Only 10 left!</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-9zwbzfbtw-hack-club-bot.vercel.app/00image_from_ios-removebg-preview.png" alt="Arduino Starter Kit">
-                    </div>
-                    <h2 class="font-1 heading">MacBook</h2>
-                    <h3 class="subheading">Air M2</h3>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div>
-
-            <!-- <div class="card">
-                <div class="ticket">130</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img src="https://cloud-cqnd9gu78-hack-club-bot.vercel.app/1prusa.png" alt="Raspberry Pi">
-                    </div>
-                    <h2 class="font-1 heading">Prusa</h2>
-                    <h3 class="subheading">MINI+</h3>
-                    <p class="order-info">You can order up to 1 of these</p>
-                    <div class="buy-section">
-                        <select>
-                            <option value="1">1</option>
-                        </select>
-                        <button>BUY</button>
-                    </div>
-                </div>
-                <div class="shipping">📦</div>
-            </div> -->
-
-    
-           
-
         </div>
     </div>
 
@@ -804,48 +256,107 @@
 
 
     <h3 class="font-2" style="text-align: center; margin-top: 100px; margin-bottom: 25px; font-size: 2rem; font-weight: bold;">Out of stock items</h3>
-    <div class="shop-section">
-        <div class="container">
-
-            <div class="outOfStockCard">
-                <div class="ticket">5</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img style="height: 250px;" src="https://cloud-2wpezbt6a-hack-club-bot.vercel.app/0notebook.png" alt="Soldering Kit">
-                    </div>
-                    <h2 class="font-1 heading">Notebook</h2>
-                    <h3>from GitHub
-                        A Denik Layflat from the <a href="https://www.thegithubshop.com/1455318-00-denik-layflat-notebook">GitHub Shop</a></h3>
-                    
-                </div>
-            </div>
-            <div class="outOfStockCard">
-                <div class="ticket">50</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img style="height: 250px;" src="https://cloud-2wpezbt6a-hack-club-bot.vercel.app/1miir.png" alt="Arduino Starter Kit">
-                    </div>
-                    <h2 class="font-1 heading">Invertocat Backback</h2>
-                    <h3 class="subheading">MIIR</h3>
-                    
-                </div>
-            </div>
-            <div class="outOfStockCard">
-                <div class="ticket">175</div>
-                <div class="card-content">
-                    <div class="card-image">
-                        <img style="height: 250px;" src="https://cloud-g0bjmr0sz-hack-club-bot.vercel.app/013in.png" alt="Raspberry Pi">
-                    </div>
-                    <h2 class="font-1 heading">Framework</h2>
-                    <h3 class="subheading">13 inch</h3>
-                </div>
-            </div>
+    <div id="outOfStock" class="shop-section">
+        <div id="outOfStock" class="container" style="margin-bottom: 50px;">
 
         </div>
     </div>
-    <h3 class="font-2" style="text-align: center; margin-bottom: 150px; padding-bottom: 50px; margin-top: 100px;">Last updated: 08/07/2024 12:15PM ACST</h3>
 
-
+<script>
+    console.log(max_order_quantity)
+    fetch('https://hackclub.com/api/arcade/shop/')
+    .then(response => response.json())
+    .then(data => {
+        data = data.sort((a, b) => a.hours - b.hours);
+        let div = document.querySelector('.shop-section .container');
+        data.forEach(element => {
+            if(element.stock !== 0){
+            let card = document.createElement('div');
+            card.classList.add('card');
+            let ticket = document.createElement('div');
+            ticket.classList.add('ticket');
+            ticket.innerText = element.hours;
+            card.appendChild(ticket);
+            let cardContent = document.createElement('div');
+            cardContent.classList.add('card-content');
+            let cardImage = document.createElement('div');
+            cardImage.classList.add('card-image');
+            let img = document.createElement('img');
+            img.src = element.imageURL;
+            img.alt = element.name;
+            cardImage.appendChild(img);
+            cardContent.appendChild(cardImage);
+            let h2 = document.createElement('h2');
+            h2.classList.add('font-1', 'heading');
+            h2.innerText = element.name;
+            cardContent.appendChild(h2);
+            let h3 = document.createElement('h3');  
+            h3.classList.add('subheading');
+            h3.innerText = element.smallName || '';
+            cardContent.appendChild(h3);
+            if(element.stock != null){
+                let stock = document.createElement('p');
+                stock.innerText = `${element.stock} Left!`;
+                stock.classList.add('stock');
+                card.appendChild(stock);
+            }
+            let buySection = document.createElement('div');
+            buySection.classList.add('buy-section');
+            let btn = document.createElement('button');
+            btn.innerText = 'BUY';
+            if(Object.keys(max_order_quantity).includes(element.name)){
+                let select = document.createElement('select');
+                for(let i = 1; i <= max_order_quantity[element.name]; i++){
+                    let option = document.createElement('option');
+                    option.value = i;
+                    option.innerText = i;
+                    select.appendChild(option);
+                }
+                buySection.appendChild(select);
+            }
+            else{
+                let select = document.createElement('select');
+                let option = document.createElement('option');
+                option.value = 1;
+                option.innerText = 1;
+                select.appendChild(option);
+                buySection.appendChild(select);
+            }
+            buySection.appendChild(btn);
+            cardContent.appendChild(buySection);
+            card.appendChild(cardContent);
+            div.appendChild(card);
+        } else {
+            let card = document.createElement('div');
+            card.classList.add('outOfStockCard');
+            let ticket = document.createElement('div');
+            ticket.classList.add('ticket');
+            ticket.innerText = element.hours;
+            card.appendChild(ticket);
+            let cardContent = document.createElement('div');
+            cardContent.classList.add('card-content');
+            let cardImage = document.createElement('div');
+            cardImage.classList.add('card-image');
+            let img = document.createElement('img');
+            img.src = element.imageURL;
+            img.alt = element.name;
+            cardImage.appendChild(img);
+            cardContent.appendChild(cardImage);
+            let h2 = document.createElement('h2');
+            h2.classList.add('font-1', 'heading');
+            h2.innerText = element.name;
+            cardContent.appendChild(h2);
+            let h3 = document.createElement('h3');  
+            h3.classList.add('subheading');
+            h3.innerText = element.smallName || '';
+            cardContent.appendChild(h3);
+            card.appendChild(cardContent);
+            let outOfStock = document.getElementById('outOfStock').querySelector('.container');
+            outOfStock.appendChild(card);
+        }
+        });
+    })
+</script>
 
 </body>
 </html>
