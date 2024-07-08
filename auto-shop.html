@@ -13,6 +13,7 @@
 
     <link rel="icon" href="favicon.png" type="image/x-icon">
     <script src="max_order_quantity.js"></script>
+    <script type="module" src="https://md-block.verou.me/md-block.js"></script>
 
     <style>
         body {
@@ -34,6 +35,7 @@
             flex-wrap: wrap;
             gap: 50px;
             justify-content: center;
+            text-align: center;
             grid-template-columns: repeat(3, 1fr);
             grid-auto-rows: auto;
             grid-gap: 1fr;
@@ -242,11 +244,65 @@
     margin-top: 0px;
     margin-bottom: 0px;
 }
+.lds-ripple {
+  color: #1c4c5b
+}
+.lds-ripple,
+.lds-ripple div {
+  box-sizing: border-box;
+}
+.lds-ripple {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ripple div {
+  position: absolute;
+  border: 4px solid currentColor;
+  opacity: 1;
+  border-radius: 50%;
+  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+.lds-ripple div:nth-child(2) {
+  animation-delay: -0.5s;
+}
+@keyframes lds-ripple {
+  0% {
+    top: 36px;
+    left: 36px;
+    width: 8px;
+    height: 8px;
+    opacity: 0;
+  }
+  4.9% {
+    top: 36px;
+    left: 36px;
+    width: 8px;
+    height: 8px;
+    opacity: 0;
+  }
+  5% {
+    top: 36px;
+    left: 36px;
+    width: 8px;
+    height: 8px;
+    opacity: 1;
+  }
+  100% {
+    top: 0;
+    left: 0;
+    width: 80px;
+    height: 80px;
+    opacity: 0;
+  }
+}
     </style>
 </head>
 <body>
     <h1 class="font-1 title">The Arcade Shop</h1>
     <p class="font-2 mini-title">Test shop UI. Stock and ticket prices are updated realtime.</p>
+    <div><div class="lds-ripple" style="top: 50%; right:47.5%; position: absolute;"><div></div><div></div></div></div>
     <div class="shop-section">
         <div class="container">
         </div>
@@ -254,21 +310,23 @@
 
 
 
-
+<div id="outOfStockContainer" style="display: none;">
     <h3 class="font-2" style="text-align: center; margin-top: 100px; margin-bottom: 25px; font-size: 2rem; font-weight: bold;">Out of stock items</h3>
     <div id="outOfStock" class="shop-section">
         <div id="outOfStock" class="container" style="margin-bottom: 50px;">
-
         </div>
     </div>
+</div>
 
 <script>
     console.log(max_order_quantity)
     fetch('https://hackclub.com/api/arcade/shop/')
     .then(response => response.json())
     .then(data => {
-        data = data.sort((a, b) => a.hours - b.hours);
         let div = document.querySelector('.shop-section .container');
+        let loader = document.querySelector('.lds-ripple');
+        loader.style.display = 'none';
+        data = data.sort((a, b) => a.hours - b.hours);
         data.forEach(element => {
             if(element.stock !== 0){
             let card = document.createElement('div');
@@ -300,6 +358,11 @@
                 stock.classList.add('stock');
                 card.appendChild(stock);
             }
+            if(element.description != null){
+                let description = document.createElement('md-block');
+                description.innerText = element.description;
+                cardContent.appendChild(description);
+            }
             let buySection = document.createElement('div');
             buySection.classList.add('buy-section');
             let btn = document.createElement('button');
@@ -327,6 +390,8 @@
             card.appendChild(cardContent);
             div.appendChild(card);
         } else {
+            let outOfStockContainer = document.getElementById('outOfStockContainer');
+            outOfStockContainer.style.display = 'block';
             let card = document.createElement('div');
             card.classList.add('outOfStockCard');
             let ticket = document.createElement('div');
