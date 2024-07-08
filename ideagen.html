@@ -39,6 +39,10 @@
             padding: 20px;
             border-radius: 5px;
         }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
         .font-1{
             font-family: 'Slackey';
             color: #fb8b3c;
@@ -46,38 +50,118 @@
         .font-2{
             font-family: 'Gaegu';
         }
+        select, button {
+            margin: 10px 0;
+            padding: 5px;
+        }
+        #idea {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        #error {
+            color: red;
+            margin-top: 10px;
+        }
+        a{
+            color: #ef3553;
+            text-decoration: underline;
+            text-underline-position: under;
+            cursor: pointer;
+        }
+        a:hover{
+            color: #ef3553;
+            text-decoration: underline wavy;
+        }
+        .heading{
+            font-size: 2.5rem;
+            margin-bottom: 0px;
+        }
+        .description{
+            font-size: 1.4rem;
+            text-align: center;
+            margin: 0px;
+            margin-bottom: 60px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="font-1 heading">Arcade Idea Generator</h1>
-        <p class="font-2 description">Get AI-powered randomized ideas for the  <a href="https://hackclub.com/arcade">Hack Club Arcade</a>!</p>
-            
+        <p class="font-2 description">Get AI-powered ideas for the <a href="https://hackclub.com/arcade">Hack Club Arcade</a>!</p>
+
+        <select id="category" class="font-2">
+            <option value="game">Game</option>
+            <option value="app">App</option>
+            <option value="web development">Web Development</option>
+            <option value="3d design">3D Design</option>
+            <option value="robotics">Robotics</option>
+            <option value="hardware">Hardware</option>
+        </select>
+
+        <select id="experience" class="font-2">
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+        </select>
+
         <button onclick="generateIdea()" class="font-2">Generate Idea</button>
-        <p class="font-2">Click the button to get a random idea for a game!</p>
-        <p id="idea"></p>
-
+        <p id="idea" class="font-2"></p>
+        <p id="error" class="font-2"></p>
     </div>
-    <script>
+
+
+    <!-- GROQ API KEY IN GROQ.JS -->
+    <script src="groq.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "groq-sdk": "https://esm.run/groq-sdk"
+            }
+        }
+    </script>
+    <script type="module">
+        import Groq from 'groq-sdk';
+
         const ideaElement = document.getElementById('idea');
+        const errorElement = document.getElementById('error');
 
-        function generateIdea() {
-            const ideas = [
-                "A game where you play as a cat trying to catch fish falling from the sky",
-                "A game where you play as a wizard trying to escape a maze",
-                "A game where you play as a robot trying to collect batteries to stay alive",
-                "A game where you play as a detective trying to solve a mystery",
-                "A game where you play as a ghost trying to scare people",
-                "A game where you play as a superhero trying to save the city",
-                "A game where you play as a pirate trying to find treasure",
-                "A game where you play as a ninja trying to defeat enemies",
+        // Initialize Groq client
+        const groq = new Groq({ apiKey: APITOKEN, dangerouslyAllowBrowser: true });
 
-            ];
-            const randomIndex = Math.floor(Math.random() * ideas.length);
-            const idea = ideas[randomIndex];
-            ideaElement.textContent = idea;
+        async function generateIdea() {
+            const category = document.getElementById('category').value;
+            const experience = document.getElementById('experience').value;
+
+            const prompt = `Generate a creative ${category} idea for a ${experience} developer participating in a virtual hackathon for teenagers aged from 13-18 years old globally. The idea should be unique, engaging, and suitable for the given experience level. Please provide a brief description of the ${category} concept. Your response must be 3 sentences. It cannot be longer or shorter`;
+
+            ideaElement.textContent = '';
+            errorElement.textContent = '';
+
+            try {
+                const stream = await groq.chat.completions.create({
+                    messages: [
+                        {
+                            role: "user",
+                            content: prompt,
+                        },
+                    ],
+                    model: "mixtral-8x7b-32768",
+                    stream: true,
+                });
+
+                for await (const chunk of stream) {
+                    const content = chunk.choices[0]?.delta?.content || "";
+                    ideaElement.textContent += content;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                ideaElement.textContent = 'Failed to generate an idea.';
+                errorElement.textContent = `Error: ${error.message}. Please try again or check your API key.`;
+            }
         }
 
+        // Make generateIdea function available globally
+        window.generateIdea = generateIdea;
     </script>
 </body>
 </html>
