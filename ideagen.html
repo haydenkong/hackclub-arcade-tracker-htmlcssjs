@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hack Club Arcade Idea Generator</title>
+
+    <!-- Google fonts - Official Arcade fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Slackey&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZD8ZCNJRQQ"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZD8ZCNJRQQ');
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #fbefd6;
+        }
+        .container {
+            max-width: 650px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .font-1{
+            font-family: 'Slackey';
+            color: #fb8b3c;
+        }
+        .font-2{
+            font-family: 'Gaegu';
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="font-1 heading">Arcade Idea Generator</h1>
+        <p class="font-2 description">Get AI-powered randomized ideas for the  <a href="https://hackclub.com/arcade">Hack Club Arcade</a>!</p>
+            
+        <button onclick="generateIdea()" class="font-2">Generate Idea</button>
+        <p class="font-2">Click the button to get a random idea for a game!</p>
+        <p id="idea"></p>
+
+    </div>
+    <script>
+        const ideaElement = document.getElementById('idea');
+
+        function generateIdea() {
+            const ideas = [
+                "A game where you play as a cat trying to catch fish falling from the sky",
+                "A game where you play as a wizard trying to escape a maze",
+                "A game where you play as a robot trying to collect batteries to stay alive",
+                "A game where you play as a detective trying to solve a mystery",
+                "A game where you play as a ghost trying to scare people",
+                "A game where you play as a superhero trying to save the city",
+                "A game where you play as a pirate trying to find treasure",
+                "A game where you play as a ninja trying to defeat enemies",
+
+            ];
+            const randomIndex = Math.floor(Math.random() * ideas.length);
+            const idea = ideas[randomIndex];
+            ideaElement.textContent = idea;
+        }
+
+    </script>
+</body>
+</html>
