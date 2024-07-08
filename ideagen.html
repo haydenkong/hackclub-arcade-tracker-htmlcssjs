@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hack Club Arcade Idea Generator</title>
+    <title>Arcade Idea Generator</title>
 
     <!-- Google fonts - Official Arcade fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,7 +34,7 @@
             background-color: #fbefd6;
         }
         .container {
-            max-width: 650px;
+            max-width: 800px;
             margin: auto;
             padding: 20px;
             border-radius: 5px;
@@ -50,13 +50,18 @@
         .font-2{
             font-family: 'Gaegu';
         }
-        select, button {
+        select, input, button {
             margin: 10px 0;
             padding: 5px;
+            width: 100%;
         }
         #idea {
             margin-top: 20px;
             font-weight: bold;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         #error {
             color: red;
@@ -80,7 +85,45 @@
             font-size: 1.4rem;
             text-align: center;
             margin: 0px;
-            margin-bottom: 60px;
+            margin-bottom: 30px;
+        }
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.4rem;
+            transition: background-color 0.3s ease;
+        }
+        .generateBtn {
+            background-color: #ff5c16;
+            color: #fbefd6;
+            transition: 0.2s;
+            border: #fb8b3c 1px solid;
+        }
+        .generateBtn:hover {
+            transform: scale(1.05);
+        }
+        .generateBtn:active {
+            transform: scale(0.95);
+        }
+        option{
+            font-family: 'Gaegu';
+            font-size: 1rem;
+        }
+        #category, #experience, #timeframe, input, select{
+            font-family: 'Gaegu';
+            font-size: 1.4rem;
         }
     </style>
 </head>
@@ -89,26 +132,49 @@
         <h1 class="font-1 heading">Arcade Idea Generator</h1>
         <p class="font-2 description">Get AI-powered ideas for the <a href="https://hackclub.com/arcade">Hack Club Arcade</a>!</p>
 
-        <select id="category" class="font-2">
-            <option value="game">Game</option>
-            <option value="app">App</option>
-            <option value="web development">Web Development</option>
-            <option value="3d design">3D Design</option>
-            <option value="robotics">Robotics</option>
-            <option value="hardware">Hardware</option>
-        </select>
+        <div class="settings-grid">
+            <div>
+                <label for="category" class="font-2">Category:</label>
+                <select id="category" class="font-2">
+                    <option value="game">Game</option>
+                    <option value="app">App</option>
+                    <option value="web development">Web Development</option>
+                    <option value="3d design">3D Design</option>
+                    <option value="robotics">Robotics</option>
+                    <option value="hardware">Hardware</option>
+                </select>
+            </div>
+            <div>
+                <label for="experience" class="font-2">Experience Level:</label>
+                <select id="experience" class="font-2">
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+            </div>
+            <div>
+                <label for="genre" class="font-2">Genre/Style:</label>
+                <input type="text" id="genre" class="font-2" placeholder="e.g., puzzle, action, educational">
+            </div>
+            <div>
+                <label for="technology" class="font-2">Preferred Technology:</label>
+                <input type="text" id="technology" class="font-2" placeholder="e.g., Python, JavaScript, Arduino">
+            </div>
+            <div>
+                <label for="timeframe" class="font-2">Project Timeframe:</label>
+                <select id="timeframe" class="font-2">
+                    <option value="short (1-3 hours)">Short (1-3 hours)</option>
+                    <option value="medium (3-6 hours)">Medium (4-8 hours)</option>
+                    <option value="long (6-10 hours)">Long (6-10 hours)</option>
+                    <option value="extended (10+ hours)">Extreme 🔥(10+ hours)</option>
+                </select>
+            </div>
+        </div>
 
-        <select id="experience" class="font-2">
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
-        </select>
-
-        <button onclick="generateIdea()" class="font-2">Generate Idea</button>
+        <button onclick="generateIdea()" class="font-2 generateBtn">Generate Idea</button>
         <p id="idea" class="font-2"></p>
         <p id="error" class="font-2"></p>
     </div>
-
 
     <!-- GROQ API KEY IN GROQ.JS -->
     <script src="groq.js"></script>
@@ -131,8 +197,17 @@
         async function generateIdea() {
             const category = document.getElementById('category').value;
             const experience = document.getElementById('experience').value;
+            const genre = document.getElementById('genre').value;
+            const technology = document.getElementById('technology').value;
+            const timeframe = document.getElementById('timeframe').value;
 
-            const prompt = `Generate a creative ${category} idea for a ${experience} developer participating in a virtual hackathon for teenagers aged from 13-18 years old globally. The idea should be unique, engaging, and suitable for the given experience level. Please provide a brief description of the ${category} concept. Your response must be 3 sentences. It cannot be longer or shorter`;
+            const prompt = `Generate a creative ${category} idea for a ${experience} developer participating in a virtual hackathon for teenagers aged 13-18 years old globally. The idea should be unique, engaging, and suitable for the given experience level. 
+            Additional parameters:
+            - Genre/Style: ${genre || "Any"}
+            - Preferred Technology: ${technology || "Any"}
+            - Project Timeframe: ${timeframe}
+            
+            Please provide a brief description of the ${category} concept, including how it incorporates the genre/style (if specified) and technology (if specified). Your response must be 3 sentences and less than 50 words, focusing on the core idea. Do not use any markdown. Be creative and have fun! Good luck! 🚀✨`;
 
             ideaElement.textContent = '';
             errorElement.textContent = '';
@@ -145,7 +220,7 @@
                             content: prompt,
                         },
                     ],
-                    model: "mixtral-8x7b-32768",
+                    model: "llama3-70b-8192",
                     stream: true,
                 });
 
