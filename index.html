@@ -272,7 +272,7 @@
            
         </div>
         <div style="text-align: center;">
-            <a id="enterTicketsLink" class="font-2">Enter Tickets</a>
+            <a id="enterTicketsLink" class="font-2">Enter Current Tickets</a>
         </div>
         <div>
             <p class="progress-bar-header font-2">Your Progress:</p>
@@ -298,10 +298,10 @@
 
         </div>
 
-        
-        <p class="ticket-count font-1" style="color: #2eb774; margin-top: 30px;" id="required-daily"></p>
+        <div style="text-align: center; cursor:default;">
+        <p class="ticket-count font-1" style="color: #2eb774; margin: 30px;" onmouseenter="requiredDaily()" onmouseleave="resetRequiredDaily()" id="required-daily"></p>
+        </div>
         <p class="required-daily font-2" style="color: #000000; margin-top: -25px;" id="">Required Daily Tickets</p>
-
         <p class="days-remaining font-2" style="color: #000000; margin-top: 30px;" id="daysLeft"></p>
         <p class="days-remaining font-2" style="color: #000000; margin-bottom: 50px;" id="tickets-left"></p>
 
@@ -361,6 +361,34 @@
             localStorage.setItem('currentTickets', currentTicketsElement.textContent);
         }
 
+        function requiredDaily(){
+            console.log('requiredDaily')
+            const requiredDailyElement = document.getElementById('required-daily');
+            const ticketGoal = parseInt(ticketGoalInput.value) || 0;
+            const currentTickets = parseInt(currentTicketsElement.textContent);
+            const now = new Date();
+            const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+            const passedDays = Math.ceil((now - startDate) / (1000 * 60 * 60 * 24));
+            const remainingDays = Math.max(totalDays - passedDays, 0);
+            const ticketsLeft = ticketGoal - currentTickets > 0 ? ticketGoal - currentTickets : 0;
+            const requiredDaily = (ticketsLeft / remainingDays).toFixed(3) || 0;
+            requiredDailyElement.textContent = `${requiredDaily}`;
+        }
+
+        function resetRequiredDaily(){
+            console.log('requiredDaily')
+            const requiredDailyElement = document.getElementById('required-daily');
+            const ticketGoal = parseInt(ticketGoalInput.value) || 0;
+            const currentTickets = parseInt(currentTicketsElement.textContent);
+            const now = new Date();
+            const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+            const passedDays = Math.ceil((now - startDate) / (1000 * 60 * 60 * 24));
+            const remainingDays = Math.max(totalDays - passedDays, 0);
+            const ticketsLeft = ticketGoal - currentTickets > 0 ? ticketGoal - currentTickets : 0;
+            const requiredDaily = Math.ceil(ticketsLeft / remainingDays) || 0;
+            requiredDailyElement.textContent = `${requiredDaily}`;
+        }
+
         function updateProgress() {
             const ticketGoal = parseInt(ticketGoalInput.value) || 0;
             const currentTickets = parseInt(currentTicketsElement.textContent);
@@ -387,7 +415,7 @@
             const cappedIdealProgress = Math.min(idealProgress, 100);
             idealProgressBar.style.width = `${cappedIdealProgress}%`;
             idealProgressText.innerHTML = `You should be <span class="font-2 spanText"> ${cappedIdealProgress.toFixed(1)}%</span> complete.`;
-            remainingProgressText.innerHTML = `<span class="font-2 spanText">${(100 - cappedProgress).toFixed(2)}</span>% left until you reach your goal!`;
+            remainingProgressText.innerHTML = `<span class="font-2 spanText">${(100 - cappedProgress).toFixed(1)}</span>% left until you reach your goal!`;
 
             // Update z-index dynamically
             if (cappedProgress >= cappedIdealProgress) {
@@ -433,7 +461,7 @@
         });
 
         enterTicketsLink.addEventListener('click', () => {
-            const tickets = prompt('Enter the number of tickets:');
+            const tickets = prompt('Enter the number of tickets you currently have:');
             if (tickets !== null && !isNaN(tickets) && tickets >= 0) {
                 currentTicketsElement.textContent = tickets;
                 updateProgress();
