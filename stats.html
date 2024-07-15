@@ -5,6 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Stats</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -14,11 +35,20 @@
         table, th, td {
             border: 1px solid #ddd;
         }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>API Stats Table</h1>
+        <h1>Arcade Review Stats</h1>
         <table id="statsTable">
             <thead>
                 <tr>
@@ -27,40 +57,44 @@
                     <th>Hours Approved</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tableBody">
 
             </tbody>
         </table>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const apiUrl = 'https://kinghayden.hackclub.app/api/stats';
-            
+    
             async function fetchStats() {
                 try {
                     const response = await fetch(apiUrl);
-                    const data = await response.json();
-                    populateTable(data);
+                    const textData = await response.text();
+                    const dataArray = textData.split('\n')
+                                              .filter(line => line.trim() !== '')
+                                              .map(item => JSON.parse(item)) // convert each line to json
+                                              .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // sort by timestamp desending
+    
+                    dataArray.forEach(dataObj => {
+                        populateTable(dataObj);
+                    });
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
             }
-
+    
             function populateTable(data) {
-                const tableBody = document.querySelector('#statsTable tbody');
-                tableBody.innerHTML = '';
-
-                data.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${new Date(item.timestamp).toLocaleString()}</td>
-                        <td>${item.hours_pending}</td>
-                        <td>${item.hours_approved}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
+                const tableBody = document.querySelector('#tableBody');
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${new Date(data.timestamp).toLocaleString()}</td>
+                    <td>${data.hours_pending}</td>
+                    <td>${data.hours_approved}</td>
+                `;
+                tableBody.appendChild(row);
             }
-
+    
             fetchStats();
         });
     </script>
