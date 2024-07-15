@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Stats</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API Stats Table</h1>
+        <table id="statsTable">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Hours Pending</th>
+                    <th>Hours Approved</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const apiUrl = 'https://kinghayden.hackclub.app/api/stats';
+            
+            async function fetchStats() {
+                try {
+                    const response = await fetch(apiUrl);
+                    const data = await response.json();
+                    populateTable(data);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+
+            function populateTable(data) {
+                const tableBody = document.querySelector('#statsTable tbody');
+                tableBody.innerHTML = '';
+
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${new Date(item.timestamp).toLocaleString()}</td>
+                        <td>${item.hours_pending}</td>
+                        <td>${item.hours_approved}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+
+            fetchStats();
+        });
+    </script>
+</body>
+</html>
