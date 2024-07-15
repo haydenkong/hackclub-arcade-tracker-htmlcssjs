@@ -3,7 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Review Stats</title>
+    <title>Arcade Review Stats</title>
+
+    <!-- SEO meta tags -->
+    <meta name="description" content="Track real-time stats updated every 15 minutes for the Hack Club Arcade Review stats.">
+    <meta name="keywords" content="hack club, hack club arcade, arcade, hack club arcade stats, hack club arcade review stats, arcade review stats">
+
+    <!-- Google fonts - Official Arcade fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Slackey&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZD8ZCNJRQQ"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZD8ZCNJRQQ');
+    </script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,21 +38,22 @@
             margin: 0;
             padding: 0;
         }
-
         .container {
-            width: 80%;
+            width: 90%;
             margin: 20px auto;
             background: #fff;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             border-radius: 5px;
         }
-
         h1 {
             text-align: center;
             color: #333;
         }
-
+        p{
+            text-align: center;
+            color: #333;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -35,66 +63,145 @@
         table, th, td {
             border: 1px solid #ddd;
         }
-
         th, td {
             padding: 10px;
             text-align: center;
-        }
-
+        }      
         th {
             background-color: #f2f2f2;
+        }
+        #chartContainer {
+            margin-top: 40px;
+            height: 400px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Arcade Review Stats</h1>
+        <p>By Hayden Kong</p>
+        <div id="chartContainer">
+            <canvas id="statsChart"></canvas>
+        </div>
         <table id="statsTable">
             <thead>
                 <tr>
                     <th>Timestamp</th>
-                    <th>Hours Pending</th>
-                    <th>Hours Approved</th>
+                    <th>Hours Pending Review</th>
+                    <th>Hours Approved (Past 7 days)</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-
             </tbody>
         </table>
     </div>
-
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const apiUrl = 'https://kinghayden.hackclub.app/api/stats';
-    
+            
             async function fetchStats() {
                 try {
                     const response = await fetch(apiUrl);
                     const textData = await response.text();
                     const dataArray = textData.split('\n')
-                                              .filter(line => line.trim() !== '')
-                                              .map(item => JSON.parse(item)) // convert each line to json
-                                              .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // sort by timestamp desending
-    
-                    dataArray.forEach(dataObj => {
-                        populateTable(dataObj);
-                    });
+                                        .filter(line => line.trim() !== '')
+                                        .map(item => JSON.parse(item))
+                                        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // Sort newest first
+                    
+                    populateTable(dataArray);
+                    createChart(dataArray);
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
             }
-    
-            function populateTable(data) {
+            
+            function populateTable(dataArray) {
                 const tableBody = document.querySelector('#tableBody');
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${new Date(data.timestamp).toLocaleString()}</td>
-                    <td>${data.hours_pending}</td>
-                    <td>${data.hours_approved}</td>
-                `;
-                tableBody.appendChild(row);
+                dataArray.forEach(data => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${new Date(data.timestamp).toLocaleString()}</td>
+                        <td>${data.hours_pending}</td>
+                        <td>${data.hours_approved}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
             }
-    
+
+            function createChart(data) {
+                const ctx = document.getElementById('statsChart').getContext('2d');
+                
+                // reverse the data for the chart so it shows oldest to newest left to right
+                const chartData = [...data].reverse();
+                
+                const timestamps = chartData.map(item => item.timestamp);
+                const pendingData = chartData.map(item => item.hours_pending);
+                const approvedData = chartData.map(item => item.hours_approved);
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: timestamps,
+                        datasets: [
+                            {
+                                label: 'Hours Pending Review Review',
+                                data: pendingData,
+                                borderColor: 'rgb(255, 99, 132)',
+                                tension: 0.1
+                            },
+                            {
+                                label: 'Hours Approved (Past 7 days)',
+                                data: approvedData,
+                                borderColor: 'rgb(54, 162, 235)',
+                                tension: 0.1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    unit: 'hour',
+                                    displayFormats: {
+                                        hour: 'MMM D, HH:mm'
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Timestamp'
+                                }
+                            },
+                            y: {
+                                beginAtZero: false,
+                                title: {
+                                    display: true,
+                                    text: 'Hours'
+                                }
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Arcade Review Stats Graph'
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest',
+                            axis: 'x',
+                            intersect: false
+                        }
+                    }
+                });
+            }
+            
             fetchStats();
         });
     </script>
