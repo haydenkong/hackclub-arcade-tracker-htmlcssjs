@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcade Review Stats API</title>
+
+    <!-- SEO meta tags -->
+    <!-- <meta name="description" content="Track real-time stats updated every 15 minutes for the Hack Club Arcade Review stats.">
+    <meta name="keywords" content="hack club, hack club arcade, arcade, hack club arcade stats, hack club arcade review stats, arcade review stats"> -->
+
+    <!-- Google fonts - Official Arcade fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Slackey&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZD8ZCNJRQQ"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZD8ZCNJRQQ');
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #fbefd6;
+        }
+        .container {
+            max-width: 750px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        p{
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 5px;
+            text-align: center;
+        }      
+        th {
+            background-color: #fbefd6;
+            border: 0px;
+            font-family: 'Slackey';
+            color: #fb8b3c;
+        }
+        #chartContainer {
+            margin-top: 40px;
+            height: 400px;
+        }
+        .font-1{
+            font-family: 'Slackey';
+            color: #fb8b3c;
+        }
+        .font-2{
+            font-family: 'Gaegu';
+        }
+        .heading{
+            font-size: 2.5rem;
+            margin-bottom: 0px;
+        }
+        .description{
+            font-size: 1.4rem;
+            text-align: center;
+            margin: 0px;
+            margin-bottom: 60px;
+        }
+
+        /* link */
+        a{
+            color: #ef3553;
+            text-decoration: underline;
+            text-underline-position: under;
+            cursor: pointer;
+        }
+        a:hover{
+            color: #ef3553;
+            text-decoration: underline wavy;
+        }
+        .about {
+            background-color: #00afb3;
+            color: #fbefd6;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        .about-listed{
+            letter-spacing: 0.01px;
+            font-size: 1.2rem;
+        }
+        #statsChart {
+            font-family: 'Gaegu', cursive;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="font-1 heading">Arcade Review Stats API</h1>
+        <p class="font-2 description">By Hayden Kong. Hosted on <a href="https://guides.hackclub.app/">Hack Club Nest</a>!</p>
+        <div class="about">
+            <p class="font-2" style="color: #fbefd6; font-size: 1.2rem;"><b>⚠️WARNING!⚠️: </b>This API is still under development and may be buggy and unreliable! The API docs below may change at any time and no guarantee for uptime. Bandwidth is limited.</p> 
+        </div>
+
+        <p class="font-2" style="font-size: 1.2rem;">API Endpoint: <a href="https://kinghayden.hackclub.app">kinghayden.hackclub.app</a></p>
+
+        <h2 class="font-1" style=" text-align: left;">/api/hours ⌛</h2>
+        <p class="font-2" style="text-align: left; font-size: 1.2rem;">API used for the Arcade Review Stats slackbot. Send a HTTP POST request and it will return a ephemeral response immediately return a ephemeral request before returning in JSON the LIVE stats from the review stats Airtable dashboard.</p>
+
+        <h2 class="font-1" style=" text-align: left;">/api/live 🔴</h2>
+        <p class="font-2" style="text-align: left; font-size: 1.2rem;">Can be used for any application wanting to intergrate the latest review stats. Send a HTTP GET reqeust and it will return in JSON the LIVE stats from the review stats Airtable dashboard. </p>
+
+        <h2 class="font-1" style=" text-align: left;">/api/countries 🗺️</h2>
+        <p class="font-2" style="text-align: left; font-size: 1.2rem;">COMING SOON! Get the latest stats on the number of countries Hack Club Arcade has shipped to!</p>
+
+        <h2 class="font-1" style=" text-align: left;">/ping 🏓</h2>
+        <p class="font-2" style="text-align: left; font-size: 1.2rem;">Returns 🏓pong🏓 if the API is succesfully running!</p>
+
+        <p class="font-2" style="font-size: 1.2rem; margin-top: 55px; color: grey;">&copy; 2024 Hayden Kong. All rights reserved.</p>
+
+    </div>
+    
+
+</body>
+</html>
