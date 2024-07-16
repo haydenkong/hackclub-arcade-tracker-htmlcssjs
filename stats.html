@@ -91,7 +91,13 @@
             font-size: 1.4rem;
             text-align: center;
             margin: 0px;
-            margin-bottom: 60px;
+        }
+        .description-secondary{
+            font-size: 1.2rem;
+            text-align: center;
+            margin: 0px;
+            color: grey;
+            margin-bottom: 30px;
         }
 
         /* link */
@@ -142,7 +148,8 @@
 <body>
     <div class="container">
         <h1 class="font-1 heading">Arcade Review Stats</h1>
-        <p class="font-2 description">By Hayden Kong. For the <a href="https://hackclub.com/arcade">Hack Club Arcade</a>!</p>
+        <!-- <p class="font-2 description">By Hayden Kong. For the <a href="https://hackclub.com/arcade">Hack Club Arcade</a>!</p> -->
+        <p class="font-2 description-secondary">By Hayden Kong. Get the latest session review stats for <a href="https://hackclub.com/arcade">Arcade</a>! Updated every 15 minutes. Get LIVE results by running /arcadereviewstats in the <a href="https://hackclub.com/slack">Hack Club Slack</a>!</p>
         
         <div class="stats-container font-2" id="reviewStatus">
             <!-- review stats here -->
@@ -184,11 +191,14 @@
         <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-top: 0px;">The stat represents a rolling 7-day total, updated daily at 0:00 EDT.
             When it updates, it removes data older than 7 days and adds the new day's data. This can cause a noticeable decrease if a high-activity day from 7 days ago is removed from the count. The line will then gradually increase as new approvals are added throughout the day.
         </p>
-        <p class="font-2" style="text-align: center; font-size: 1.2rem;"><b>💡Time zone💡</b></p>
-        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-top: 0px;">Hack Club Nest's servers are located in Helsinki, Finland. The time zone that is used for the logging and timestamps is in GMT (Greenwich Mean Time).
+        <p class="font-2" style="text-align: center; font-size: 1.2rem;"><b>⌚Time zone⌚</b></p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-top: 0px;">Hack Club Nest's servers are located in Helsinki, Finland. The time zone that is used for the logging and timestamps is in GMT (Greenwich Mean Time). However, the timestamps are converted to your local time zone!
         </p>
         <p class="font-2" style="text-align: center;">-------------------</p>
-        <p class="font-2" style="text-align: center; font-size: 1.2rem;">If you have any suggestions or issues, contact me on the Hack Club Slack: @Hayden Kong. <a href="index.html">Go back to the Arcade Tracker</a>.</p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem;">If you have any suggestions or issues, please <a href="https://forms.fillout.com/t/hSJMTXtGshus">fill out this form</a> or contact me on the Hack Club Slack: @Hayden Kong. <a href="index.html">Go back to the Arcade Tracker</a>.</p>
+
+        <p class="font-2" style="font-size: 1.2rem; margin-top: 55px; color: grey;">&copy; 2024 Hayden Kong. All rights reserved.</p>
+
     </div>
     
     <script>
