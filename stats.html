@@ -106,7 +106,7 @@
             text-decoration: underline wavy;
         }
         .about {
-            background-color: #00afb3;
+            background-color: #fb8b3c;
             color: #fbefd6;
             padding: 15px;
             margin-top: 20px;
@@ -119,18 +119,44 @@
         #statsChart {
             font-family: 'Gaegu', cursive;
         }
+        .stats-container {
+            background-color: #00afb3;
+            color: #fbefd6;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .stats-p{
+            font-size: 1.2rem;
+            color: #fbefd6;
+            margin: 0px;
+        }
+        .stats-h2{
+            font-size: 1.5rem;
+            color: #fbefd6;
+            margin: 0px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="font-1 heading">Arcade Review Stats</h1>
         <p class="font-2 description">By Hayden Kong. For the <a href="https://hackclub.com/arcade">Hack Club Arcade</a>!</p>
+        
+        <div class="stats-container font-2" id="reviewStatus">
+            <!-- review stats here -->
+        </div>
+        
+        <div id="chartContainer">
+            <canvas id="statsChart"></canvas>
+        </div>
         <div class="about">
             <p class="font-2" style="color: #fbefd6; font-size: 1.2rem;"><b>⚠️NOTICE!⚠️: </b>There is currently a huge backlog in the review sessions. Please be patient! 
                 Sessions are not reviewed in order and should take around 2-7 days.</p> 
         </div>
-        <div id="chartContainer">
-            <canvas id="statsChart"></canvas>
+        <div class="stats-container font-2" id="recentStats">
+           <!-- recent stats here -->
         </div>
         <table id="statsTable" class="font-2">
             <thead>
@@ -174,12 +200,19 @@
                     const response = await fetch(apiUrl);
                     const textData = await response.text();
                     const dataArray = textData.split('\n')
-                                        .filter(line => line.trim() !== '')
-                                        .map(item => JSON.parse(item))
-                                        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // Sort newest first
+                        .filter(line => line.trim() !== '')
+                        .map(item => {
+                            const parsedItem = JSON.parse(item);
+                            // convert GMT to local time using momentjs
+                            parsedItem.timestamp = moment.utc(parsedItem.timestamp).local().format('YYYY-MM-DD HH:mm:ss');
+                            return parsedItem;
+                        })
+                        .sort((a, b) => moment(b.timestamp).diff(moment(a.timestamp))); // sort newest first
                     
                     populateTable(dataArray);
                     createChart(dataArray);
+                    updateReviewStatus(dataArray);
+                    updateRecentStats(dataArray);
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
@@ -190,7 +223,7 @@
                 dataArray.forEach(data => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${new Date(data.timestamp).toLocaleString()}</td>
+                        <td>${data.timestamp}</td>
                         <td>${data.hours_pending}</td>
                         <td>${data.hours_approved}</td>
                     `;
@@ -204,7 +237,7 @@
                 // reverse the data for the chart so it shows oldest to newest left to right
                 const chartData = [...data].reverse();
                 
-                const timestamps = chartData.map(item => item.timestamp);
+                const timestamps = chartData.map(item => moment(item.timestamp).toDate());
                 const pendingData = chartData.map(item => item.hours_pending);
                 const approvedData = chartData.map(item => item.hours_approved);
 
@@ -217,16 +250,18 @@
                         labels: timestamps,
                         datasets: [
                             {
-                                label: 'Hours Pending Review Review',
+                                label: 'Hours Pending Review',
                                 data: pendingData,
-                                borderColor: 'rgb(255, 99, 132)',
-                                tension: 0.1
+                                borderColor: '#fb8b3c',
+                                tension: 0.1,
+                                pointRadius: 0
                             },
                             {
                                 label: 'Hours Approved (Past 7 days)',
                                 data: approvedData,
-                                borderColor: 'rgb(54, 162, 235)',
-                                tension: 0.1
+                                borderColor: '#00afb3',
+                                tension: 0.1,
+                                pointRadius: 0
                             }
                         ]
                     },
@@ -240,11 +275,12 @@
                                     unit: 'hour',
                                     displayFormats: {
                                         hour: 'MMM D, HH:mm'
-                                    }
+                                    },
+                                    tooltipFormat: 'MMM D, YYYY, HH:mm'
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Timestamp',
+                                    text: 'Timestamp (Local Time)',
                                     font: {
                                         weight: 'bold'
                                     }
@@ -289,6 +325,40 @@
                         }
                     }
                 });
+            }
+
+            function updateReviewStatus(dataArray) {
+                const statusContainer = document.getElementById('reviewStatus');
+                const latest = dataArray[0];
+                const previous = dataArray[1];
+                
+                if (latest.hours_approved > previous.hours_approved) {
+                    statusContainer.innerHTML = '<h2>🎉 Sessions are being reviewed! 🎉</h2>' + (latest.hours_approved-previous.hours_approved) + ' reviewed so far!';
+                } else {
+                    statusContainer.innerHTML = '<h2>😴 Sessions arent being reviewed right now. Pls be patient!</h2>';
+                }
+            }
+
+            function updateRecentStats(dataArray) {
+                const statsContainer = document.getElementById('recentStats');
+                const latest = dataArray[0];
+                const thirtyMinutesAgo = dataArray.find(item => {
+                    const timeDiff = moment(latest.timestamp).diff(moment(item.timestamp), 'minutes');
+                    return timeDiff >= 30;
+                });
+
+                if (thirtyMinutesAgo) {
+                    const sessionsReviewed = latest.hours_approved - thirtyMinutesAgo.hours_approved;
+                    const hoursAdded = latest.hours_pending - thirtyMinutesAgo.hours_pending;
+
+                    statsContainer.innerHTML = `
+                        <h2 class="stats-h2">Last 30 Minutes Stats:</h2>
+                        <p class="stats-p">Sessions Reviewed: ${sessionsReviewed}</p>
+                        <p class="stats-p">Hours Added to Queue: ${hoursAdded}</p>
+                    `;
+                } else {
+                    statsContainer.innerHTML = '<p>Not enough data for 30-minute stats yet.</p>';
+                }
             }
             
             fetchStats();
