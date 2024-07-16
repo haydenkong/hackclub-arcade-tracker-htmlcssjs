@@ -20,6 +20,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZD8ZCNJRQQ"></script>
@@ -69,8 +70,10 @@
         th {
             background-color: #fbefd6;
             border: 0px;
-            font-family: 'Slackey';
+            /* font-family: 'Slackey'; */
             color: #fb8b3c;
+            font-weight: bold;
+            font-size: 1.3rem;
         }
         #chartContainer {
             margin-top: 40px;
@@ -143,6 +146,50 @@
             color: #fbefd6;
             margin: 0px;
         }
+
+        #paginationControls button {
+            background-color: #00afb3;
+            color: #fbefd6;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        #paginationControls button:hover {
+            background-color: #338d8f;
+            transform: scale(1.05);
+        }
+
+        #paginationControls button:active {
+            transform: scale(0.95);
+        }
+
+        #paginationControls button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #pageInfo {
+            font-size: 1rem;
+            color: #333;
+        }
+
+        #vermontTimeContainer {
+            background-color: #00afb3;
+            color: #fbefd6;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        #vermontTimeContainer p {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
     </style>
 </head>
 <body>
@@ -166,6 +213,7 @@
            <!-- recent stats here -->
         </div>
         <table id="statsTable" class="font-2">
+            <h2 class="font-1" style="text-align: center; margin-top: 50px;">Full Logs</h2>
             <thead>
                 <tr>
                     <th>Timestamp</th>
@@ -204,33 +252,45 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const apiUrl = 'https://kinghayden.hackclub.app/api/stats';
+            let allData = [];
+            const rowsPerPage = 50;
+            let currentPage = 1;
+            let totalPages = 0;
             
             async function fetchStats() {
                 try {
                     const response = await fetch(apiUrl);
                     const textData = await response.text();
-                    const dataArray = textData.split('\n')
+                    allData = textData.split('\n')
                         .filter(line => line.trim() !== '')
                         .map(item => {
                             const parsedItem = JSON.parse(item);
-                            // convert GMT to local time using momentjs
                             parsedItem.timestamp = moment.utc(parsedItem.timestamp).local().format('YYYY-MM-DD HH:mm:ss');
                             return parsedItem;
                         })
-                        .sort((a, b) => moment(b.timestamp).diff(moment(a.timestamp))); // sort newest first
+                        .sort((a, b) => moment(b.timestamp).diff(moment(a.timestamp)));
                     
-                    populateTable(dataArray);
-                    createChart(dataArray);
-                    updateReviewStatus(dataArray);
-                    updateRecentStats(dataArray);
+                    totalPages = Math.ceil(allData.length / rowsPerPage);
+                    createPaginationControls();
+                    populateTable();
+                    createChart(allData);
+                    updateReviewStatus(allData);
+                    updateRecentStats(allData);
+                    updateVermontTime();
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
             }
             
-            function populateTable(dataArray) {
+            function populateTable() {
                 const tableBody = document.querySelector('#tableBody');
-                dataArray.forEach(data => {
+                tableBody.innerHTML = ''; // clear existing rows
+                
+                const startIndex = (currentPage - 1) * rowsPerPage;
+                const endIndex = startIndex + rowsPerPage;
+                const pageData = allData.slice(startIndex, endIndex);
+                
+                pageData.forEach(data => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${data.timestamp}</td>
@@ -239,6 +299,81 @@
                     `;
                     tableBody.appendChild(row);
                 });
+                
+                updatePaginationControls();
+            }
+            
+            function createPaginationControls() {
+                const paginationContainer = document.createElement('div');
+                paginationContainer.id = 'paginationControls';
+                paginationContainer.className = 'font-2';
+                paginationContainer.style.textAlign = 'center';
+                paginationContainer.style.marginTop = '20px';
+                
+                const backButton = document.createElement('button');
+                backButton.id = 'backButton';
+                backButton.innerHTML = '&larr;'; // left arrow
+                backButton.addEventListener('click', () => changePage(-1));
+                
+                const pageInfo = document.createElement('span');
+                pageInfo.id = 'pageInfo';
+                pageInfo.style.margin = '0 10px';
+                
+                const forwardButton = document.createElement('button');
+                forwardButton.id = 'forwardButton';
+                forwardButton.innerHTML = '&rarr;'; // right arrow
+                forwardButton.addEventListener('click', () => changePage(1));
+                
+                paginationContainer.appendChild(backButton);
+                paginationContainer.appendChild(pageInfo);
+                paginationContainer.appendChild(forwardButton);
+                
+                document.querySelector('#statsTable').insertAdjacentElement('afterend', paginationContainer);
+            }
+            
+            function updatePaginationControls() {
+                const pageInfo = document.getElementById('pageInfo');
+                pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+                
+                const backButton = document.getElementById('backButton');
+                const forwardButton = document.getElementById('forwardButton');
+                
+                backButton.disabled = currentPage === 1;
+                forwardButton.disabled = currentPage === totalPages;
+            }
+            
+            function changePage(direction) {
+                currentPage += direction;
+                currentPage = Math.max(1, Math.min(currentPage, totalPages));
+                populateTable();
+            }
+
+            function updateVermontTime() {
+                const vermontTimeContainer = document.createElement('div');
+                vermontTimeContainer.id = 'vermontTimeContainer';
+                vermontTimeContainer.className = 'font-2 stats-container';
+                vermontTimeContainer.style.marginTop = '20px';
+
+                const vermontTime = moment().tz('America/New_York'); // Vermont is in the Eastern Time Zone
+                const timeOfDay = getTimeOfDay(vermontTime);
+                const timeString = vermontTime.format('h:mm A');
+                
+                const timeElement = document.createElement('p');
+                timeElement.className = 'stats-p';
+                timeElement.innerHTML = `<strong>Current time in Hack Club HQ:</strong> ${timeOfDay} (${timeString})`;
+                vermontTimeContainer.appendChild(timeElement);
+
+                document.querySelector('#statsTable').insertAdjacentElement('beforebegin', vermontTimeContainer);
+            }
+
+            function getTimeOfDay(time) {
+                const hour = time.hour();
+                if (hour >= 5 && hour < 8) return 'Early Morning - (Don\'t Ping!)';
+                if (hour >= 8 && hour < 12) return 'Morning (In Office)';
+                if (hour >= 12 && hour < 14) return 'Midday (In Office)';
+                if (hour >= 14 && hour < 17) return 'Afternoon (In Office)';
+                if (hour >= 17 && hour < 20) return 'Late Afternoon (In/Out Office)';
+                if (hour >= 20 || hour < 5) return 'Night 🛏️💤💤 - (Don\'t Ping!)';
             }
 
             function createChart(data) {
