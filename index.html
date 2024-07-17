@@ -266,6 +266,8 @@
             background-color: #fbefd6;
             padding: 20px;
             z-index: 100;
+            text-align: center;
+            box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.5);
         }
         .popup h2 {
             text-align: center;
@@ -284,12 +286,16 @@
             margin-bottom: 10px;
         }
         .popup button {
+            margin-top: 10px;
             padding: 10px 20px;
             border: none;
             border-radius: 3px;
             background-color: #fb8b3c;
             color: #fbefd6;
             cursor: pointer;
+        }
+        .hoursperday{
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -306,7 +312,7 @@
         </div>  
 
         <div style="text-align: center;">
-            <div class="inline-container font-2">
+            <div class="inline-container font-2 hoursperday">
                 <label style="font-size: 1.4rem;" for="hoursPerDay">Hours per day:</label>
                 <input type="number" class="font-2" id="hoursPerDay" value="1">
             </div>
@@ -374,10 +380,15 @@
         <h2 class="font-1" style="font-size: 2rem; text-align: center;">Faq</h2>
         <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-bottom: 0px;"><b>When does Arcade end? When does the shop close?</b></p>
         <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-top: 0px;">Hack Club Arcade ends on Aug 31st. You will not be able to earn OR spend tickets after that date. Shipments for prizes may occur after the end date. **Subject to change**</p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-bottom: 0px;"><b>What are some helpful tools?</b></p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-top: 0px;">You can try this <a href="stats.html">live arcade review stats website</a> to see the review backlog or this <a href="https://arcade-tools.vercel.app/ideagen.html">AI powered idea generator</a>. More stuff coming soon!</p>
         <p class="font-2" style="text-align: center;">-------------------</p>
         <p class="font-2" style="text-align: center; font-size: 1.2rem;">I am still working on the FAQ, but in the meantime, you can have a look at the <a href="https://docs.google.com/document/d/1RXCe1nNrFdiolKCknkR5Ho1AG7Kf_2LsTAKTHxQodic/">official FAQ</a>, <a href="https://github.com/hackclub/arcade-constitution">Arcade Constitution</a>, or message the #arcade-help channel on the <a href="https://hackclub.com/slack">Hack Club Slack</a>! Alternatively, you can visit the FAQ section of the <a href="https://hackclub.com/arcade/">Hack Club Arcade Website</a>.</p>
         <p class="font-2" style="text-align: center; font-size: 1.2rem;">If you have any suggestions or issues, please <a href="https://forms.fillout.com/t/hSJMTXtGshus">fill out this form</a>, or contact me on the Hack Club Slack: @Hayden Kong. <a href="https://github.com/PixelVerseIT/hackclub-arcade-tracker-htmlcssjs">Open source on GitHub</a>.</p>
+
+        <p class="font-2" style="font-size: 1.2rem; margin-top: 55px; color: grey; text-align: center;">&copy; 2024 Hayden Kong. All rights reserved.</p>
     </div>
+    
     
 
     <!-- date popoup -->
@@ -388,6 +399,7 @@
         <br>
         <button id="saveStartDate">Save</button>
     </div>
+    
 
     
     <script>
