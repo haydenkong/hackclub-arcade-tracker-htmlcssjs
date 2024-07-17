@@ -51,11 +51,12 @@
             display: block;
         }
         input[type="number"], input[type="date"] {
-            max-width: 100px;
+            max-width: 150px;
             background-color: #ede5d3;
-            border-radius: 5px;
+            border-radius: 0px;
             border: none;
             outline: none;
+            border-radius: 5px;
             font-size: 1.4rem;
             padding: 5px;
         }
@@ -67,7 +68,7 @@
         .inline-container label {
             margin: 0;
         }
-        .inline-container input[type="number"] {
+        .inline-container input[type="number"], .inline-container input[type="date"] {
             flex: 2;
             padding: 8px;
         }
@@ -227,6 +228,7 @@
         }
         .spanText{
             font-size: 1.2rem;
+            /* font-weight: bold; */
         }
         .stats-info{
             text-decoration: underline;
@@ -251,22 +253,43 @@
         25%  {transform: scale(0.8);}
         75%  {transform: scale(1.3);}
         }
-        .stats {
+
+        /* popup styles */
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border: 3px solid #fb8b3c;
+            border-radius: 5px;
+            background-color: #fbefd6;
+            padding: 20px;
+            z-index: 100;
+        }
+        .popup h2 {
             text-align: center;
-            margin-top: 20px;
-        }
-        .stats p {
-            margin: 5px 0;
-        }
-        .input-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
             margin-bottom: 10px;
         }
-        .input-container input {
-            width: 100px;
+        .popup label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .popup input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .popup button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            background-color: #fb8b3c;
+            color: #fbefd6;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -278,27 +301,30 @@
         <div style="text-align: center;">
             <div class="inline-container font-2">
                 <label style="font-size: 1.4rem;" for="ticketGoal">Ticket Goal:</label>
-                <input type="number" style="width: 50px;" class="font-2" id="ticketGoal" value="100">
+                <input type="number" class="font-2" id="ticketGoal" value="100">
             </div>  
         </div>  
+
+        <div style="text-align: center;">
+            <div class="inline-container font-2">
+                <label style="font-size: 1.4rem;" for="hoursPerDay">Hours per day:</label>
+                <input type="number" class="font-2" id="hoursPerDay" value="1">
+            </div>
+        </div>
 
         <div class="ticket-count font-1">
             <span id="currentTickets" style="color: #00afb3;">0</span> 
             <button class="addOne" id="addOne">🎟️</button>
+           
         </div>
-        <div style="text-align: center; margin-bottom: 10px;">
+        <div style="text-align: center;">
             <a id="enterTicketsLink" class="font-2">Enter Current Tickets</a>
         </div>
 
-        <div class="input-container">
-            <label for="startDateInput" style="font-size: 1.4rem;" class="font-2">Start Date:</label>
-            <input type="date" style="min-width: 150px;" id="startDateInput" class="font-2">
+        <div style="text-align: center;">
+            <a id="setStartDateLink" class="font-2">Set Start Date</a>
         </div>
-        <div class="input-container">
-            <label for="availableHoursInput" style="font-size: 1.4rem;" class="font-2">Available Hours per Day:</label>
-            <input type="number" id="availableHoursInput" style="max-width: 50px;" class="font-2" min="0" step="0.5" value="2">
-        </div>
-
+        
         <div>
             <p class="progress-bar-header font-2">Your Progress:</p>
             <div class="progress-bar">
@@ -320,19 +346,17 @@
                 <div class="remainingprogressbar-color"></div>
                 <p id="remainingProgressText" class="progress-bar-text"></p>
             </div>
+
         </div>
 
         <div style="text-align: center; cursor:default;">
         <p class="ticket-count font-1" style="color: #2eb774; margin: 30px;" onmouseenter="requiredDaily()" onmouseleave="resetRequiredDaily()" id="required-daily"></p>
         </div>
         <p class="required-daily font-2" style="color: #000000; margin-top: -25px;" id="">Required Daily Tickets</p>
-        
-        <div class="stats">
-            <p class="days-remaining font-2" style="color: #000000; margin-top: 30px;" id="daysLeft"></p>
-            <p class="days-remaining font-2" style="color: #000000; margin-bottom: 20px;" id="tickets-left"></p>
-            <p class="font-2 days-remaining" id="averageTicketsPerDay"></p>
-            <p class="font-2 days-remaining" id="projectedCompletionDate" style="margin-bottom: 50px;"></p>
-        </div>
+        <p class="days-remaining font-2" style="color: #000000; margin-top: 30px;" id="daysLeft"></p>
+        <p class="days-remaining font-2" style="color: #000000; margin-bottom: 50px;" id="tickets-left"></p>
+        <p class="days-remaining font-2" style="color: #000000; margin-bottom: 50px;" id="estimated-goal-date"></p>
+
         
         <div class="button-container">
             <button class="font-1" id="addOneHour">Add 1 Hour</button>
@@ -355,6 +379,17 @@
         <p class="font-2" style="text-align: center; font-size: 1.2rem;">If you have any suggestions or issues, please <a href="https://forms.fillout.com/t/hSJMTXtGshus">fill out this form</a>, or contact me on the Hack Club Slack: @Hayden Kong. <a href="https://github.com/PixelVerseIT/hackclub-arcade-tracker-htmlcssjs">Open source on GitHub</a>.</p>
     </div>
     
+
+    <!-- date popoup -->
+    <div id="startDatePopup" class="popup">
+        <h2>Set Start Date</h2>
+        <label for="startDateInput">Enter Start Date:</label>
+        <input type="date" id="startDateInput" value="2024-06-18" style="min-width: 250px;">
+        <br>
+        <button id="saveStartDate">Save</button>
+    </div>
+
+    
     <script>
         const ticketGoalInput = document.getElementById('ticketGoal');
         const currentTicketsElement = document.getElementById('currentTickets');
@@ -368,172 +403,170 @@
         const addOneButton = document.getElementById('addOne');
         const ticketsLeftElement = document.getElementById('tickets-left');
         const enterTicketsLink = document.getElementById('enterTicketsLink');
+        const setStartDateLink = document.getElementById('setStartDateLink');
+        const startDatePopup = document.getElementById('startDatePopup');
+        const startDateInput = document.getElementById('startDateInput');
+        const saveStartDateButton = document.getElementById('saveStartDate');
         const requiredDailyElement = document.getElementById('required-daily');
         const remainingProgressText = document.getElementById('remainingProgressText');
-        const averageTicketsPerDayElement = document.getElementById('averageTicketsPerDay');
-        const projectedCompletionDateElement = document.getElementById('projectedCompletionDate');
-        const startDateInput = document.getElementById('startDateInput');
-        const availableHoursInput = document.getElementById('availableHoursInput');
-    
+        const hoursPerDayInput = document.getElementById('hoursPerDay');
+        const estimatedGoalDateElement = document.getElementById('estimated-goal-date'); 
+
+        let startDate = new Date(localStorage.getItem('startDate')) || new Date('2024-06-18'); 
         const endDate = new Date('2024-08-31');
-    
+
         function loadFromStorage() {
             const storedGoal = localStorage.getItem('ticketGoal');
             const storedTickets = localStorage.getItem('currentTickets');
             const storedStartDate = localStorage.getItem('startDate');
-            const storedAvailableHours = localStorage.getItem('availableHours');
-    
+            const storedHoursPerDay = localStorage.getItem('hoursPerDay');
+
             if (storedGoal) ticketGoalInput.value = storedGoal;
             if (storedTickets) currentTicketsElement.textContent = storedTickets;
-            if (storedStartDate) startDateInput.value = storedStartDate;
-            if (storedAvailableHours) availableHoursInput.value = storedAvailableHours;
+            if (storedStartDate) startDate = new Date(storedStartDate);
+            if (storedHoursPerDay) hoursPerDayInput.value = storedHoursPerDay;
         }
-    
+
         function saveToStorage() {
             localStorage.setItem('ticketGoal', ticketGoalInput.value);
             localStorage.setItem('currentTickets', currentTicketsElement.textContent);
-            localStorage.setItem('startDate', startDateInput.value);
-            localStorage.setItem('availableHours', availableHoursInput.value);
+            localStorage.setItem('startDate', startDate.toString());
+            localStorage.setItem('hoursPerDay', hoursPerDayInput.value);
         }
-    
+
         function requiredDaily(){
+            const requiredDailyElement = document.getElementById('required-daily');
             const ticketGoal = parseInt(ticketGoalInput.value) || 0;
             const currentTickets = parseInt(currentTicketsElement.textContent);
             const now = new Date();
-            const startDate = new Date(startDateInput.value);
             const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-            const passedDays = Math.max(Math.ceil((now - startDate) / (1000 * 60 * 60 * 24)), 1);
+            const passedDays = Math.ceil((now - startDate) / (1000 * 60 * 60 * 24));
             const remainingDays = Math.max(totalDays - passedDays, 0);
-            const ticketsLeft = Math.max(ticketGoal - currentTickets, 0);
-            const availableHours = parseFloat(availableHoursInput.value) || 0;
-            const requiredDaily = (ticketsLeft / (remainingDays * availableHours)).toFixed(3) || 0;
+            const ticketsLeft = ticketGoal - currentTickets > 0 ? ticketGoal - currentTickets : 0;
+            const requiredDaily = (ticketsLeft / remainingDays).toFixed(3) || 0;
             requiredDailyElement.textContent = `${requiredDaily}`;
         }
-    
+
         function resetRequiredDaily(){
+            const requiredDailyElement = document.getElementById('required-daily');
             const ticketGoal = parseInt(ticketGoalInput.value) || 0;
             const currentTickets = parseInt(currentTicketsElement.textContent);
             const now = new Date();
-            const startDate = new Date(startDateInput.value);
             const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-            const passedDays = Math.max(Math.ceil((now - startDate) / (1000 * 60 * 60 * 24)), 1);
+            const passedDays = Math.ceil((now - startDate) / (1000 * 60 * 60 * 24));
             const remainingDays = Math.max(totalDays - passedDays, 0);
-            const ticketsLeft = Math.max(ticketGoal - currentTickets, 0);
-            const availableHours = parseFloat(availableHoursInput.value) || 0;
-            const requiredDaily = Math.ceil(ticketsLeft / (remainingDays * availableHours)) || 0;
+            const ticketsLeft = ticketGoal - currentTickets > 0 ? ticketGoal - currentTickets : 0;
+            const requiredDaily = Math.ceil(ticketsLeft / remainingDays) || 0;
             requiredDailyElement.textContent = `${requiredDaily}`;
         }
-    
+
         function updateProgress() {
             const ticketGoal = parseInt(ticketGoalInput.value) || 0;
             const currentTickets = parseInt(currentTicketsElement.textContent);
+            const hoursPerDay = parseFloat(hoursPerDayInput.value) || 1; 
             const progress = (currentTickets / ticketGoal) * 100 || 0;
             const cappedProgress = Math.min(progress, 100) || 0;
-    
+
             progressBar.style.width = `${cappedProgress}%`;
             progressText.innerHTML = `You are <span class="font-2 spanText">${cappedProgress.toFixed(1)}%</span> complete to your goal of ${ticketGoal} tickets.`;
-    
+
             const now = new Date();
-            const startDate = new Date(startDateInput.value);
             const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-            const passedDays = Math.max(Math.ceil((now - startDate) / (1000 * 60 * 60 * 24)), 1);
+            const passedDays = Math.ceil((now - startDate) / (1000 * 60 * 60 * 24));
             const remainingDays = Math.max(totalDays - passedDays, 0);
-            const ticketsLeft = Math.max(ticketGoal - currentTickets, 0);
-            const availableHours = parseFloat(availableHoursInput.value) || 10;
-    
-            const requiredDaily = (ticketsLeft / remainingDays) || 0;
+            const ticketsLeft = ticketGoal - currentTickets > 0 ? ticketGoal - currentTickets : 0;
+            const requiredDaily = Math.ceil(ticketsLeft / remainingDays) || 0;
             const requiredDailyColour = requiredDaily < 4 ? '#2eb774' : '#ff5c16';
-    
             ticketsLeftElement.innerHTML = `You have <span class="stats-info">${ticketsLeft}</span> tickets left to earn`;
             daysLeftElement.innerHTML = `<span class="stats-info">${remainingDays}</span> Days Left`;
-            requiredDailyElement.textContent = `${requiredDaily.toFixed(1)}`;
+            requiredDailyElement.textContent = `${requiredDaily}`;
             requiredDailyElement.style.color = requiredDailyColour;
-    
+
             const idealProgress = (passedDays / totalDays) * 100 || 0;
             const cappedIdealProgress = Math.min(idealProgress, 100);
             idealProgressBar.style.width = `${cappedIdealProgress}%`;
             idealProgressText.innerHTML = `You should be <span class="font-2 spanText"> ${cappedIdealProgress.toFixed(1)}%</span> complete.`;
-    
-            const remainingProgress = 100 - cappedProgress;
-            remainingProgressText.innerHTML = `Remaining: <span class="font-2 spanText">${remainingProgress.toFixed(1)}%</span>`;
-    
-            const averageTicketsPerDay = (currentTickets / passedDays).toFixed(2) || 0;
-            averageTicketsPerDayElement.innerHTML = `Average Tickets/Day: <span class="stats-info">${averageTicketsPerDay}</span>`;
-    
-            const projectedCompletionDays = Math.ceil(ticketsLeft / requiredDaily) || 0;
-            const projectedCompletionDate = new Date(now);
-            projectedCompletionDate.setDate(projectedCompletionDate.getDate() + projectedCompletionDays);
-            projectedCompletionDateElement.innerHTML = `Projected Completion Date: <span class="stats-info">${projectedCompletionDate.toDateString()}</span>`;
-        }
-    
-        function incrementTicket() {
-            let currentTickets = parseInt(currentTicketsElement.textContent) || 0;
-            currentTickets += 1;
-            currentTicketsElement.textContent = currentTickets;
-            updateProgress();
+            remainingProgressText.innerHTML = `<span class="font-2 spanText">${(100 - cappedProgress).toFixed(1)}</span>% left until you reach your goal!`;
+
+            if (cappedProgress >= cappedIdealProgress) {
+                progressBar.style.zIndex = 1;
+                idealProgressBar.style.zIndex = 2;
+            } else {
+                progressBar.style.zIndex = 2;
+                idealProgressBar.style.zIndex = 1;
+            }
+
+            // calculate estimated goal date
+            let estimatedGoalDate = new Date();
+            let daysToReachGoal = Math.ceil(ticketsLeft / hoursPerDay); 
+            estimatedGoalDate.setDate(estimatedGoalDate.getDate() + daysToReachGoal);
+
+            // format date
+            let formattedDate = estimatedGoalDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // update the UI
+            estimatedGoalDateElement.textContent = 'You will reach your goal on ' + formattedDate + '.';
+
             saveToStorage();
         }
-    
-        function decrementTicket() {
-            let currentTickets = parseInt(currentTicketsElement.textContent) || 0;
+
+        ticketGoalInput.addEventListener('input', updateProgress);
+        hoursPerDayInput.addEventListener('input', updateProgress);
+
+        addOneHourButton.addEventListener('click', () => {
+            currentTicketsElement.textContent = parseInt(currentTicketsElement.textContent) + 1;
+            updateProgress();
+            confetti({
+                particleCount: 300,
+                spread: 300
+            });
+
+        });
+
+        addOneButton.addEventListener('click', () => {
+            currentTicketsElement.textContent = parseInt(currentTicketsElement.textContent) + 1;
+            updateProgress();
+            confetti({
+                particleCount: 300,
+                spread: 300
+            });
+
+        });
+
+        removeOneHourButton.addEventListener('click', () => {
+            const currentTickets = parseInt(currentTicketsElement.textContent);
             if (currentTickets > 0) {
-                currentTickets -= 1;
-                currentTicketsElement.textContent = currentTickets;
+                currentTicketsElement.textContent = currentTickets - 1;
                 updateProgress();
-                saveToStorage();
             }
-        }
-    
-        function addOneHour() {
-            let availableHours = parseFloat(availableHoursInput.value) || 0;
-            availableHours += 1;
-            availableHoursInput.value = availableHours;
-            updateProgress();
-            saveToStorage();
-        }
-    
-        function removeOneHour() {
-            let availableHours = parseFloat(availableHoursInput.value) || 0;
-            if (availableHours > 0) {
-                availableHours -= 1;
-                availableHoursInput.value = availableHours;
-                updateProgress();
-                saveToStorage();
-            }
-        }
-    
-        ticketGoalInput.addEventListener('input', () => {
-            updateProgress();
-            saveToStorage();
         });
-    
-        startDateInput.addEventListener('change', () => {
-            updateProgress();
-            saveToStorage();
-        });
-    
-        availableHoursInput.addEventListener('input', () => {
-            updateProgress();
-            saveToStorage();
-        });
-    
-        addOneButton.addEventListener('click', incrementTicket);
-        removeOneHourButton.addEventListener('click', decrementTicket);
-        addOneHourButton.addEventListener('click', addOneHour);
-    
+
         enterTicketsLink.addEventListener('click', () => {
-            const enteredTickets = prompt("Enter your current tickets:");
-            if (enteredTickets !== null) {
-                currentTicketsElement.textContent = parseInt(enteredTickets) || 0;
+            const tickets = prompt('Enter the number of tickets you currently have:');
+            if (tickets !== null && !isNaN(tickets) && tickets >= 0) {
+                currentTicketsElement.textContent = tickets;
                 updateProgress();
-                saveToStorage();
             }
         });
-    
+        
+        // start date popup
+        setStartDateLink.addEventListener('click', () => {
+            startDatePopup.style.display = 'block';
+        });
+
+        saveStartDateButton.addEventListener('click', () => {
+            startDate = new Date(startDateInput.value);
+            startDatePopup.style.display = 'none';
+            updateProgress(); 
+        });
+
+
         loadFromStorage();
         updateProgress();
     </script>
-    
-    
 </body>
 </html>
