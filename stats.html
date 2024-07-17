@@ -186,17 +186,32 @@
         }
 
         #vermontTimeContainer {
-            background-color: #00afb3;
-            color: #fbefd6;
+            margin: 0px;
+            background-color: #fbefd6;
+            color: #000000;
             padding: 15px;
             margin-top: 20px;
             border-radius: 5px;
             text-align: center;
+            padding: 0px;
         }
 
         #vermontTimeContainer p {
             margin: 5px 0;
             font-size: 1.2em;
+        }
+
+        .h2status{
+            font-size: 1.5rem;
+            color: #fbefd6;
+            margin: 0px;
+        }
+
+        .status-p{
+            font-size: 1.2rem;
+            color: #fbefd6;
+            margin: 0px;
+            font-weight: normal;
         }
     </style>
 </head>
@@ -214,17 +229,21 @@
             <canvas id="statsChart"></canvas>
         </div>
         <div class="about">
-            <p class="font-2" style="color: #fbefd6; font-size: 1.2rem;"><b>⚠️NOTICE!⚠️: </b>There is currently a huge backlog in the review sessions. Please be patient! 
+            <p class="font-2" style="color: #fbefd6; font-size: 1.2rem;"><b>⚠️NOTICE⚠️: </b>There is currently a huge backlog in the review sessions. Please be patient! 
                 Sessions are not reviewed in order and should take around 2-7 days.</p> 
         </div>
         <div class="stats-container font-2" id="recentStats">
            <!-- recent stats here -->
         </div>
-        <div class="stats-container font-2" id="countdownTimer">
-            <!-- countdown timer will be inserted here -->
-         </div>
+        
         <table id="statsTable" class="font-2">
-            <h2 class="font-1" style="text-align: center; margin-top: 50px;">Full Logs</h2>
+            <h2 class="font-1" style="text-align: center; font-size: 2rem; margin-top: 50px; margin-bottom: 0px;">Full Logs</h2>
+            <div id="vermontTimeContainer">
+                <!-- Vermont time -->
+            </div>
+            <div class="stats-container font-2" id="countdownTimer">
+                <!-- countdown timer here -->
+             </div>
             <thead>
                 <tr>
                     <th>Timestamp</th>
@@ -363,7 +382,7 @@
             function updateVermontTime() {
                 const vermontTimeContainer = document.createElement('div');
                 vermontTimeContainer.id = 'vermontTimeContainer';
-                vermontTimeContainer.className = 'font-2 stats-container';
+                vermontTimeContainer.className = 'font-2 time-container';
                 vermontTimeContainer.style.marginTop = '20px';
 
                 const vermontTime = moment().tz('America/New_York'); // Vermont is in the Eastern Time Zone
@@ -371,21 +390,28 @@
                 const timeString = vermontTime.format('h:mm A');
                 
                 const timeElement = document.createElement('p');
-                timeElement.className = 'stats-p';
-                timeElement.innerHTML = `<strong>Current time in Hack Club HQ:</strong> ${timeOfDay} (${timeString})`;
+                timeElement.className = 'time-p';
+                timeElement.innerHTML = `<strong>Current time in Hack Club HQ:</strong> (${timeString}) ${timeOfDay} `;
                 vermontTimeContainer.appendChild(timeElement);
 
-                document.querySelector('#statsTable').insertAdjacentElement('beforebegin', vermontTimeContainer);
+                document.querySelector('#vermontTimeContainer').insertAdjacentElement('beforebegin', vermontTimeContainer);
             }
 
             function getTimeOfDay(time) {
                 const hour = time.hour();
-                if (hour >= 5 && hour < 8) return 'Early Morning - (Don\'t Ping!)';
-                if (hour >= 8 && hour < 12) return 'Morning (In Office)';
-                if (hour >= 12 && hour < 14) return 'Midday (In Office)';
-                if (hour >= 14 && hour < 17) return 'Afternoon (In Office)';
-                if (hour >= 17 && hour < 20) return 'Late Afternoon (In/Out Office)';
-                if (hour >= 20 || hour < 5) return 'Night 🛏️💤💤 - (Don\'t Ping!)';
+                if (hour >= 5 && hour < 8) {
+                    return 'Early Morning 🍵 - Avoid Pinging!';
+                } else if (hour >= 8 && hour < 12) {
+                    return 'Morning 🌇 (In Office)';
+                } else if (hour >= 12 && hour < 13) {
+                    return 'Midday ☀️ (In Office)';
+                } else if (hour >= 13 && hour < 17) {
+                    return 'Afternoon 🕑 (In Office)';
+                } else if (hour >= 17 && hour < 20) {
+                    return 'Evening 🌙 (Out of Office)';
+                } else if (hour >= 20 || hour < 5) {
+                    return 'Night 🛏️💤💤 - Avoid Pinging!';
+                }
             }
 
             function createChart(data) {
@@ -490,9 +516,9 @@
                 const previous = dataArray[1];
                 
                 if (latest.hours_approved > previous.hours_approved) {
-                    statusContainer.innerHTML = '<h2>🎉 Sessions are being reviewed! 🎉</h2>' + (latest.hours_approved-previous.hours_approved) + ' reviewed so far!';
+                    statusContainer.innerHTML = '<h2 class="h2status">🎉 Sessions are being reviewed! 🎉</h2>' + '<h2 class="status-p">' + (latest.hours_approved-previous.hours_approved) + ' reviewed in the past 15 minutes!</h2>';
                 } else {
-                    statusContainer.innerHTML = '<h2>😴 Sessions arent being reviewed right now. Pls be patient!</h2>';
+                    statusContainer.innerHTML = '<h2 class="h2status">😴 Sessions arent being reviewed right now. Pls be patient!</h2>';
                 }
             }
 
