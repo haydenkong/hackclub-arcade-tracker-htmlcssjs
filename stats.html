@@ -172,6 +172,14 @@
             cursor: not-allowed;
         }
 
+        #paginationControls:hover button:disabled {
+            transform: scale(1);
+        }
+
+        #paginationControls:active button:disabled {
+            transform: scale(1);
+        }
+
         #pageInfo {
             font-size: 1rem;
             color: #333;
@@ -212,6 +220,9 @@
         <div class="stats-container font-2" id="recentStats">
            <!-- recent stats here -->
         </div>
+        <div class="stats-container font-2" id="countdownTimer">
+            <!-- countdown timer will be inserted here -->
+         </div>
         <table id="statsTable" class="font-2">
             <h2 class="font-1" style="text-align: center; margin-top: 50px;">Full Logs</h2>
             <thead>
@@ -277,6 +288,7 @@
                     updateReviewStatus(allData);
                     updateRecentStats(allData);
                     updateVermontTime();
+                    updateCountdownTimer(allData[0].timestamp);
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
@@ -504,6 +516,43 @@
                 } else {
                     statsContainer.innerHTML = '<p>Not enough data for 30-minute stats yet.</p>';
                 }
+            }
+
+            function updateCountdownTimer(latestTimestamp) {
+                const countdownContainer = document.getElementById('countdownTimer');
+                let isLoading = false;
+                
+                function updateTimer() {
+                    const now = moment();
+                    const latestUpdate = moment(latestTimestamp);
+                    const nextUpdate = latestUpdate.add(15, 'minutes');
+                    const duration = moment.duration(nextUpdate.diff(now));
+                    
+                    if (duration.asSeconds() <= 0) {
+                        if (!isLoading) {
+                            // 10-sec loading period
+                            isLoading = true;
+                            countdownContainer.innerHTML = `
+                                <h2 class="stats-h2">GETTING LATEST STATS</h2>
+                                <p class="stats-p">Please wait 10 seconds. This page will auto-refresh.</p>
+                            `;
+                            setTimeout(() => {
+                                location.reload();
+                            }, 10000); // 10 seconds
+                        }
+                    } else {
+                        const minutes = Math.floor(duration.asMinutes());
+                        const seconds = Math.floor(duration.asSeconds() % 60);
+                        
+                        countdownContainer.innerHTML = `
+                            <h2 class="stats-h2">Next API Update:</h2>
+                            <p class="stats-p">${minutes} minutes ${seconds} seconds</p>
+                        `;
+                        setTimeout(updateTimer, 1000);
+                    }
+                }
+                
+                updateTimer();
             }
             
             fetchStats();

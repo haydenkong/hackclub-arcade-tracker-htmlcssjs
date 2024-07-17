@@ -274,6 +274,9 @@
         <div style="text-align: center;">
             <a id="enterTicketsLink" class="font-2">Enter Current Tickets</a>
         </div>
+        <div style="text-align: center;">
+            <a id="enterStartDateLink" class="font-2">Set Start Date</a>
+        </div>
         <div>
             <p class="progress-bar-header font-2">Your Progress:</p>
             <div class="progress-bar">
@@ -294,6 +297,11 @@
             <div style="display: flex;">
                 <div class="remainingprogressbar-color"></div>
                 <p id="remainingProgressText" class="progress-bar-text"></p>
+            </div>
+
+            <div class="stats">
+                <p class="font-2" id="averageTicketsPerDay"></p>
+                <p class="font-2" id="projectedCompletionDate"></p>
             </div>
 
         </div>
@@ -345,20 +353,27 @@
         const requiredDailyElement = document.getElementById('required-daily');
         const remainingProgressText = document.getElementById('remainingProgressText');
 
-        const startDate = new Date('2024-06-18');
+        const averageTicketsPerDayElement = document.getElementById('averageTicketsPerDay');
+        const projectedCompletionDateElement = document.getElementById('projectedCompletionDate');
+        const enterStartDateLink = document.getElementById('enterStartDateLink');
+
+        let startDate = new Date('2024-06-18');
         const endDate = new Date('2024-08-31');
 
         function loadFromStorage() {
             const storedGoal = localStorage.getItem('ticketGoal');
             const storedTickets = localStorage.getItem('currentTickets');
+            const storedStartDate = localStorage.getItem('startDate');
             
             if (storedGoal) ticketGoalInput.value = storedGoal;
             if (storedTickets) currentTicketsElement.textContent = storedTickets;
+            if (storedStartDate) startDate = new Date(storedStartDate);
         }
 
         function saveToStorage() {
             localStorage.setItem('ticketGoal', ticketGoalInput.value);
             localStorage.setItem('currentTickets', currentTicketsElement.textContent);
+            localStorage.setItem('startDate', startDate.toISOString());
         }
 
         function requiredDaily(){
@@ -426,6 +441,22 @@
                 idealProgressBar.style.zIndex = 1;
             }
 
+            // Calculate average tickets per day
+            const averageTicketsPerDay = passedDays > 0 ? (currentTickets / passedDays).toFixed(2) : 0;
+            averageTicketsPerDayElement.textContent = `Average tickets per day: ${averageTicketsPerDay}`;
+
+
+            if (averageTicketsPerDay > 0) {
+                const daysToCompletion = Math.ceil(ticketsLeft / averageTicketsPerDay);
+                const projectedCompletionDate = new Date(now.getTime() + daysToCompletion * 24 * 60 * 60 * 1000);
+                if (projectedCompletionDate <= endDate) {
+                    projectedCompletionDateElement.textContent = `Projected completion date: ${projectedCompletionDate.toDateString()}`;
+                } else {
+                    projectedCompletionDateElement.textContent = "Projected completion date: After August 31st, 2024";
+                }
+            } else {
+                projectedCompletionDateElement.textContent = "Projected completion date: Not enough data";
+            }
 
             saveToStorage();
         }
@@ -465,6 +496,19 @@
             if (tickets !== null && !isNaN(tickets) && tickets >= 0) {
                 currentTicketsElement.textContent = tickets;
                 updateProgress();
+            }
+        });
+
+        enterStartDateLink.addEventListener('click', () => {
+            const newStartDate = prompt('Enter your start date (YYYY-MM-DD):');
+            if (newStartDate) {
+                const parsedDate = new Date(newStartDate);
+                if (!isNaN(parsedDate.getTime())) {
+                    startDate = parsedDate;
+                    updateProgress();
+                } else {
+                    alert('Invalid date format. Please use YYYY-MM-DD.');
+                }
             }
         });
 
