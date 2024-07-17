@@ -374,28 +374,28 @@
         const projectedCompletionDateElement = document.getElementById('projectedCompletionDate');
         const startDateInput = document.getElementById('startDateInput');
         const availableHoursInput = document.getElementById('availableHoursInput');
-
+    
         const endDate = new Date('2024-08-31');
-
+    
         function loadFromStorage() {
             const storedGoal = localStorage.getItem('ticketGoal');
             const storedTickets = localStorage.getItem('currentTickets');
             const storedStartDate = localStorage.getItem('startDate');
             const storedAvailableHours = localStorage.getItem('availableHours');
-            
+    
             if (storedGoal) ticketGoalInput.value = storedGoal;
             if (storedTickets) currentTicketsElement.textContent = storedTickets;
             if (storedStartDate) startDateInput.value = storedStartDate;
             if (storedAvailableHours) availableHoursInput.value = storedAvailableHours;
         }
-
+    
         function saveToStorage() {
             localStorage.setItem('ticketGoal', ticketGoalInput.value);
             localStorage.setItem('currentTickets', currentTicketsElement.textContent);
             localStorage.setItem('startDate', startDateInput.value);
             localStorage.setItem('availableHours', availableHoursInput.value);
         }
-
+    
         function requiredDaily(){
             const ticketGoal = parseInt(ticketGoalInput.value) || 0;
             const currentTickets = parseInt(currentTicketsElement.textContent);
@@ -405,10 +405,11 @@
             const passedDays = Math.max(Math.ceil((now - startDate) / (1000 * 60 * 60 * 24)), 1);
             const remainingDays = Math.max(totalDays - passedDays, 0);
             const ticketsLeft = Math.max(ticketGoal - currentTickets, 0);
-            const requiredDaily = (ticketsLeft / remainingDays).toFixed(3) || 0;
+            const availableHours = parseFloat(availableHoursInput.value) || 0;
+            const requiredDaily = (ticketsLeft / (remainingDays * availableHours)).toFixed(3) || 0;
             requiredDailyElement.textContent = `${requiredDaily}`;
         }
-
+    
         function resetRequiredDaily(){
             const ticketGoal = parseInt(ticketGoalInput.value) || 0;
             const currentTickets = parseInt(currentTicketsElement.textContent);
@@ -418,116 +419,121 @@
             const passedDays = Math.max(Math.ceil((now - startDate) / (1000 * 60 * 60 * 24)), 1);
             const remainingDays = Math.max(totalDays - passedDays, 0);
             const ticketsLeft = Math.max(ticketGoal - currentTickets, 0);
-            const requiredDaily = Math.ceil(ticketsLeft / remainingDays) || 0;
+            const availableHours = parseFloat(availableHoursInput.value) || 0;
+            const requiredDaily = Math.ceil(ticketsLeft / (remainingDays * availableHours)) || 0;
             requiredDailyElement.textContent = `${requiredDaily}`;
         }
-
+    
         function updateProgress() {
             const ticketGoal = parseInt(ticketGoalInput.value) || 0;
             const currentTickets = parseInt(currentTicketsElement.textContent);
             const progress = (currentTickets / ticketGoal) * 100 || 0;
             const cappedProgress = Math.min(progress, 100) || 0;
-
+    
             progressBar.style.width = `${cappedProgress}%`;
             progressText.innerHTML = `You are <span class="font-2 spanText">${cappedProgress.toFixed(1)}%</span> complete to your goal of ${ticketGoal} tickets.`;
-
+    
             const now = new Date();
             const startDate = new Date(startDateInput.value);
             const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
             const passedDays = Math.max(Math.ceil((now - startDate) / (1000 * 60 * 60 * 24)), 1);
             const remainingDays = Math.max(totalDays - passedDays, 0);
             const ticketsLeft = Math.max(ticketGoal - currentTickets, 0);
-            const availableHours = parseFloat(availableHoursInput.value) || 2;
-
-            const requiredDaily = Math.ceil(ticketsLeft / remainingDays) || 0;
+            const availableHours = parseFloat(availableHoursInput.value) || 10;
+    
+            const requiredDaily = (ticketsLeft / remainingDays) || 0;
             const requiredDailyColour = requiredDaily < 4 ? '#2eb774' : '#ff5c16';
-
+    
             ticketsLeftElement.innerHTML = `You have <span class="stats-info">${ticketsLeft}</span> tickets left to earn`;
             daysLeftElement.innerHTML = `<span class="stats-info">${remainingDays}</span> Days Left`;
-            requiredDailyElement.textContent = `${requiredDaily}`;
+            requiredDailyElement.textContent = `${requiredDaily.toFixed(1)}`;
             requiredDailyElement.style.color = requiredDailyColour;
-
+    
             const idealProgress = (passedDays / totalDays) * 100 || 0;
             const cappedIdealProgress = Math.min(idealProgress, 100);
             idealProgressBar.style.width = `${cappedIdealProgress}%`;
             idealProgressText.innerHTML = `You should be <span class="font-2 spanText"> ${cappedIdealProgress.toFixed(1)}%</span> complete.`;
-            remainingProgressText.innerHTML = `<span class="font-2 spanText">${(100 - cappedProgress).toFixed(1)}</span>% left until you reach your goal!`;
-
-            if (cappedProgress >= cappedIdealProgress) {
-                progressBar.style.zIndex = 1;
-                idealProgressBar.style.zIndex = 2;
-            } else {
-                progressBar.style.zIndex = 2;
-                idealProgressBar.style.zIndex = 1;
-            }
-
-            // Calculate average tickets per day
-            const averageTicketsPerDay = (currentTickets / passedDays).toFixed(2);
-            averageTicketsPerDayElement.textContent = `Average tickets per day: ${averageTicketsPerDay}`;
-
-            // Calculate projected completion date
-            const projectedDaysToCompletion = Math.ceil(ticketsLeft / (availableHours / 2));
-            const projectedCompletionDate = new Date(now.getTime() + projectedDaysToCompletion * 24 * 60 * 60 * 1000);
-            
-            if (projectedCompletionDate <= endDate) {
-                projectedCompletionDateElement.textContent = `Projected completion date: ${projectedCompletionDate.toDateString()}`;
-            } else {
-                projectedCompletionDateElement.textContent = "Projected completion date: After August 31st, 2024";
-            }
-
+    
+            const remainingProgress = 100 - cappedProgress;
+            remainingProgressText.innerHTML = `Remaining: <span class="font-2 spanText">${remainingProgress.toFixed(1)}%</span>`;
+    
+            const averageTicketsPerDay = (currentTickets / passedDays).toFixed(2) || 0;
+            averageTicketsPerDayElement.innerHTML = `Average Tickets/Day: <span class="stats-info">${averageTicketsPerDay}</span>`;
+    
+            const projectedCompletionDays = Math.ceil(ticketsLeft / requiredDaily) || 0;
+            const projectedCompletionDate = new Date(now);
+            projectedCompletionDate.setDate(projectedCompletionDate.getDate() + projectedCompletionDays);
+            projectedCompletionDateElement.innerHTML = `Projected Completion Date: <span class="stats-info">${projectedCompletionDate.toDateString()}</span>`;
+        }
+    
+        function incrementTicket() {
+            let currentTickets = parseInt(currentTicketsElement.textContent) || 0;
+            currentTickets += 1;
+            currentTicketsElement.textContent = currentTickets;
+            updateProgress();
             saveToStorage();
         }
-
-        ticketGoalInput.addEventListener('input', updateProgress);
-        startDateInput.addEventListener('change', updateProgress);
-        availableHoursInput.addEventListener('input', updateProgress);
-
-        addOneHourButton.addEventListener('click', () => {
-            currentTicketsElement.textContent = parseInt(currentTicketsElement.textContent) + 1;
-            updateProgress();
-            confetti({
-                particleCount: 300,
-                spread: 300
-            });
-        });
-
-        addOneButton.addEventListener('click', () => {
-            currentTicketsElement.textContent = parseInt(currentTicketsElement.textContent) + 1;
-            updateProgress();
-            confetti({
-                particleCount: 300,
-                spread: 300
-            });
-        });
-
-        removeOneHourButton.addEventListener('click', () => {
-            const currentTickets = parseInt(currentTicketsElement.textContent);
+    
+        function decrementTicket() {
+            let currentTickets = parseInt(currentTicketsElement.textContent) || 0;
             if (currentTickets > 0) {
-                currentTicketsElement.textContent = currentTickets - 1;
+                currentTickets -= 1;
+                currentTicketsElement.textContent = currentTickets;
                 updateProgress();
+                saveToStorage();
             }
+        }
+    
+        function addOneHour() {
+            let availableHours = parseFloat(availableHoursInput.value) || 0;
+            availableHours += 1;
+            availableHoursInput.value = availableHours;
+            updateProgress();
+            saveToStorage();
+        }
+    
+        function removeOneHour() {
+            let availableHours = parseFloat(availableHoursInput.value) || 0;
+            if (availableHours > 0) {
+                availableHours -= 1;
+                availableHoursInput.value = availableHours;
+                updateProgress();
+                saveToStorage();
+            }
+        }
+    
+        ticketGoalInput.addEventListener('input', () => {
+            updateProgress();
+            saveToStorage();
         });
-
+    
+        startDateInput.addEventListener('change', () => {
+            updateProgress();
+            saveToStorage();
+        });
+    
+        availableHoursInput.addEventListener('input', () => {
+            updateProgress();
+            saveToStorage();
+        });
+    
+        addOneButton.addEventListener('click', incrementTicket);
+        removeOneHourButton.addEventListener('click', decrementTicket);
+        addOneHourButton.addEventListener('click', addOneHour);
+    
         enterTicketsLink.addEventListener('click', () => {
-            const tickets = prompt('Enter the number of tickets you currently have:');
-            if (tickets !== null && !isNaN(tickets) && tickets >= 0) {
-                currentTicketsElement.textContent = tickets;
+            const enteredTickets = prompt("Enter your current tickets:");
+            if (enteredTickets !== null) {
+                currentTicketsElement.textContent = parseInt(enteredTickets) || 0;
                 updateProgress();
+                saveToStorage();
             }
         });
-
+    
         loadFromStorage();
         updateProgress();
-
-        // Set min date for start date input
-        const minDate = new Date('2024-06-18');
-        startDateInput.min = minDate.toISOString().split('T')[0];
-        startDateInput.max = new Date().toISOString().split('T')[0];
-
-        // Set default start date if not set
-        if (!startDateInput.value) {
-            startDateInput.value = minDate.toISOString().split('T')[0];
-        }
     </script>
+    
+    
 </body>
 </html>
