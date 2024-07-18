@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hack Club Arcade UIKit</title>
 
+    <!-- SEO meta tags -->
+    <meta name="description" content="Simple, modular UI kit for the Hack Club Arcade. ">
+    <meta name="keywords" content="hack club, hack club arcade, arcade ui, hack club arcade ui, hack club ui, ui kit">
+
     <!-- Google fonts - Official Arcade fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,37 +27,136 @@
     gtag('config', 'G-ZD8ZCNJRQQ');
     </script>
 
+
     <style>
+        /* Base styles */
+        :root {
+            --primary-color: #ff5c16;
+            --text-primary: #ff8d3d;
+            --secondary-color: #00afb3;
+            --background-color: #fbefd6;
+            --text-color: #333333;
+            --accent-color: #ef3553;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+            font-family: 'Gaegu', cursive;
+            /* line-height: 1.6; */
             margin: 0;
             padding: 20px;
-            background-color: #fbefd6;
-            text-align: center;
+            background-color: var(--background-color);
+            color: var(--text-color);
         }
+
         .container {
-            max-width: 750px;
+            max-width: 900px;
             margin: auto;
             padding: 20px;
+        }
+
+        /* Typography */
+        .font-1 {
+            font-family: 'Slackey', cursive;
+            color: var(--text-primary);
+        }
+
+        .font-2 {
+            font-family: 'Gaegu', cursive;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            margin-bottom: 0.5em;
+        }
+
+        p{
+            font-size: 1.2rem;
+        }
+
+        .heading {
+            font-size: 2.5rem;
+            margin-bottom: 0.5em;
+        }
+
+        .subheading {
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
             border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: 0.2s;
+            border: none;
+            font-family: 'Slackey', cursive;
         }
-        .font-1{
-            font-family: 'Slackey';
-            color: #fb8b3c;
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--background-color);
         }
-        .font-2{
-            font-family: 'Gaegu';
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--background-color);
         }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Cards */
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Utility classes */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-1 { margin-top: 1rem; }
+        .mt-2 { margin-top: 2rem; }
+        .mb-1 { margin-bottom: 1rem; }
+        .mb-2 { margin-bottom: 2rem; }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1 class="font-1 heading">Arcade UI Kit</h1>
-        coming soon...
-        <p class="font-2" style="font-size: 1.2rem; margin-top: 55px; color: grey;">&copy; 2024 Hayden Kong. All rights reserved.</p>
+    <body>
+        <div class="container">
+            <h1 class="font-1 heading text-center">Arcade UI Kit</h1>
+            <p class="font-2 text-center">A comprehensive design system for Hack Club Arcade projects</p>
 
-    </div>
-    
-</body>
+            <section class="mt-2">
+                <h2 class="font-1 subheading">Typography</h2>
+                <h1 class="font-1">Heading 1</h1>
+                <h2 class="font-1">Heading 2</h2>
+                <h3 class="font-1">Heading 3</h3>
+                <p class="font-2">This is a paragraph in the Gaegu font. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc id aliquam tincidunt, nisl nunc tincidunt nunc, vitae aliquam nisl nunc vitae nunc.</p>
+            </section>
+
+            <section class="mt-2">
+                <h2 class="font-1 subheading">Buttons</h2>
+                <button class="btn btn-primary">Primary Button</button>
+                <button class="btn btn-secondary">Secondary Button</button>
+            </section>
+
+            <section class="mt-2">
+                <h2 class="font-1 subheading">Cards</h2>
+                <div class="card">
+                    <h3 class="font-1">Card Title</h3>
+                    <p class="font-2">This is some content inside a card. You can put any information here.</p>
+                </div>
+            </section>
+        </div>
+    </body>
 </html>
