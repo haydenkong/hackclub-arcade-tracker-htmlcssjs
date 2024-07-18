@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arcade Review Stats</title>
+    <title>Hack Club Arcade UI Kit</title>
 
     <!-- SEO meta tags -->
     <meta name="description" content="Track real-time stats updated every 15 minutes for the Hack Club Arcade Review stats.">
@@ -31,7 +31,6 @@
 
     gtag('config', 'G-ZD8ZCNJRQQ');
     </script>
-
 
     <style>
         /* Base styles */
@@ -127,7 +126,6 @@
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
-            /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
         }
 
         .card h3, .card p {
@@ -165,7 +163,6 @@
         .form-input {
             width: 100%;
             padding: 0.5rem;
-            /* border: 2px solid var(--text-primary); */
             border: none;
             border-radius: 5px;
             font-size: 1rem;
@@ -198,6 +195,32 @@
             margin: 10px;
             display: inline-block;
             border: 1px solid #8a8a8a;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .color-swatch::after {
+            content: attr(data-color);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s, content 0.3s;
+        }
+
+        .color-swatch:hover::after {
+            opacity: 1;
+        }
+
+        .color-swatch.copied::after {
+            content: 'COPIED!';
+            /* background-color: var(--accent-color); */
         }
 
         .swatch-primary { background-color: var(--primary-color); }
@@ -205,74 +228,143 @@
         .swatch-background { background-color: var(--background-color); }
         .swatch-text { background-color: var(--text-color); }
         .swatch-accent { background-color: var(--accent-color); }
+
+        /* Hyperlinks */
+        a {
+            color: #ef3553;
+            text-decoration: underline;
+            text-underline-position: under;
+            cursor: pointer;
+        }
+        a:hover {
+            color: #ef3553;
+            text-decoration: underline wavy;
+        }
     </style>
 </head>
-    <body>
-        <div class="container">
-            <h1 class="font-1 heading text-center mb-0">Arcade UI Kit</h1>
-            <p class="font-2 text-center mt-0">A comprehensive design system for Hack Club Arcade themed projects by Hayden Kong</p>
+<body>
+    <div class="container">
+        <h1 class="font-1 heading text-center mb-0">Arcade UI Kit</h1>
+        <p class="font-2 text-center mt-0">A comprehensive design system for Hack Club Arcade themed projects by Hayden Kong</p>
 
-            <section class="mt-2">
-                <h2 class="font-1 subheading">Typography</h2>
-                <h1 class="font-1">Heading 1</h1>
-                <h2 class="font-1">Heading 2</h2>
-                <h3 class="font-1">Heading 3</h3>
-                <p class="font-2">This is a paragraph in the Gaegu font. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc id aliquam tincidunt, nisl nunc tincidunt nunc, vitae aliquam nisl nunc vitae nunc.</p>
-            </section>
+        <section class="mt-2">
+            <h2 class="font-1 subheading">Typography</h2>
+            <h1 class="font-1">Heading 1</h1>
+            <h2 class="font-1">Heading 2</h2>
+            <h3 class="font-1">Heading 3</h3>
+            <p class="font-2">This is a paragraph in the Gaegu font. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc id aliquam tincidunt, nisl nunc tincidunt nunc, vitae aliquam nisl nunc vitae nunc.</p>
+        </section>
 
-            <section class="mt-2">
-                <h2 class="font-1 subheading">Buttons</h2>
-                <button class="btn btn-primary">Primary Button</button>
-                <button class="btn btn-secondary">Secondary Button</button>
-            </section>
+        <section class="mt-2">
+            <h2 class="font-1 subheading">Buttons</h2>
+            <button class="btn btn-primary">Primary Button</button>
+            <button class="btn btn-secondary">Secondary Button</button>
+        </section>
 
-            <section class="mt-2">
-                <h2 class="font-1 subheading">Cards</h2>
-                <div class="card">
-                    <h3 class="font-1">Card Title</h3>
-                    <p class="font-2">This is some content inside a card. You can put any information here.</p>
+        <section class="mt-2">
+            <h2 class="font-1 subheading">Cards</h2>
+            <div class="card">
+                <h3 class="font-1">Card Title</h3>
+                <p class="font-2">This is some content inside a card. You can put any information here.</p>
+            </div>
+            <div class="card dotted">
+                <h3 class="font-1">Card Title</h3>
+                <p class="font-2">This is some content inside a card. You can put any information here.</p>
+            </div>
+            <div class="card primary">
+                <h3 class="font-1-nocolor">Card Title</h3>
+                <p class="font-2">This is some content inside a card. You can put any information here.</p>
+            </div>
+            <div class="card secondary">
+                <h3 class="font-1-nocolor">Card Title</h3>
+                <p class="font-2">This is some content inside a card. You can put any information here.</p>
+            </div>
+        </section>
+
+        <section class="mt-2">
+            <h2 class="font-1 subheading">Form Elements</h2>
+            <form>
+                <div class="form-group">
+                    <label class="form-label" for="name">Name</label>
+                    <input type="text" id="name" class="form-input" placeholder="Enter your name">
                 </div>
-                <div class="card dotted">
-                    <h3 class="font-1">Card Title</h3>
-                    <p class="font-2">This is some content inside a card. You can put any information here.</p>
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="Enter your email">
                 </div>
-                <div class="card primary">
-                    <h3 class="font-1-nocolor">Card Title</h3>
-                    <p class="font-2">This is some content inside a card. You can put any information here.</p>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </section>
+
+        <section class="mt-2">
+            <h2 class="font-1 subheading">Color Palette</h2>
+            <div class="color-swatch swatch-primary" data-color="#ff5c16"></div>
+            <div class="color-swatch swatch-secondary" data-color="#00afb3"></div>
+            <div class="color-swatch swatch-background" data-color="#fbefd6"></div>
+            <div class="color-swatch swatch-text" data-color="#333333"></div>
+            <div class="color-swatch swatch-accent" data-color="#ef3553"></div>
+        </section>
+
+        <section class="mt-2">
+            <h2 class="font-1 subheading">Hyperlinks</h2>
+            <p class="font-2">This is a paragraph with a <a href="#">sample link</a>. Hover over it to see the wavy underline effect.</p>
+        </section>
+
+        <section class="mt-2">
+            <h2 class="font-1 subheading">Hack Club Flags</h2>
+            <div class="card">
+                <img src="https://assets.hackclub.com/flag-orpheus-top.svg" alt="Orpheus Flag - Top">
+                <h3>Orpheus Flag - Top</h3>
+                <div class="download-links">
+                    <a href="https://assets.hackclub.com/flag-orpheus-top.svg" download>SVG</a>
+                    <a href="https://assets.hackclub.com/flag-orpheus-top.png" download>PNG</a>
+                    <a href="https://assets.hackclub.com/flag-orpheus-top.pdf" download>PDF</a>
                 </div>
-                <div class="card secondary">
-                    <h3 class="font-1-nocolor">Card Title</h3>
-                    <p class="font-2">This is some content inside a card. You can put any information here.</p>
+                <div class="download-link">https://assets.hackclub.com/flag-orpheus-top.svg</div>
+            </div>
+            <div class="card">
+                <img src="https://assets.hackclub.com/flag-orpheus-left.svg" alt="Orpheus Flag - Left">
+                <h3>Orpheus Flag - Left</h3>
+                <div class="download-links">
+                    <a href="https://assets.hackclub.com/flag-orpheus-left.svg" download>SVG</a>
+                    <a href="https://assets.hackclub.com/flag-orpheus-left.png" download>PNG</a>
+                    <a href="https://assets.hackclub.com/flag-orpheus-left.pdf" download>PDF</a>
                 </div>
-            </section>
+                <div class="download-link">https://assets.hackclub.com/flag-orpheus-left.svg</div>
+            </div>
+            <div class="card">
+                <img src="https://assets.hackclub.com/flag-standalone.svg" alt="Flag Standalone">
+                <h3>Flag Standalone</h3>
+                <div class="download-links">
+                    <a href="https://assets.hackclub.com/flag-standalone.svg" download>SVG</a>
+                    <a href="https://assets.hackclub.com/flag-standalone.png" download>PNG</a>
+                    <a href="https://assets.hackclub.com/flag-standalone.pdf" download>PDF</a>
+                </div>
+                <div class="download-link">https://assets.hackclub.com/flag-standalone.svg</div>
+            </div>
+        </section>
 
-            <section class="mt-2">
-                <h2 class="font-1 subheading">Form Elements</h2>
-                <form>
-                    <div class="form-group">
-                        <label class="form-label" for="name">Name</label>
-                        <input type="text" id="name" class="form-input" placeholder="Enter your name">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="email">Email</label>
-                        <input type="email" id="email" class="form-input" placeholder="Enter your email">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            </section>
+        <footer class="mt-2 text-center">
+            <p class="font-2">by hayden kong. not affiliated with hack club</p>
+        </footer>
+    </div>
 
-            <section class="mt-2">
-                <h2 class="font-1 subheading">Color Palette</h2>
-                <div class="color-swatch swatch-primary"></div>
-                <div class="color-swatch swatch-secondary"></div>
-                <div class="color-swatch swatch-background"></div>
-                <div class="color-swatch swatch-text"></div>
-                <div class="color-swatch swatch-accent"></div>
-            </section>
+    <script>
+        function showCopiedFeedback(swatch) {
+            swatch.classList.add('copied');
+            setTimeout(() => {
+                swatch.classList.remove('copied');
+            }, 1000);
+        }
 
-            <footer class="mt-2 text-center">
-                <p class="font-2">by hayden kong. not affiliated with hack club</p>
-            </footer>
-        </div>
-    </body>
+        document.querySelectorAll('.color-swatch').forEach(swatch => {
+            swatch.addEventListener('click', function() {
+                showCopiedFeedback(this);
+                navigator.clipboard.writeText(this.getAttribute('data-color')).catch(() => {
+                    console.error('Failed to copy color to clipboard');
+                });
+            });
+        });
+    </script>
+</body>
 </html>
