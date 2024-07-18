@@ -124,9 +124,14 @@
 <body>
     <div class="container">
         <h1 class="font-1 heading">Arcade Review Stats API</h1>
-        <p class="font-2 description">By Hayden Kong. Hosted on <a href="https://guides.hackclub.app/">Hack Club Nest</a>!</p>
+        <p class="font-2 description">By Hayden Kong. Hosted on <a href="https://guides.hackclub.app/">Hack Club Nest</a>! See the <a href="stats.html">demo</a>!</p>
         <div class="about">
-            <p class="font-2" style="color: #fbefd6; font-size: 1.2rem;"><b>⚠️WARNING!⚠️: </b>This API is still under development and may be buggy and unreliable! The API docs below may change at any time and no guarantee for uptime. Bandwidth is limited.</p> 
+            <p class="font-2" style="color: #fbefd6; font-size: 1.2rem;"><b>⚠️WARNING!⚠️: </b>This API is still under development and may be buggy and unreliable! The API docs below may change at any time and no guarantee for uptime. Bandwidth is limited. </p> 
+        </div>
+        <div class="about" style="background-color: #fbefd6; border: 4px #00afb3 dashed; border-radius: 10px;">
+            <p class="font-2" style="color: #000000; font-size: 1.2rem; margin-bottom: 0px; padding-bottom: 0px;"><b>🎉ANNOUNCEMENT🎉: </b></p>
+            
+            <p class="font-2" style="color: #000000; font-size: 1.2rem; margin-top: 0px; padding-top: 0px;">Review Stats API will be forever free to use and open source. However, support for API keys will be coming in the next few days. DM @Hayden Kong to try the beta.</p> 
         </div>
 
         <p class="font-2" style="font-size: 1.2rem;">API Endpoint: <a href="https://kinghayden.hackclub.app">kinghayden.hackclub.app</a></p>
@@ -134,17 +139,23 @@
         <h2 class="font-1" style=" text-align: left;">/api/hours ⌛</h2>
         <p class="font-2" style="text-align: left; font-size: 1.2rem;">API used for the Arcade Review Stats slackbot. Send a HTTP POST request and it will return a ephemeral response immediately return a ephemeral request before returning in JSON the LIVE stats from the review stats Airtable dashboard.</p>
 
-        <h2 class="font-1" style=" text-align: left;">/api/live 🔴</h2>
-        <p class="font-2" style="text-align: left; font-size: 1.2rem;">COMING SOON! Can be used for any application wanting to intergrate the latest review stats. Send a HTTP GET reqeust and it will return in JSON the LIVE stats from the review stats Airtable dashboard. </p>
+        <h2 class="font-1" style=" text-align: left;">/api/realtime 🔴</h2>
+        <p class="font-2" style="text-align: left; font-size: 1.2rem;">Get the latest realtime review stats via the Airtable Dashboard. Can be used for any application wanting to intergrate the latest review stats. Returns the data in JSON format and on average takes around 2-4 seconds to scrape and return data. </p>
 
         <h2 class="font-1" style=" text-align: left;">/api/countries 🗺️</h2>
-        <p class="font-2" style="text-align: left; font-size: 1.2rem;">COMING SOON! Get the latest stats on the number of countries Hack Club Arcade has shipped to!</p>
+        <p class="font-2" style="text-align: left; font-size: 1.2rem;">COMING SOON! Get the latest, realtime stats on the number of countries Hack Club Arcade has shipped to!</p>
 
         <h2 class="font-1" style=" text-align: left;">/api/logs 📃</h2>
-        <p class="font-2" style="text-align: left; font-size: 1.2rem;">Returns the full server log. Can be used to check if server errors and see if your request was succesful.</p>
+        <p class="font-2" style="text-align: left; font-size: 1.2rem;">Returns the full server log in plain text. Mainly used to check for server errors and see if your request was succesful. However, it can take a few seconds to load the giagantic file!</p>
+
+        <h2 class="font-1" style=" text-align: left;">/api/stats 📊</h2>
+        <p class="font-2" style="text-align: left; font-size: 1.2rem;">Returns in JSON format the history of the Arcade review stats, collected since 16/07/2024 at 15 minute intervals. Returns GMT time and the stats at that time. </p>
 
         <h2 class="font-1" style=" text-align: left;">/ping 🏓</h2>
-        <p class="font-2" style="text-align: left; font-size: 1.2rem;">Returns 🏓pong🏓 if the API is succesfully running!</p>
+        <p class="font-2" style="text-align: left; font-size: 1.2rem;">Returns 🏓pong🏓 if the API and website is up and running!</p>
+
+        <h2 class="font-1" style=" text-align: left;">/ 🌏</h2>
+        <p class="font-2" style="text-align: left; font-size: 1.2rem;">Hello, World! - yeah, nothing else to see.</p>
 
         <p class="font-2" style="font-size: 1.2rem; margin-top: 55px; color: grey;">&copy; 2024 Hayden Kong. All rights reserved.</p>
 
