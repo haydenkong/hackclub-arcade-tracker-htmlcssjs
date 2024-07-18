@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hack Club Arcade UIKit</title>
+    <title>Arcade Review Stats</title>
 
     <!-- SEO meta tags -->
-    <meta name="description" content="Simple, modular UI kit for the Hack Club Arcade. ">
-    <meta name="keywords" content="hack club, hack club arcade, arcade ui, hack club arcade ui, hack club ui, ui kit">
+    <meta name="description" content="Track real-time stats updated every 15 minutes for the Hack Club Arcade Review stats.">
+    <meta name="keywords" content="hack club, hack club arcade, arcade, hack club arcade stats, hack club arcade review stats, arcade review stats">
 
     <!-- Google fonts - Official Arcade fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,6 +16,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
 
     <link rel="icon" href="favicon.png" type="image/x-icon">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZD8ZCNJRQQ"></script>
@@ -41,7 +46,7 @@
 
         body {
             font-family: 'Gaegu', cursive;
-            /* line-height: 1.6; */
+            line-height: 1.6;
             margin: 0;
             padding: 20px;
             background-color: var(--background-color);
@@ -58,6 +63,11 @@
         .font-1 {
             font-family: 'Slackey', cursive;
             color: var(--text-primary);
+        }
+
+        .font-1-nocolor {
+            font-family: 'Slackey', cursive;
+            color: var(--background-color);
         }
 
         .font-2 {
@@ -108,7 +118,7 @@
         }
 
         .btn:active {
-            transform: scale(0.95);
+            transform: scale(0.97);
         }
 
         /* Cards */
@@ -117,24 +127,90 @@
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
         }
-        
+
+        .card h3, .card p {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .dotted {
+            border-radius: 10px;
+            border: 5px dashed var(--secondary-color);
+            background-color: var(--background-color);
+        }
+
+        .primary {
+            background-color: var(--text-primary);
+            color: var(--background-color);
+        }
+
+        .secondary{
+            background-color: var(--secondary-color);
+            color: var(--background-color);
+        }
+
+        /* Form elements */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.5rem;
+            /* border: 2px solid var(--text-primary); */
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: 'Gaegu', cursive;
+            outline: none;
+            background-color: #ede5d3;
+        }
+
+        .form-input:focus, .form-input:hover {
+            background-color: rgb(214, 208, 192);
+        }
+
         /* Utility classes */
         .text-center {
             text-align: center;
         }
 
+        .mt-0 { margin-top: 0; }
         .mt-1 { margin-top: 1rem; }
         .mt-2 { margin-top: 2rem; }
+        .mb-0 { margin-bottom: 0; }
         .mb-1 { margin-bottom: 1rem; }
         .mb-2 { margin-bottom: 2rem; }
+
+        /* Color swatches */
+        .color-swatch {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            margin: 10px;
+            display: inline-block;
+            border: 1px solid #8a8a8a;
+        }
+
+        .swatch-primary { background-color: var(--primary-color); }
+        .swatch-secondary { background-color: var(--secondary-color); }
+        .swatch-background { background-color: var(--background-color); }
+        .swatch-text { background-color: var(--text-color); }
+        .swatch-accent { background-color: var(--accent-color); }
     </style>
 </head>
     <body>
         <div class="container">
-            <h1 class="font-1 heading text-center">Arcade UI Kit</h1>
-            <p class="font-2 text-center">A comprehensive design system for Hack Club Arcade projects</p>
+            <h1 class="font-1 heading text-center mb-0">Arcade UI Kit</h1>
+            <p class="font-2 text-center mt-0">A comprehensive design system for Hack Club Arcade themed projects by Hayden Kong</p>
 
             <section class="mt-2">
                 <h2 class="font-1 subheading">Typography</h2>
@@ -156,7 +232,47 @@
                     <h3 class="font-1">Card Title</h3>
                     <p class="font-2">This is some content inside a card. You can put any information here.</p>
                 </div>
+                <div class="card dotted">
+                    <h3 class="font-1">Card Title</h3>
+                    <p class="font-2">This is some content inside a card. You can put any information here.</p>
+                </div>
+                <div class="card primary">
+                    <h3 class="font-1-nocolor">Card Title</h3>
+                    <p class="font-2">This is some content inside a card. You can put any information here.</p>
+                </div>
+                <div class="card secondary">
+                    <h3 class="font-1-nocolor">Card Title</h3>
+                    <p class="font-2">This is some content inside a card. You can put any information here.</p>
+                </div>
             </section>
+
+            <section class="mt-2">
+                <h2 class="font-1 subheading">Form Elements</h2>
+                <form>
+                    <div class="form-group">
+                        <label class="form-label" for="name">Name</label>
+                        <input type="text" id="name" class="form-input" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email</label>
+                        <input type="email" id="email" class="form-input" placeholder="Enter your email">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </section>
+
+            <section class="mt-2">
+                <h2 class="font-1 subheading">Color Palette</h2>
+                <div class="color-swatch swatch-primary"></div>
+                <div class="color-swatch swatch-secondary"></div>
+                <div class="color-swatch swatch-background"></div>
+                <div class="color-swatch swatch-text"></div>
+                <div class="color-swatch swatch-accent"></div>
+            </section>
+
+            <footer class="mt-2 text-center">
+                <p class="font-2">by hayden kong. not affiliated with hack club</p>
+            </footer>
         </div>
     </body>
 </html>
