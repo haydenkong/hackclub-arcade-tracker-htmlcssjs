@@ -127,6 +127,12 @@
         }
         #statsChart {
             font-family: 'Gaegu', cursive;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 416px) {
+            #statsChart {
+                margin-bottom: 50px;
+            }
         }
         .stats-container {
             background-color: #00afb3;
@@ -213,6 +219,27 @@
             margin: 0px;
             font-weight: normal;
         }
+
+        .chart-option{
+            font-family: 'Gaegu';
+            background-color: #00afb3;
+            color: #fbefd6;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .chart-option:hover{
+            background-color: #0b9395;
+            transform: scale(1.04);
+        }
+
+        .chart-option:active{
+            transform: scale(0.96);
+        }
     </style>
 </head>
 <body>
@@ -252,6 +279,12 @@
         </div>
         
         <div id="chartContainer">
+            <div id="chartOptions" class="font-2" style="text-align: center; margin-bottom: 10px;">
+                <button class="chart-option" data-option="max">Max</button>
+                <button class="chart-option" data-option="5days">Past 5 Days</button>
+                <button class="chart-option" data-option="3days">Past 3 Days</button>
+                <button class="chart-option" data-option="24hours">Last 24 Hours</button>
+            </div>
             <canvas id="statsChart"></canvas>
         </div>
         <div class="about">
@@ -315,6 +348,7 @@
             const rowsPerPage = 50;
             let currentPage = 1;
             let totalPages = 0;
+            let chart;
             
             async function fetchStats() {
                 try {
@@ -332,7 +366,7 @@
                     totalPages = Math.ceil(allData.length / rowsPerPage);
                     createPaginationControls();
                     populateTable();
-                    createChart(allData);
+                    createChart(allData); // Initial chart creation with all data
                     updateReviewStatus(allData);
                     updateRecentStats(allData);
                     updateVermontTime();
@@ -456,7 +490,7 @@
                 Chart.defaults.font.family = "'Gaegu', cursive";
                 Chart.defaults.font.size = 14;
                 
-                new Chart(ctx, {
+                chart = new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: timestamps,
@@ -534,10 +568,30 @@
                             mode: 'nearest',
                             axis: 'x',
                             intersect: false
+                        },
+                        animation: {
+                            duration: 1000, // in ms
+                            easing: 'easeInOutQuart' // easing for smooth animation
                         }
                     }
                 });
             }
+
+            function updateChartData(option) {
+                const filteredData = filterDataByOption(allData, option);
+                const chartData = [...filteredData].reverse();
+                
+                const timestamps = chartData.map(item => moment(item.timestamp).toDate());
+                const pendingData = chartData.map(item => item.hours_pending);
+                const approvedData = chartData.map(item => item.hours_approved);
+
+                chart.data.labels = timestamps;
+                chart.data.datasets[0].data = pendingData;
+                chart.data.datasets[1].data = approvedData;
+
+                chart.update();
+            }
+
 
             function updateReviewStatus(dataArray) {
                 const statusContainer = document.getElementById('reviewStatus');
@@ -580,7 +634,7 @@
                 function updateTimer() {
                     const now = moment();
                     const latestUpdate = moment(latestTimestamp);
-                    const nextUpdate = latestUpdate.add(15, 'minutes');
+                    const nextUpdate = latestUpdate.add(5, 'minutes');
                     const duration = moment.duration(nextUpdate.diff(now));
                     
                     if (duration.asSeconds() <= 0) {
@@ -609,6 +663,27 @@
                 
                 updateTimer();
             }
+
+            function filterDataByOption(data, option) {
+                const now = moment();
+                switch (option) {
+                    case '5days':
+                        return data.filter(item => moment(item.timestamp).isAfter(now.clone().subtract(5, 'days')));
+                    case '3days':
+                        return data.filter(item => moment(item.timestamp).isAfter(now.clone().subtract(3, 'days')));
+                    case '24hours':
+                        return data.filter(item => moment(item.timestamp).isAfter(now.clone().subtract(24, 'hours')));
+                    default:
+                        return data;
+                }
+            }
+
+            document.querySelectorAll('.chart-option').forEach(button => {
+                button.addEventListener('click', () => {
+                    const option = button.getAttribute('data-option');
+                    updateChartData(option);
+                });
+            });
             
             fetchStats();
         });
