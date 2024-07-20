@@ -634,7 +634,7 @@
                 function updateTimer() {
                     const now = moment();
                     const latestUpdate = moment(latestTimestamp);
-                    const nextUpdate = latestUpdate.add(5, 'minutes');
+                    const nextUpdate = latestUpdate.add(10, 'minutes');
                     const duration = moment.duration(nextUpdate.diff(now));
                     
                     if (duration.asSeconds() <= 0) {
