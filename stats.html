@@ -634,7 +634,7 @@
                 function updateTimer() {
                     const now = moment();
                     const latestUpdate = moment(latestTimestamp);
-                    const nextUpdate = latestUpdate.add(10, 'minutes');
+                    const nextUpdate = latestUpdate.add(5, 'minutes');
                     const duration = moment.duration(nextUpdate.diff(now));
                     
                     if (duration.asSeconds() <= 0) {
@@ -643,11 +643,11 @@
                             isLoading = true;
                             countdownContainer.innerHTML = `
                                 <h2 class="stats-h2">GETTING LATEST STATS</h2>
-                                <p class="stats-p">Please wait 15 seconds. This page will auto-refresh.</p>
+                                <p class="stats-p">Please wait 10 seconds. This page will auto-refresh.</p>
                             `;
                             setTimeout(() => {
                                 location.reload();
-                            }, 15000); // 10 seconds
+                            }, 10000); // 10 seconds
                         }
                     } else {
                         const minutes = Math.floor(duration.asMinutes());
