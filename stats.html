@@ -643,11 +643,11 @@
                             isLoading = true;
                             countdownContainer.innerHTML = `
                                 <h2 class="stats-h2">GETTING LATEST STATS</h2>
-                                <p class="stats-p">Please wait 10 seconds. This page will auto-refresh.</p>
+                                <p class="stats-p">Please wait 15 seconds. This page will auto-refresh.</p>
                             `;
                             setTimeout(() => {
                                 location.reload();
-                            }, 10000); // 10 seconds
+                            }, 15000); // 10 seconds
                         }
                     } else {
                         const minutes = Math.floor(duration.asMinutes());
