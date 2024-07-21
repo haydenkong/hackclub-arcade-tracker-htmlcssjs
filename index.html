@@ -18,6 +18,8 @@
     <link rel="icon" href="favicon.png" type="image/x-icon">
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZD8ZCNJRQQ"></script>
@@ -363,7 +365,10 @@
         <p class="days-remaining font-2" style="color: #000000; margin-bottom: 50px;" id="tickets-left"></p>
         <p class="days-remaining font-2" style="color: #000000; margin-bottom: 0px;" id="estimated-goal-date"></p>
         <div style="text-align: center; margin-bottom: 50px;">
-            <a id="enterTicketsLink" class="font-2">View Ticket History</a>
+            <a id="ticketHistoryLink" class="font-2">View Ticket History</a>
+        </div>
+        <div id="ticketHistoryDiv" style="display:block;">
+            <canvas id="myChart" style="width:100%;"></canvas>
         </div>
 
         
@@ -402,10 +407,10 @@
         <br>
         <button id="saveStartDate">Save</button>
     </div>
-    <div id="ticketHistoryPopup" class="popup">
+    <div id="apiKeyPopup" class="popup">
         <h2>Enter Api Key</h2>
-        <label for="ticketHistoryLabel">Enter Start Date:</label>
-        <input type="text" id="ticketHistoryInput" style="min-width: 400px;">
+        <label for="apiKeyLabel">This data is stored locally on your browser</label>
+        <input type="text" id="apiKeyInput" style="min-width: 400px;">
         <br>
         <button id="saveApiKey">Save</button>
     </div>
@@ -429,8 +434,9 @@
         const startDateInput = document.getElementById('startDateInput');
         const saveStartDateButton = document.getElementById('saveStartDate');
         const enterTicketsLink = document.getElementById('enterTicketsLink');
-        const ticketHistoryPopup = document.getElementById('ticketHistoryPopup');
-        const ticketHistoryInput = document.getElementById('ticketHistoryInput');
+        const ticketHistoryLink = document.getElementById('ticketHistoryLink');
+        const apiKeyPopup = document.getElementById('apiKeyPopup');
+        const apiKeyInput = document.getElementById('apiKeyInput');
         const saveApiKeyButton = document.getElementById('saveApiKey');
         const requiredDailyElement = document.getElementById('required-daily');
         const remainingProgressText = document.getElementById('remainingProgressText');
@@ -590,13 +596,80 @@
         });
 
         // ticket history popup
-        enterTicketsLink.addEventListener('click', () => {
-            ticketHistoryPopup.style.display = 'block';
+        ticketHistoryLink.addEventListener('click', () => {
+            const apiKey = localStorage.getItem('apiKey');
+            if(apiKey){
+                const url = `https://hackhour.hackclub.com/api/history/U07A928DDJQ`;
+                console.log(getDates("17/06/24"));
+                //post request
+             /*   fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    mode: 'no-cors'
+                }).then(response => response.json())
+                .then(data =>{
+                })
+                new Chart("myChart", {
+  type: "line",
+  data: {
+    labels: getDates("17/06/24"),
+    datasets: [{
+      fill: false,
+      lineTension: 0,
+      backgroundColor: "rgba(0,0,255,1.0)",
+      borderColor: "rgba(0,0,255,0.1)",
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+  }
+});
+*/
+            } else {
+            apiKeyPopup.style.display = 'block';
+            }
         });
 
+        saveApiKeyButton.addEventListener('click', () => {
+            const apiKey = apiKeyInput.value;
+            if(apiKey){
+                localStorage.setItem('apiKey', apiKey);
+            }
+            apiKeyPopup.style.display = 'none';
+        });
 
         loadFromStorage();
         updateProgress();
+
+        function getDates(startDate) {
+    function parseDate(dateStr) {
+        const [day, month, year] = dateStr.split('/').map(Number);
+        return new Date(year + 2000, month - 1, day);
+    }
+
+    function formatDate(date) {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = String(date.getFullYear()).slice(2);
+        return `${day}/${month}/${year}`;
+    }
+
+    const start = parseDate(startDate);
+    const end = new Date();
+    const dates = [];
+
+    for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
+        dates.push(formatDate(new Date(date)));
+    }
+
+    return dates;
+}
+
+
     </script>
 </body>
 </html>
