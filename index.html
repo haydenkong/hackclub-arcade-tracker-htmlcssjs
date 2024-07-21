@@ -361,7 +361,10 @@
         <p class="required-daily font-2" style="color: #000000; margin-top: -25px;" id="">Required Daily Tickets</p>
         <p class="days-remaining font-2" style="color: #000000; margin-top: 30px;" id="daysLeft"></p>
         <p class="days-remaining font-2" style="color: #000000; margin-bottom: 50px;" id="tickets-left"></p>
-        <p class="days-remaining font-2" style="color: #000000; margin-bottom: 50px;" id="estimated-goal-date"></p>
+        <p class="days-remaining font-2" style="color: #000000; margin-bottom: 0px;" id="estimated-goal-date"></p>
+        <div style="text-align: center; margin-bottom: 50px;">
+            <a id="enterTicketsLink" class="font-2">View Ticket History</a>
+        </div>
 
         
         <div class="button-container">
@@ -399,6 +402,13 @@
         <br>
         <button id="saveStartDate">Save</button>
     </div>
+    <div id="ticketHistoryPopup" class="popup">
+        <h2>Enter Api Key</h2>
+        <label for="ticketHistoryLabel">Enter Start Date:</label>
+        <input type="text" id="ticketHistoryInput" style="min-width: 400px;">
+        <br>
+        <button id="saveApiKey">Save</button>
+    </div>
     
 
     
@@ -414,11 +424,14 @@
         const removeOneHourButton = document.getElementById('removeOneHour');
         const addOneButton = document.getElementById('addOne');
         const ticketsLeftElement = document.getElementById('tickets-left');
-        const enterTicketsLink = document.getElementById('enterTicketsLink');
         const setStartDateLink = document.getElementById('setStartDateLink');
         const startDatePopup = document.getElementById('startDatePopup');
         const startDateInput = document.getElementById('startDateInput');
         const saveStartDateButton = document.getElementById('saveStartDate');
+        const enterTicketsLink = document.getElementById('enterTicketsLink');
+        const ticketHistoryPopup = document.getElementById('ticketHistoryPopup');
+        const ticketHistoryInput = document.getElementById('ticketHistoryInput');
+        const saveApiKeyButton = document.getElementById('saveApiKey');
         const requiredDailyElement = document.getElementById('required-daily');
         const remainingProgressText = document.getElementById('remainingProgressText');
         const hoursPerDayInput = document.getElementById('hoursPerDay');
@@ -574,6 +587,11 @@
             startDate = new Date(startDateInput.value);
             startDatePopup.style.display = 'none';
             updateProgress(); 
+        });
+
+        // ticket history popup
+        enterTicketsLink.addEventListener('click', () => {
+            ticketHistoryPopup.style.display = 'block';
         });
 
 
