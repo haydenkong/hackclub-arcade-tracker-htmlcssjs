@@ -62,6 +62,17 @@
             font-size: 1.4rem;
             padding: 5px;
         }
+
+        select {
+            max-width: 200px;
+            background-color: #ede5d3;
+            border-radius: 0px;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            padding: 15px;
+        }
         .inline-container {
             display: inline-flex;
             align-items: center;
@@ -306,11 +317,15 @@
         <h1 class="font-1 heading">The Arcade Tracker</h1>
         <p class="font-2 description">Track your progress towards your goal for the <a href="https://hackclub.com/arcade">Hack Club Arcade</a>!</p>
             
-        <div style="text-align: center;">
+        <div style="text-align: center; flex-direction: row; justify-content: center;">
             <div class="inline-container font-2">
-                <label style="font-size: 1.4rem;" for="ticketGoal">Ticket Goal:</label>
+                <label style="font-size: 1.4rem;" for="ticketGoal" id="ticketGoalLabel">Ticket Goal:</label>
                 <input type="number" class="font-2" id="ticketGoal" value="100">
-            </div>  
+                <select id="itemGoal" class="font-2" style="display: none">
+                    <option value="0">Select an item</option>
+                </select>
+                <button class="addOne" id="switchMode"><image style="height: 20px; padding-bottom: 10px;" src="https://cdn-icons-png.flaticon.com/512/15049/15049734.png"/></button>
+            </div> 
         </div>  
 
         <div style="text-align: center;">
@@ -410,6 +425,7 @@
     <div id="apiKeyPopup" class="popup">
         <h2>Enter Api Key</h2>
         <label for="apiKeyLabel">This data is stored locally on your browser</label>
+        <br>
         <input type="text" id="apiKeyInput" style="min-width: 400px;">
         <br>
         <button id="saveApiKey">Save</button>
@@ -442,24 +458,76 @@
         const remainingProgressText = document.getElementById('remainingProgressText');
         const hoursPerDayInput = document.getElementById('hoursPerDay');
         const estimatedGoalDateElement = document.getElementById('estimated-goal-date'); 
+        const switchModeButton = document.getElementById('switchMode');
+        let goalType = 'tickets';
 
         let startDate = new Date(localStorage.getItem('startDate')) || new Date('2024-06-18'); 
         const endDate = new Date('2024-08-31');
+
+        function getItems(){
+            url = 'https://hackclub.com/api/arcade/shop/'
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(item => {
+                    if(item.stock != 0){
+                    const option = document.createElement('option');
+                    option.value = item.hours;
+                    option.textContent = item.name;
+                    if(localStorage.getItem('itemGoal') === item.name){
+                        option.selected = true;
+                        localStorage.setItem('ticketGoal', item.hours);
+                        updateProgress();
+                    }
+                    document.getElementById('itemGoal').appendChild(option);
+                    }
+                });
+            })
+            .then(() => {
+                console.log(localStorage.getItem('ticketGoal'));
+                console.log(document.getElementById('itemGoal').value);
+                updateProgress();
+                console.log(localStorage.getItem('ticketGoal'));
+                console.log(document.getElementById('itemGoal').value);
+            })
+        }
+
+        getItems()
 
         function loadFromStorage() {
             const storedGoal = localStorage.getItem('ticketGoal');
             const storedTickets = localStorage.getItem('currentTickets');
             const storedStartDate = localStorage.getItem('startDate');
             const storedHoursPerDay = localStorage.getItem('hoursPerDay');
+            const storedGoalType = localStorage.getItem('goalType');
 
             if (storedGoal) ticketGoalInput.value = storedGoal;
             if (storedTickets) currentTicketsElement.textContent = storedTickets;
             if (storedStartDate) startDate = new Date(storedStartDate);
             if (storedHoursPerDay) hoursPerDayInput.value = storedHoursPerDay;
+            if(!storedGoalType){
+                localStorage.setItem('goalType', 'tickets');
+            }
+            if (storedGoalType){ 
+                goalType = storedGoalType;
+                if(goalType === 'tickets'){
+                    document.getElementById('ticketGoal').style.display = 'block';
+                    document.getElementById('itemGoal').style.display = 'none';
+                } else {
+                    document.getElementById('ticketGoal').style.display = 'none';
+                    document.getElementById('itemGoal').style.display = 'block';
+                }
+
+            }
+
         }
 
         function saveToStorage() {
-            localStorage.setItem('ticketGoal', ticketGoalInput.value);
+            if(goalType === 'tickets'){
+                localStorage.setItem('ticketGoal', ticketGoalInput.value);
+            } else {
+                localStorage.setItem('ticketGoal', document.getElementById('itemGoal').value);
+            }
             localStorage.setItem('currentTickets', currentTicketsElement.textContent);
             localStorage.setItem('startDate', startDate.toString());
             localStorage.setItem('hoursPerDay', hoursPerDayInput.value);
@@ -492,7 +560,14 @@
         }
 
         function updateProgress() {
-            const ticketGoal = parseInt(ticketGoalInput.value) || 0;
+            const ticketGoal = localStorage.getItem('goalType') === 'tickets' ? parseInt(ticketGoalInput.value) || 0 : parseInt(document.getElementById('itemGoal').value) || 0;
+            if(goalType === 'tickets'){
+                document.getElementById('ticketGoalLabel').textContent = 'Ticket Goal:';
+                saveToStorage();
+            } else {
+                document.getElementById('ticketGoalLabel').textContent = 'Item Goal:';
+                saveToStorage();
+            }
             const currentTickets = parseInt(currentTicketsElement.textContent);
             const hoursPerDay = parseFloat(hoursPerDayInput.value) || 1; 
             const progress = (currentTickets / ticketGoal) * 100 || 0;
@@ -641,6 +716,20 @@
                 localStorage.setItem('apiKey', apiKey);
             }
             apiKeyPopup.style.display = 'none';
+        });
+
+        switchModeButton.addEventListener('click', () => {
+            goalType = goalType === 'tickets' ? 'hours' : 'tickets';
+            localStorage.setItem('goalType', goalType);
+            document.getElementById('ticketGoalLabel').textContent = goalType === 'tickets' ? 'Ticket Goal:' : 'Item Goal:';
+            document.getElementById('itemGoal').style.display = goalType === 'tickets' ? 'none' : 'block';
+            document.getElementById('ticketGoal').style.display = goalType === 'tickets' ? 'block' : 'none';
+            updateProgress();
+        });
+        
+        document.getElementById('itemGoal').addEventListener('change', () =>{
+            localStorage.setItem('itemGoal', document.getElementById('itemGoal').options[document.getElementById('itemGoal').selectedIndex].text);
+            updateProgress()
         });
 
         loadFromStorage();
