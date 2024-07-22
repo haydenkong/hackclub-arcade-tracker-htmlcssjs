@@ -310,6 +310,15 @@
         .hoursperday{
             margin-top: 10px;
         }
+
+        .itemGoalImage{
+            top:0px; 
+            left:600px;
+            height:120px; 
+            rotate: 20deg; 
+            position: absolute; 
+            z-index: 2147483647;
+        }
     </style>
 </head>
 <body>
@@ -321,7 +330,7 @@
             <div class="inline-container font-2">
                 <label style="font-size: 1.4rem;" for="ticketGoal" id="ticketGoalLabel">Ticket Goal:</label>
                 <input type="number" class="font-2" id="ticketGoal" value="100">
-                <select id="itemGoal" class="font-2" style="display: none">
+                <select id="itemGoal" class="font-2" style="display: none" disabled="true">
                     <option value="0">Select an item</option>
                 </select>
                 <button class="addOne" id="switchMode"><image style="height: 20px; padding-bottom: 10px;" src="https://cdn-icons-png.flaticon.com/512/15049/15049734.png"/></button>
@@ -348,7 +357,7 @@
             <a id="setStartDateLink" class="font-2">Set Start Date</a>
         </div>
         
-        <div>
+        <div style="position: relative;">
             <p class="progress-bar-header font-2">Your Progress:</p>
             <div class="progress-bar">
                 <div class="progress actual-progress" id="progressBar"></div>
@@ -369,6 +378,7 @@
                 <div class="remainingprogressbar-color"></div>
                 <p id="remainingProgressText" class="progress-bar-text"></p>
             </div>
+            <image id="itemGoalImage" class="itemGoalImage"/>
 
         </div>
 
@@ -459,7 +469,7 @@
         const hoursPerDayInput = document.getElementById('hoursPerDay');
         const estimatedGoalDateElement = document.getElementById('estimated-goal-date'); 
         const switchModeButton = document.getElementById('switchMode');
-        let goalType = 'tickets';
+        let goalType = localStorage.getItem('goalType') || 'tickets';
 
         let startDate = new Date(localStorage.getItem('startDate')) || new Date('2024-06-18'); 
         const endDate = new Date('2024-08-31');
@@ -474,6 +484,7 @@
                     const option = document.createElement('option');
                     option.value = item.hours;
                     option.textContent = item.name;
+                    option.ariaImage = item.imageURL;
                     if(localStorage.getItem('itemGoal') === item.name){
                         option.selected = true;
                         localStorage.setItem('ticketGoal', item.hours);
@@ -484,11 +495,9 @@
                 });
             })
             .then(() => {
-                console.log(localStorage.getItem('ticketGoal'));
-                console.log(document.getElementById('itemGoal').value);
+                document.getElementById('itemGoal').disabled = false;
                 updateProgress();
-                console.log(localStorage.getItem('ticketGoal'));
-                console.log(document.getElementById('itemGoal').value);
+                document.getElementById('itemGoalImage').src = document.getElementById('itemGoal').options[document.getElementById('itemGoal').selectedIndex].ariaImage;
             })
         }
 
@@ -564,9 +573,11 @@
             if(goalType === 'tickets'){
                 document.getElementById('ticketGoalLabel').textContent = 'Ticket Goal:';
                 saveToStorage();
+                document.getElementById('itemGoalImage').style.display = 'none';
             } else {
                 document.getElementById('ticketGoalLabel').textContent = 'Item Goal:';
                 saveToStorage();
+                document.getElementById('itemGoalImage').style.display = 'block';
             }
             const currentTickets = parseInt(currentTicketsElement.textContent);
             const hoursPerDay = parseFloat(hoursPerDayInput.value) || 1; 
@@ -674,7 +685,7 @@
         ticketHistoryLink.addEventListener('click', () => {
             const apiKey = localStorage.getItem('apiKey');
             if(apiKey){
-                const url = `http://127.0.0.1:8096/api/history`;
+                const url = `https://kinghayden.hackclub.app/api/history`;
                 fetch(url, {
                     method: 'GET',
                     headers: {
@@ -724,11 +735,18 @@
             document.getElementById('ticketGoalLabel').textContent = goalType === 'tickets' ? 'Ticket Goal:' : 'Item Goal:';
             document.getElementById('itemGoal').style.display = goalType === 'tickets' ? 'none' : 'block';
             document.getElementById('ticketGoal').style.display = goalType === 'tickets' ? 'block' : 'none';
+            document.getElementById('itemGoalImage').src = document.getElementById('itemGoal').options[document.getElementById('itemGoal').selectedIndex].ariaImage;
             updateProgress();
+            if(goalType != 'items'){
+                document.getElementById('itemGoalImage').style.display = 'none';
+            } else {
+                document.getElementById('itemGoalImage').style.display = 'block';
+            }
         });
         
         document.getElementById('itemGoal').addEventListener('change', () =>{
             localStorage.setItem('itemGoal', document.getElementById('itemGoal').options[document.getElementById('itemGoal').selectedIndex].text);
+            document.getElementById('itemGoalImage').src = document.getElementById('itemGoal').options[document.getElementById('itemGoal').selectedIndex].ariaImage;
             updateProgress()
         });
 
