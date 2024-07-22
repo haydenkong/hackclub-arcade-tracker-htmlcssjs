@@ -365,9 +365,9 @@
         <p class="days-remaining font-2" style="color: #000000; margin-bottom: 50px;" id="tickets-left"></p>
         <p class="days-remaining font-2" style="color: #000000; margin-bottom: 0px;" id="estimated-goal-date"></p>
         <div style="text-align: center; margin-bottom: 50px;">
-            <a id="ticketHistoryLink" class="font-2">View Ticket History</a>
+            <a id="ticketHistoryLink" class="font-2">View Daily Ticket History</a>
         </div>
-        <div id="ticketHistoryDiv" style="display:block;">
+        <div id="ticketHistoryDiv" style="display:none;">
             <canvas id="myChart" style="width:100%;"></canvas>
         </div>
 
@@ -599,36 +599,37 @@
         ticketHistoryLink.addEventListener('click', () => {
             const apiKey = localStorage.getItem('apiKey');
             if(apiKey){
-                const url = `https://hackhour.hackclub.com/api/history/U07A928DDJQ`;
-                console.log(getDates("17/06/24"));
-                //post request
-             /*   fetch(url, {
+                const url = `http://127.0.0.1:8096/api/history`;
+                fetch(url, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`
+                        'Authorization': `Bearer ${apiKey}`,
                     },
-                    mode: 'no-cors'
                 }).then(response => response.json())
                 .then(data =>{
-                })
-                new Chart("myChart", {
+                    document.getElementById('ticketHistoryDiv').style.display = 'block';
+                    new Chart("myChart", {
   type: "line",
   data: {
     labels: getDates("17/06/24"),
     datasets: [{
       fill: false,
       lineTension: 0,
-      backgroundColor: "rgba(0,0,255,1.0)",
-      borderColor: "rgba(0,0,255,0.1)",
-      data: yValues
+      backgroundColor: "#FB8B3C",
+      borderColor: "rgba(251, 139, 60,0.5)",
+      data: getCountsByDate(data, "17/06/24")
     }]
   },
   options: {
     legend: {display: false},
   }
 });
-*/
+                }).catch(error => {
+                    document.getElementById('ticketHistoryDiv').style.display = 'none';
+                    apiKeyPopup.style.display = 'block';
+                });
+
             } else {
             apiKeyPopup.style.display = 'block';
             }
@@ -667,6 +668,47 @@
     }
 
     return dates;
+}
+
+function getCountsByDate(jsonData, startDate) {
+    function parseDate(dateStr) {
+        const [day, month, year] = dateStr.split('/').map(Number);
+        return new Date(year + 2000, month - 1, day);
+    }
+
+    function formatDate(date) {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = String(date.getFullYear()).slice(2);
+        return `${day}/${month}/${year}`;
+    }
+
+    function dateKey(date) {
+        return date.toISOString().split('T')[0];
+    }
+
+    const start = parseDate(startDate);
+    const end = new Date();
+
+    const dateCounts = {};
+    for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+        dateCounts[dateKey(date)] = 0;
+    }
+
+    jsonData.data.forEach(item => {
+        const itemDate = new Date(item.createdAt);
+        const itemDateKey = dateKey(itemDate);
+        if (itemDateKey in dateCounts) {
+            dateCounts[itemDateKey]++;
+        }
+    });
+
+    const countsArray = [];
+    for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+        countsArray.push(dateCounts[dateKey(date)]);
+    }
+
+    return countsArray;
 }
 
 
