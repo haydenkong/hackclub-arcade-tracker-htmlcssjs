@@ -18,6 +18,8 @@
     <link rel="icon" href="favicon.png" type="image/x-icon">
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZD8ZCNJRQQ"></script>
@@ -59,6 +61,17 @@
             border-radius: 5px;
             font-size: 1.4rem;
             padding: 5px;
+        }
+
+        select {
+            max-width: 200px;
+            background-color: #ede5d3;
+            border-radius: 0px;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            padding: 15px;
         }
         .inline-container {
             display: inline-flex;
@@ -297,6 +310,15 @@
         .hoursperday{
             margin-top: 10px;
         }
+
+        .itemGoalImage{
+            top:0px; 
+            left:600px;
+            height:120px; 
+            rotate: 20deg; 
+            position: absolute; 
+            z-index: 2147483647;
+        }
     </style>
 </head>
 <body>
@@ -304,11 +326,15 @@
         <h1 class="font-1 heading">The Arcade Tracker</h1>
         <p class="font-2 description">Track your progress towards your goal for the <a href="https://hackclub.com/arcade">Hack Club Arcade</a>!</p>
             
-        <div style="text-align: center;">
+        <div style="text-align: center; flex-direction: row; justify-content: center;">
             <div class="inline-container font-2">
-                <label style="font-size: 1.4rem;" for="ticketGoal">Ticket Goal:</label>
+                <label style="font-size: 1.4rem;" for="ticketGoal" id="ticketGoalLabel">Ticket Goal:</label>
                 <input type="number" class="font-2" id="ticketGoal" value="100">
-            </div>  
+                <select id="itemGoal" class="font-2" style="display: none" disabled="true">
+                    <option value="0">Select an item</option>
+                </select>
+                <button class="addOne" id="switchMode"><image style="height: 20px; padding-bottom: 10px;" src="https://cdn-icons-png.flaticon.com/512/15049/15049734.png"/></button>
+            </div> 
         </div>  
 
         <div style="text-align: center;">
@@ -331,7 +357,7 @@
             <a id="setStartDateLink" class="font-2">Set Start Date</a>
         </div>
         
-        <div>
+        <div style="position: relative;">
             <p class="progress-bar-header font-2">Your Progress:</p>
             <div class="progress-bar">
                 <div class="progress actual-progress" id="progressBar"></div>
@@ -352,6 +378,7 @@
                 <div class="remainingprogressbar-color"></div>
                 <p id="remainingProgressText" class="progress-bar-text"></p>
             </div>
+            <image id="itemGoalImage" class="itemGoalImage"/>
 
         </div>
 
@@ -361,7 +388,13 @@
         <p class="required-daily font-2" style="color: #000000; margin-top: -25px;" id="">Required Daily Tickets</p>
         <p class="days-remaining font-2" style="color: #000000; margin-top: 30px;" id="daysLeft"></p>
         <p class="days-remaining font-2" style="color: #000000; margin-bottom: 50px;" id="tickets-left"></p>
-        <p class="days-remaining font-2" style="color: #000000; margin-bottom: 50px;" id="estimated-goal-date"></p>
+        <p class="days-remaining font-2" style="color: #000000; margin-bottom: 0px;" id="estimated-goal-date"></p>
+        <div style="text-align: center; margin-bottom: 50px;">
+            <a id="ticketHistoryLink" class="font-2">View Daily Ticket History</a>
+        </div>
+        <div id="ticketHistoryDiv" style="display:none;">
+            <canvas id="myChart" style="width:100%;"></canvas>
+        </div>
 
         
         <div class="button-container">
@@ -399,6 +432,14 @@
         <br>
         <button id="saveStartDate">Save</button>
     </div>
+    <div id="apiKeyPopup" class="popup">
+        <h2>Enter Api Key</h2>
+        <label for="apiKeyLabel">This data is stored locally on your browser</label>
+        <br>
+        <input type="text" id="apiKeyInput" style="min-width: 400px;">
+        <br>
+        <button id="saveApiKey">Save</button>
+    </div>
     
 
     
@@ -414,33 +455,88 @@
         const removeOneHourButton = document.getElementById('removeOneHour');
         const addOneButton = document.getElementById('addOne');
         const ticketsLeftElement = document.getElementById('tickets-left');
-        const enterTicketsLink = document.getElementById('enterTicketsLink');
         const setStartDateLink = document.getElementById('setStartDateLink');
         const startDatePopup = document.getElementById('startDatePopup');
         const startDateInput = document.getElementById('startDateInput');
         const saveStartDateButton = document.getElementById('saveStartDate');
+        const enterTicketsLink = document.getElementById('enterTicketsLink');
+        const ticketHistoryLink = document.getElementById('ticketHistoryLink');
+        const apiKeyPopup = document.getElementById('apiKeyPopup');
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        const saveApiKeyButton = document.getElementById('saveApiKey');
         const requiredDailyElement = document.getElementById('required-daily');
         const remainingProgressText = document.getElementById('remainingProgressText');
         const hoursPerDayInput = document.getElementById('hoursPerDay');
         const estimatedGoalDateElement = document.getElementById('estimated-goal-date'); 
+        const switchModeButton = document.getElementById('switchMode');
+        let goalType = localStorage.getItem('goalType') || 'tickets';
 
         let startDate = new Date(localStorage.getItem('startDate')) || new Date('2024-06-18'); 
         const endDate = new Date('2024-08-31');
+
+        function getItems(){
+            url = 'https://hackclub.com/api/arcade/shop/'
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(item => {
+                    if(item.stock != 0){
+                    const option = document.createElement('option');
+                    option.value = item.hours;
+                    option.textContent = item.name;
+                    option.ariaImage = item.imageURL;
+                    if(localStorage.getItem('itemGoal') === item.name){
+                        option.selected = true;
+                        localStorage.setItem('ticketGoal', item.hours);
+                        updateProgress();
+                    }
+                    document.getElementById('itemGoal').appendChild(option);
+                    }
+                });
+            })
+            .then(() => {
+                document.getElementById('itemGoal').disabled = false;
+                updateProgress();
+                document.getElementById('itemGoalImage').src = document.getElementById('itemGoal').options[document.getElementById('itemGoal').selectedIndex].ariaImage;
+            })
+        }
+
+        getItems()
 
         function loadFromStorage() {
             const storedGoal = localStorage.getItem('ticketGoal');
             const storedTickets = localStorage.getItem('currentTickets');
             const storedStartDate = localStorage.getItem('startDate');
             const storedHoursPerDay = localStorage.getItem('hoursPerDay');
+            const storedGoalType = localStorage.getItem('goalType');
 
             if (storedGoal) ticketGoalInput.value = storedGoal;
             if (storedTickets) currentTicketsElement.textContent = storedTickets;
             if (storedStartDate) startDate = new Date(storedStartDate);
             if (storedHoursPerDay) hoursPerDayInput.value = storedHoursPerDay;
+            if(!storedGoalType){
+                localStorage.setItem('goalType', 'tickets');
+            }
+            if (storedGoalType){ 
+                goalType = storedGoalType;
+                if(goalType === 'tickets'){
+                    document.getElementById('ticketGoal').style.display = 'block';
+                    document.getElementById('itemGoal').style.display = 'none';
+                } else {
+                    document.getElementById('ticketGoal').style.display = 'none';
+                    document.getElementById('itemGoal').style.display = 'block';
+                }
+
+            }
+
         }
 
         function saveToStorage() {
-            localStorage.setItem('ticketGoal', ticketGoalInput.value);
+            if(goalType === 'tickets'){
+                localStorage.setItem('ticketGoal', ticketGoalInput.value);
+            } else {
+                localStorage.setItem('ticketGoal', document.getElementById('itemGoal').value);
+            }
             localStorage.setItem('currentTickets', currentTicketsElement.textContent);
             localStorage.setItem('startDate', startDate.toString());
             localStorage.setItem('hoursPerDay', hoursPerDayInput.value);
@@ -473,7 +569,16 @@
         }
 
         function updateProgress() {
-            const ticketGoal = parseInt(ticketGoalInput.value) || 0;
+            const ticketGoal = localStorage.getItem('goalType') === 'tickets' ? parseInt(ticketGoalInput.value) || 0 : parseInt(document.getElementById('itemGoal').value) || 0;
+            if(goalType === 'tickets'){
+                document.getElementById('ticketGoalLabel').textContent = 'Ticket Goal:';
+                saveToStorage();
+                document.getElementById('itemGoalImage').style.display = 'none';
+            } else {
+                document.getElementById('ticketGoalLabel').textContent = 'Item Goal:';
+                saveToStorage();
+                document.getElementById('itemGoalImage').style.display = 'block';
+            }
             const currentTickets = parseInt(currentTicketsElement.textContent);
             const hoursPerDay = parseFloat(hoursPerDayInput.value) || 1; 
             const progress = (currentTickets / ticketGoal) * 100 || 0;
@@ -576,9 +681,144 @@
             updateProgress(); 
         });
 
+        // ticket history popup
+        ticketHistoryLink.addEventListener('click', () => {
+            const apiKey = localStorage.getItem('apiKey');
+            if(apiKey){
+                const url = `https://kinghayden.hackclub.app/api/history`;
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`,
+                    },
+                }).then(response => response.json())
+                .then(data =>{
+                    document.getElementById('ticketHistoryDiv').style.display = 'block';
+                    new Chart("myChart", {
+  type: "line",
+  data: {
+    labels: getDates("17/06/24"),
+    datasets: [{
+      fill: false,
+      lineTension: 0,
+      backgroundColor: "#FB8B3C",
+      borderColor: "rgba(251, 139, 60,0.5)",
+      data: getCountsByDate(data, "17/06/24")
+    }]
+  },
+  options: {
+    legend: {display: false},
+  }
+});
+                }).catch(error => {
+                    document.getElementById('ticketHistoryDiv').style.display = 'none';
+                    apiKeyPopup.style.display = 'block';
+                });
+
+            } else {
+            apiKeyPopup.style.display = 'block';
+            }
+        });
+
+        saveApiKeyButton.addEventListener('click', () => {
+            const apiKey = apiKeyInput.value;
+            if(apiKey){
+                localStorage.setItem('apiKey', apiKey);
+            }
+            apiKeyPopup.style.display = 'none';
+        });
+
+        switchModeButton.addEventListener('click', () => {
+            goalType = goalType === 'tickets' ? 'hours' : 'tickets';
+            localStorage.setItem('goalType', goalType);
+            document.getElementById('ticketGoalLabel').textContent = goalType === 'tickets' ? 'Ticket Goal:' : 'Item Goal:';
+            document.getElementById('itemGoal').style.display = goalType === 'tickets' ? 'none' : 'block';
+            document.getElementById('ticketGoal').style.display = goalType === 'tickets' ? 'block' : 'none';
+            document.getElementById('itemGoalImage').src = document.getElementById('itemGoal').options[document.getElementById('itemGoal').selectedIndex].ariaImage;
+            updateProgress();
+            if(goalType != 'items'){
+                document.getElementById('itemGoalImage').style.display = 'none';
+            } else {
+                document.getElementById('itemGoalImage').style.display = 'block';
+            }
+        });
+        
+        document.getElementById('itemGoal').addEventListener('change', () =>{
+            localStorage.setItem('itemGoal', document.getElementById('itemGoal').options[document.getElementById('itemGoal').selectedIndex].text);
+            document.getElementById('itemGoalImage').src = document.getElementById('itemGoal').options[document.getElementById('itemGoal').selectedIndex].ariaImage;
+            updateProgress()
+        });
 
         loadFromStorage();
         updateProgress();
+
+        function getDates(startDate) {
+    function parseDate(dateStr) {
+        const [day, month, year] = dateStr.split('/').map(Number);
+        return new Date(year + 2000, month - 1, day);
+    }
+
+    function formatDate(date) {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = String(date.getFullYear()).slice(2);
+        return `${day}/${month}/${year}`;
+    }
+
+    const start = parseDate(startDate);
+    const end = new Date();
+    const dates = [];
+
+    for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
+        dates.push(formatDate(new Date(date)));
+    }
+
+    return dates;
+}
+
+function getCountsByDate(jsonData, startDate) {
+    function parseDate(dateStr) {
+        const [day, month, year] = dateStr.split('/').map(Number);
+        return new Date(year + 2000, month - 1, day);
+    }
+
+    function formatDate(date) {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = String(date.getFullYear()).slice(2);
+        return `${day}/${month}/${year}`;
+    }
+
+    function dateKey(date) {
+        return date.toISOString().split('T')[0];
+    }
+
+    const start = parseDate(startDate);
+    const end = new Date();
+
+    const dateCounts = {};
+    for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+        dateCounts[dateKey(date)] = 0;
+    }
+
+    jsonData.data.forEach(item => {
+        const itemDate = new Date(item.createdAt);
+        const itemDateKey = dateKey(itemDate);
+        if (itemDateKey in dateCounts) {
+            dateCounts[itemDateKey]++;
+        }
+    });
+
+    const countsArray = [];
+    for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+        countsArray.push(dateCounts[dateKey(date)]);
+    }
+
+    return countsArray;
+}
+
+
     </script>
 </body>
 </html>
