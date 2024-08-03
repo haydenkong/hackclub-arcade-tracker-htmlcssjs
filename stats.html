@@ -25,721 +25,140 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZD8ZCNJRQQ"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-    gtag('config', 'G-ZD8ZCNJRQQ');
+        gtag('config', 'G-ZD8ZCNJRQQ');
     </script>
 
     <style>
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
+            font-family: 'Arial', sans-serif;
             background-color: #fbefd6;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
+
+        .flag-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 225px;
+            overflow: hidden;
+            margin-left: 10px;
+        }
+
+        .flag-container img {
+            width: 100%;
+            height: auto;
+        }
+
+        .content-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
         .container {
-            max-width: 750px;
-            margin: auto;
-            padding: 20px;
-            border-radius: 5px;
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
         }
+
         h1 {
             text-align: center;
             color: #333;
         }
-        p{
+
+        p {
             text-align: center;
             color: #333;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+
+        .font-1 {
+            font-family: 'Slackey', cursive;
+            color: #fb8b3c;
         }
 
-        table, th, td {
-            border: 1px solid #ddd;
+        .font-2 {
+            font-family: 'Gaegu', cursive;
         }
-        th, td {
-            padding: 5px;
-            text-align: center;
-        }      
-        th {
-            background-color: #fbefd6;
-            border: 0px;
-            /* font-family: 'Slackey'; */
-            color: #fb8b3c;
-            font-weight: bold;
-            font-size: 1.3rem;
-        }
-        #chartContainer {
-            margin-top: 40px;
-            height: 400px;
-        }
-        .font-1{
-            font-family: 'Slackey';
-            color: #fb8b3c;
-        }
-        .font-2{
-            font-family: 'Gaegu';
-        }
-        .heading{
+
+        .heading {
             font-size: 2.5rem;
             margin-bottom: 0px;
         }
-        .description{
+
+        .description {
             font-size: 1.4rem;
             text-align: center;
             margin: 0px;
         }
-        .description-secondary{
-            font-size: 1.2rem;
-            text-align: center;
-            margin: 0px;
-            color: grey;
-            margin-bottom: 30px;
-        }
 
-        /* link */
-        a{
+        a {
             color: #ef3553;
             text-decoration: underline;
             text-underline-position: under;
             cursor: pointer;
         }
-        a:hover{
+
+        a:hover {
             color: #ef3553;
             text-decoration: underline wavy;
         }
+
         .about {
-            background-color: #fb8b3c;
-            color: #fbefd6;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 5px;
-        }
-        .about-listed{
-            letter-spacing: 0.01px;
-            font-size: 1.2rem;
-        }
-        #statsChart {
-            font-family: 'Gaegu', cursive;
-            margin-bottom: 25px;
-        }
-        @media (max-width: 416px) {
-            #statsChart {
-                margin-bottom: 50px;
-            }
-        }
-        .stats-container {
-            background-color: #00afb3;
-            color: #fbefd6;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 5px;
-            text-align: center;
-        }
-        .stats-p{
-            font-size: 1.2rem;
-            color: #fbefd6;
-            margin: 0px;
-        }
-        .stats-h2{
-            font-size: 1.5rem;
-            color: #fbefd6;
-            margin: 0px;
-        }
-
-        #paginationControls button {
-            background-color: #00afb3;
-            color: #fbefd6;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: 0.2s;
-        }
-
-        #paginationControls button:hover {
-            background-color: #338d8f;
-            transform: scale(1.05);
-        }
-
-        #paginationControls button:active {
-            transform: scale(0.95);
-        }
-
-        #paginationControls button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        #paginationControls:hover button:disabled {
-            transform: scale(1);
-        }
-
-        #paginationControls:active button:disabled {
-            transform: scale(1);
-        }
-
-        #pageInfo {
-            font-size: 1rem;
-            color: #333;
-        }
-
-        #vermontTimeContainer {
-            margin: 0px;
-            background-color: #fbefd6;
-            color: #000000;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 5px;
-            text-align: center;
-            padding: 0px;
-        }
-
-        #vermontTimeContainer p {
-            margin: 5px 0;
-            font-size: 1.2em;
-        }
-
-        .h2status{
-            font-size: 1.5rem;
-            color: #fbefd6;
-            margin: 0px;
-        }
-
-        .status-p{
-            font-size: 1.2rem;
-            color: #fbefd6;
-            margin: 0px;
-            font-weight: normal;
-        }
-
-        .chart-option{
-            font-family: 'Gaegu';
-            background-color: #00afb3;
-            color: #fbefd6;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: 0.2s;
-        }
-
-        .chart-option:hover{
-            background-color: #0b9395;
-            transform: scale(1.04);
-        }
-
-        .chart-option:active{
-            transform: scale(0.96);
-        }
-
-        #loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh; 
-            text-align: center;
-            flex-direction: column; 
-        }
-
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .errorMsg {
-            text-align: center;
             background-color: #ef3553;
             color: #fbefd6;
+            font-size: 1.2rem;
             padding: 15px;
-            border-radius: 5px;
             margin-top: 20px;
+            border-radius: 5px;
         }
-
-
-
-
     </style>
 </head>
 <body>
-    <div class="container">
-
-        
-             
-
-
-        
-        <h1 class="font-1 heading">Arcade Review Stats</h1>
-        <!-- <p class="font-2 description">By Hayden Kong. For the <a href="https://hackclub.com/arcade">Hack Club Arcade</a>!</p> -->
-        <p class="font-2 description-secondary">By Hayden Kong. Get the latest session review stats for <a href="https://hackclub.com/arcade">Arcade</a>! Updated every 15 minutes. Get LIVE results by running /arcadereviewstats in the <a href="https://hackclub.com/slack">Hack Club Slack</a>!</p>
-
-        <div id="loading">
-            <div class="spinner"></div>
-            <p>Loading data...</p>
-        </div>   
-
-        <div class="about errorMsg" style="background-color: #ef3553; display: none; margin-top: 250px; margin-bottom: 250px;">
-            <p class="font-2" style="color: #fbefd6; font-size: 1.2rem; margin-bottom: 0px;"><b>⚠️OUTAGE DETECTED⚠️: </b></p>
-            <p class="font-2" style="color: #fbefd6; font-size: 1.2rem; margin-top: 0px;">
-                Looks like we are currently having some issues with <a style="color: #fbefd6;" href="https://guides.hackclub.app">Hack Club Nest!</a>
-                We will keep you updated here, or join the #arcade-review-stats channel on the Hack Club Slack
-                 - Sorry! 
-            </p>
-            
-
-        </div>
-        
-        <div class="stats-container font-2" id="reviewStatus">
-            <!-- review stats here -->
-        </div>
-        
-        <div id="chartContainer">
-            <div id="chartOptions" class="font-2" style="text-align: center; margin-bottom: 10px;">
-                <button class="chart-option" data-option="max">Max</button>
-                <button class="chart-option" data-option="5days">Past 5 Days</button>
-                <button class="chart-option" data-option="3days">Past 3 Days</button>
-                <button class="chart-option" data-option="24hours">Last 24 Hours</button>
-            </div>
-            <canvas id="statsChart"></canvas>
-        </div>
-        <!-- <div class="about">
-            <p class="font-2" style="color: #fbefd6; font-size: 1.2rem;"><b>⚠️NOTICE⚠️: </b>
-                There is currently a huge backlog and most reviewers are away and on the <a style="color: #fbefd6" href="https://boreal.hackclub.com/">Boreal Express</a>. Please be patient! 
-                Reviewers are mostly volunteers. Sessions are not reviewed in order and take around 2-7 days (or more) to get reviewed.
-            </p> 
-        </div> -->
-        <div class="stats-container font-2" id="recentStats">
-           <!-- recent stats here -->
-        </div>
-        
-        <table id="statsTable" class="font-2">
-            <h2 class="font-1" style="text-align: center; font-size: 2rem; margin-top: 50px; margin-bottom: 0px;">Full Logs</h2>
-            <div id="vermontTimeContainer">
-                <!-- Vermont time -->
-            </div>
-            <div class="stats-container font-2" id="countdownTimer">
-                <!-- countdown timer here -->
-             </div>
-            <thead>
-                <tr>
-                    <th>Timestamp</th>
-                    <th>Hours Pending Review</th>
-                    <th>Hours Approved (Past 7 days)</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-            </tbody>
-        </table>
-
-        <div class="about">
-            <h3 class="font-1" style="color: #fbefd6; font-size: 1.5rem; margin-bottom: 0px; text-align: center;">How this works</h3>
-            <ol class="font-2">
-                <li class="about-listed">Every 15 minutes, a python script hosted using <a style="color: #fbefd6" href="https://guides.hackclub.app/index.php/Main_Page">Hack Club Nest</a> scrapes the Hack Club <a style="color: #fbefd6" href="https://airtable.com/appOKDJk2ALKSisEM/shriBhjoCj83rYCGT">Arcade Review Stats dashboard</a>.</li>
-                <li class="about-listed">The python script saves the hours pending review and hours reviewed in the past 7 days from the dashboard to a txt file.</li>
-                <li class="about-listed">Every time you load this page, it calls an <a style="color: #fbefd6" href="apidocs.html">API (click here for docs)</a> which gets the saved txt file from the Nest server containing all the data!</li>
-            </ol>    
-        </div>
-
-        <h2 class="font-1" style="font-size: 2rem; text-align: center;">More info...</h2>
-        <p class="font-2" style="text-align: center; font-size: 1.2rem;"><b>💡Some extra info about the 7-day total💡</b></p>
-        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-top: 0px;">The stat represents a rolling 7-day total, updated daily at 0:00 EDT.
-            When it updates, it removes data older than 7 days and adds the new day's data. This can cause a noticeable decrease if a high-activity day from 7 days ago is removed from the count. The line will then gradually increase as new approvals are added throughout the day.
-        </p>
-        <p class="font-2" style="text-align: center; font-size: 1.2rem;"><b>⌚Time zone⌚</b></p>
-        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-top: 0px;">Hack Club Nest's servers are located in Helsinki, Finland. The time zone that is used for the logging and timestamps is in GMT (Greenwich Mean Time). However, the timestamps are converted to your local time zone!
-        </p>
-        <p class="font-2" style="text-align: center; font-size: 1.2rem;"><b>🎯Accuracy of the data🎯</b></p>
-        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-top: 0px;">All the data scraped is from the official public Arcade Review dashboard. The data is not manipulated in any way and is directly from the dashboard. The accuracy of the data is controlled by Hack Club :)
-        </p>
-        <p class="font-2" style="text-align: center;">-------------------</p>
-        <p class="font-2" style="text-align: center; font-size: 1.2rem;">If you have any suggestions or issues, please <a href="https://forms.fillout.com/t/hSJMTXtGshus">fill out this form</a> or contact me on the Hack Club Slack: @Hayden Kong. <a href="index.html">Go back to the Arcade Tracker</a>.</p>
-
-        <p class="font-2" style="font-size: 1.2rem; margin-top: 55px; color: grey;">&copy; 2024 Hayden Kong. All rights reserved.</p>
-
+    <div class="flag-container">
+        <img src="https://assets.hackclub.com/flag-orpheus-top.svg" alt="Hack Club Flag">
     </div>
-    
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const apiUrl = 'https://kinghayden.hackclub.app/api/stats';
-        let allData = [];
-        const rowsPerPage = 50;
-        let currentPage = 1;
-        let totalPages = 0;
-        let chart;
-        
-        const loadingAnimation = document.getElementById('loading');
-        loadingAnimation.style.display = 'block';
+    <div class="content-container">
+        <div class="container">
+            <h1 class="font-1 heading">Arcade Review Stats</h1>
+            <!-- <p class="font-2 description">Oops! We're doing some maintenance. We apologize for the inconvenience. We're sprucing things up to serve you better!</p> -->
+            <p class="font-2 description">Oops! Looks like Nest(#nest) is down. We apologize for the inconvenience.</p>
 
-        const mainContent = document.querySelectorAll('.container > :not(h1):not(p):not(#loading)');
-        mainContent.forEach(el => el.style.display = 'none');
-
-        async function fetchStats() {
-            try {
-                const response = await fetch(apiUrl);
-                const textData = await response.text();
-                allData = textData.split('\n')
-                    .filter(line => line.trim() !== '')
-                    .map(item => {
-                        const parsedItem = JSON.parse(item);
-                        parsedItem.timestamp = moment.utc(parsedItem.timestamp).local().format('YYYY-MM-DD HH:mm:ss');
-                        return parsedItem;
-                    })
-                    .sort((a, b) => moment(b.timestamp).diff(moment(a.timestamp)));
-                
-                totalPages = Math.ceil(allData.length / rowsPerPage);
-                createPaginationControls();
-                populateTable();
-                createChart(allData); // chart creation with all data
-                updateReviewStatus(allData);
-                updateRecentStats(allData);
-                updateVermontTime();
-                updateCountdownTimer(allData[0].timestamp);
-                
-                mainContent.forEach(el => el.style.display = 'block');
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            } finally {
-                loadingAnimation.style.display = 'none';
-            }
-        }
-
-        async function checkAPIStatus() {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 5000); // timeout 5 seconds
-
-            try {
-                const response = await fetch('https://kinghayden.hackclub.app/ping', { signal: controller.signal });
-                const text = await response.text();
-                if (text.trim() === 'pong') {
-                    fetchStats();
-                } else {
-                    displayAPIDownMessage();
-                }
-            } catch (error) {
-                displayAPIDownMessage();
-            } finally {
-                clearTimeout(timeoutId);
-            }
-        }
-
-        function displayAPIDownMessage() {
-            loadingAnimation.style.display = 'none';
-            const apiDownMessage = document.querySelector('.errorMsg');
-            apiDownMessage.style.display = 'block';
-        }
-
-        function populateTable() {
-            const tableBody = document.querySelector('#tableBody');
-            tableBody.innerHTML = ''; // clear existing rows
-            
-            const startIndex = (currentPage - 1) * rowsPerPage;
-            const endIndex = startIndex + rowsPerPage;
-            const pageData = allData.slice(startIndex, endIndex);
-            
-            pageData.forEach(data => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${data.timestamp}</td>
-                    <td>${data.hours_pending}</td>
-                    <td>${data.hours_approved}</td>
-                `;
-                tableBody.appendChild(row);
-            });
-            
-            updatePaginationControls();
-        }
-
-        function createPaginationControls() {
-            const paginationContainer = document.createElement('div');
-            paginationContainer.id = 'paginationControls';
-            paginationContainer.className = 'font-2';
-            paginationContainer.style.textAlign = 'center';
-            paginationContainer.style.marginTop = '20px';
-            
-            const backButton = document.createElement('button');
-            backButton.id = 'backButton';
-            backButton.innerHTML = '&larr;'; // left arrow
-            backButton.addEventListener('click', () => changePage(-1));
-            
-            const pageInfo = document.createElement('span');
-            pageInfo.id = 'pageInfo';
-            pageInfo.style.margin = '0 10px';
-            
-            const forwardButton = document.createElement('button');
-            forwardButton.id = 'forwardButton';
-            forwardButton.innerHTML = '&rarr;'; // right arrow
-            forwardButton.addEventListener('click', () => changePage(1));
-            
-            paginationContainer.appendChild(backButton);
-            paginationContainer.appendChild(pageInfo);
-            paginationContainer.appendChild(forwardButton);
-            
-            document.querySelector('#statsTable').insertAdjacentElement('afterend', paginationContainer);
-        }
-
-        function updatePaginationControls() {
-            const pageInfo = document.getElementById('pageInfo');
-            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-            
-            const backButton = document.getElementById('backButton');
-            const forwardButton = document.getElementById('forwardButton');
-            
-            backButton.disabled = currentPage === 1;
-            forwardButton.disabled = currentPage === totalPages;
-        }
-
-        function changePage(direction) {
-            currentPage += direction;
-            currentPage = Math.max(1, Math.min(currentPage, totalPages));
-            populateTable();
-        }
-
-        function updateVermontTime() {
-            const vermontTimeContainer = document.createElement('div');
-            vermontTimeContainer.id = 'vermontTimeContainer';
-            vermontTimeContainer.className = 'font-2 time-container';
-            vermontTimeContainer.style.marginTop = '20px';
-
-            const vermontTime = moment().tz('America/New_York'); // Vermont is in the Eastern Time Zone
-            const timeOfDay = getTimeOfDay(vermontTime);
-            const timeString = vermontTime.format('h:mm A');
-            
-            const timeElement = document.createElement('p');
-            timeElement.className = 'time-p';
-            timeElement.innerHTML = `<strong>Current time in Hack Club HQ:</strong> (${timeString}) ${timeOfDay} `;
-            vermontTimeContainer.appendChild(timeElement);
-
-            document.querySelector('#vermontTimeContainer').insertAdjacentElement('beforebegin', vermontTimeContainer);
-        }
-
-        function getTimeOfDay(time) {
-            const hour = time.hour();
-            if (hour >= 5 && hour < 8) {
-                return 'Early Morning 🍵 - Avoid Pinging!';
-            } else if (hour >= 8 && hour < 12) {
-                return 'Morning 🌇 (In Office)';
-            } else if (hour >= 12 && hour < 13) {
-                return 'Midday ☀️ (In Office)';
-            } else if (hour >= 13 && hour < 17) {
-                return 'Afternoon 🕑 (In Office)';
-            } else if (hour >= 17 && hour < 20) {
-                return 'Evening 🌙 (Out of Office)';
-            } else if (hour >= 20 || hour < 5) {
-                return 'Night 🛏️💤💤 - Avoid Pinging!';
-            }
-        }
-
-        function createChart(data) {
-            const ctx = document.getElementById('statsChart').getContext('2d');
-            
-            // reverse the data for the chart so it shows oldest to newest left to right
-            const chartData = [...data].reverse();
-            
-            const timestamps = chartData.map(item => moment(item.timestamp).toDate());
-            const pendingData = chartData.map(item => item.hours_pending);
-            const approvedData = chartData.map(item => item.hours_approved);
-
-            Chart.defaults.font.family = "'Gaegu', cursive";
-            Chart.defaults.font.size = 14;
-            
-            chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: timestamps,
-                    datasets: [
-                        {
-                            label: 'Hours Pending Review',
-                            data: pendingData,
-                            borderColor: '#fb8b3c',
-                            tension: 0.1,
-                            pointRadius: 0
-                        },
-                        {
-                            label: 'Hours Approved (Past 7 days)',
-                            data: approvedData,
-                            borderColor: '#00afb3',
-                            tension: 0.1,
-                            pointRadius: 0
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            type: 'time',
-                            time: {
-                                unit: 'hour',
-                                displayFormats: {
-                                    hour: 'MMM D, HH:mm'
-                                },
-                                tooltipFormat: 'MMM D, YYYY, HH:mm'
-                            },
-                            title: {
-                                display: true,
-                                text: 'Timestamp (Local Time)',
-                                font: {
-                                    weight: 'bold'
-                                }
-                            }
-                        },
-                        y: {
-                            beginAtZero: false,
-                            title: {
-                                display: true,
-                                text: 'Hours',
-                                font: {
-                                    weight: 'bold'
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        title: {
-                            display: false,
-                            text: 'Arcade Review Stats Graph',
-                            font: {
-                                weight: 'bold'
-                            }
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                        },
-                        legend: {
-                            labels: {
-                                font: {
-                                    family: "'Gaegu', cursive",
-                                    weight: 'bold'
-                                }
-                            }
-                        }
-                    },
-                    interaction: {
-                        mode: 'nearest',
-                        axis: 'x',
-                        intersect: false
-                    }
-                }
-            });
-        }
-
-        function updateChart(timeRange) {
-            let filteredData;
-            const now = moment();
-            
-            switch (timeRange) {
-                case '1h':
-                    filteredData = data.filter(item => moment(item.timestamp).isAfter(now.subtract(1, 'hour')));
-                    break;
-                case '3h':
-                    filteredData = data.filter(item => moment(item.timestamp).isAfter(now.subtract(3, 'hours')));
-                    break;
-                case '6h':
-                    filteredData = data.filter(item => moment(item.timestamp).isAfter(now.subtract(6, 'hours')));
-                    break;
-                case '12h':
-                    filteredData = data.filter(item => moment(item.timestamp).isAfter(now.subtract(12, 'hours')));
-                    break;
-                case '24h':
-                    filteredData = data.filter(item => moment(item.timestamp).isAfter(now.subtract(24, 'hours')));
-                    break;
-                default:
-                    filteredData = data;
-            }
-
-            const timestamps = filteredData.map(item => moment(item.timestamp).toDate());
-            const pendingData = filteredData.map(item => item.hours_pending);
-            const approvedData = filteredData.map(item => item.hours_approved);
-
-            chart.data.labels = timestamps;
-            chart.data.datasets[0].data = pendingData;
-            chart.data.datasets[1].data = approvedData;
-            chart.update();
-        }
-
-        function updateReviewStatus(data) {
-            const currentReviewStatusContainer = document.createElement('div');
-            currentReviewStatusContainer.id = 'currentReviewStatusContainer';
-            currentReviewStatusContainer.className = 'font-2';
-            currentReviewStatusContainer.style.marginTop = '20px';
-            
-            const latestData = data[0];
-            const lastUpdated = moment(latestData.timestamp).fromNow();
-            
-            const reviewStatusElement = document.createElement('p');
-            reviewStatusElement.innerHTML = `As of ${lastUpdated}, there are ${latestData.hours_pending} hours pending review.`;
-            currentReviewStatusContainer.appendChild(reviewStatusElement);
-            
-            document.querySelector('.container').appendChild(currentReviewStatusContainer);
-        }
-
-        function updateRecentStats(data) {
-            const recentStatsContainer = document.createElement('div');
-            recentStatsContainer.id = 'recentStatsContainer';
-            recentStatsContainer.className = 'font-2';
-            recentStatsContainer.style.marginTop = '20px';
-            
-            const last24HoursData = data.filter(item => moment(item.timestamp).isAfter(moment().subtract(24, 'hours')));
-            
-            const totalApproved = last24HoursData.reduce((sum, item) => sum + item.hours_approved, 0);
-            const totalPending = last24HoursData.reduce((sum, item) => sum + item.hours_pending, 0);
-            
-            const recentStatsElement = document.createElement('p');
-            recentStatsElement.innerHTML = `In the last 24 hours, ${totalApproved} hours were approved and ${totalPending} hours were added to the pending review.`;
-            recentStatsContainer.appendChild(recentStatsElement);
-            
-            document.querySelector('.container').appendChild(recentStatsContainer);
-        }
-
-        function updateCountdownTimer(lastTimestamp) {
-            const lastUpdateTime = moment(lastTimestamp);
-            const countdownTimerContainer = document.createElement('div');
-            countdownTimerContainer.id = 'countdownTimerContainer';
-            countdownTimerContainer.className = 'font-2';
-            countdownTimerContainer.style.marginTop = '20px';
-            
-            const countdownTimerElement = document.createElement('p');
-            countdownTimerElement.id = 'countdownTimer';
-            countdownTimerContainer.appendChild(countdownTimerElement);
-            
-            document.querySelector('.container').appendChild(countdownTimerContainer);
-
-            function updateTimer() {
-                const now = moment();
-                const duration = moment.duration(now.diff(lastUpdateTime));
-                const hours = Math.floor(duration.asHours());
-                const minutes = duration.minutes();
-                const seconds = duration.seconds();
-                
-                countdownTimerElement.innerHTML = `Last update was ${hours} hours, ${minutes} minutes, and ${seconds} seconds ago.`;
-            }
-
-            setInterval(updateTimer, 1000);
-            updateTimer();
-        }
-
-        checkAPIStatus();
-    });
-    </script>
+            <div class="about">
+                <!-- <p class="font-2" style="color: #fbefd6; font-size: 1.2rem;"><b>UPDATE: </b>
+                    Nest staff are currently troubleshooting a system-wide issue, most likely due to the secure-vm being down.
+                </p> -->
+                <!-- <p class="font-2" style="color: #fbefd6; font-size: 1.2rem;"><b>UPDATE: </b>
+                    Nest is up but we are still working on fixing a issue with Caddy. We appreciate your patience and will update as necessary.
+                </p>
+                <p class="font-2" style="color: #fbefd6; font-size: 1.2rem;"><b>UPDATE: </b>
+                    Maintenance is still ongoing and taking longer than expected. We appreciate your patience and will update as necessary.
+                </p>
+                <p class="font-2" style="color: #fbefd6; font-size: 1.2rem;"><b>UPDATE: </b>
+                    Upgrades are taking slightly longer than expected. We appreciate your patience and will update as necessary.
+                </p>
+                <p class="font-2" style="color: #fbefd6; font-size: 1.2rem; margin-bottom: 2px;">
+                    <b>⚠️Scheduled Maintenance Notification⚠️:</b>
+                </p> -->
+                <p class="font-2" style="color: #fbefd6; font-size: 1.2rem; margin-top: 0px;">
+                    Hack Club Nest (the service that hosts Arcade Review Stats) is currently experiencing
+                    some issues that have not been yet announced. They have comfirmed they are working on
+                    the issue and will update us as soon as possible. We apologize for the inconvenience.
+                </p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
