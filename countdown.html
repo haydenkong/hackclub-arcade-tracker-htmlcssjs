@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcade Review Stats</title>
+
+    <!-- SEO meta tags -->
+    <meta name="description" content="Track real-time stats updated every 15 minutes for the Hack Club Arcade Review stats.">
+    <meta name="keywords" content="hack club, hack club arcade, arcade, hack club arcade stats, hack club arcade review stats, arcade review stats">
+
+    <!-- Google fonts - Official Arcade fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Slackey&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZD8ZCNJRQQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-ZD8ZCNJRQQ');
+    </script>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fbefd6;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .content-container {
+            flex-grow: 1;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        p {
+            text-align: center;
+            color: #333;
+        }
+
+        .font-1 {
+            font-family: 'Slackey', cursive;
+            color: #fb8b3c;
+        }
+
+        .font-2 {
+            font-family: 'Gaegu', cursive;
+        }
+
+        .heading {
+            font-size: 2.5rem;
+            margin-bottom: 0px;
+        }
+
+        .description {
+            font-size: 1.4rem;
+            text-align: center;
+            margin: 0px;
+        }
+
+        a {
+            color: #ef3553;
+            text-decoration: underline;
+            text-underline-position: under;
+            cursor: pointer;
+        }
+
+        a:hover {
+            color: #ef3553;
+            text-decoration: underline wavy;
+        }
+
+        .about {
+            background-color: #ef3553;
+            color: #fbefd6;
+            font-size: 1.2rem;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+
+
+
+        .countdown {
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 2rem;
+        }
+        #timer {
+            display: flex;
+            justify-content: space-around;
+        }
+        .time-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .time-amount {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #4a4a4a;
+        }
+        .time-label {
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container">
+        <h1>Countdown till Arcade ends!</h1>
+        <div id="timer"></div>
+    </div>
+
+    <script>
+        function getTimeRemaining(endtime) {
+            const total = Date.parse(endtime) - Date.parse(new Date());
+            const seconds = Math.floor((total / 1000) % 60);
+            const minutes = Math.floor((total / 1000 / 60) % 60);
+            const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+            const days = Math.floor(total / (1000 * 60 * 60 * 24));
+            
+            return {
+                total,
+                days,
+                hours,
+                minutes,
+                seconds
+            };
+        }
+
+        function initializeClock(id, endtime) {
+            const clock = document.getElementById(id);
+
+            function updateClock() {
+                const t = getTimeRemaining(endtime);
+
+                clock.innerHTML = `
+                    <div class="time-section">
+                        <span class="time-amount">${t.days}</span>
+                        <span class="time-label">Days</span>
+                    </div>
+                    <div class="time-section">
+                        <span class="time-amount">${t.hours.toString().padStart(2, '0')}</span>
+                        <span class="time-label">Hours</span>
+                    </div>
+                    <div class="time-section">
+                        <span class="time-amount">${t.minutes.toString().padStart(2, '0')}</span>
+                        <span class="time-label">Minutes</span>
+                    </div>
+                    <div class="time-section">
+                        <span class="time-amount">${t.seconds.toString().padStart(2, '0')}</span>
+                        <span class="time-label">Seconds</span>
+                    </div>
+                `;
+
+                if (t.total <= 0) {
+                    clearInterval(timeinterval);
+                    clock.innerHTML = "<div class='time-amount'>The countdown is over!</div>";
+                }
+            }
+
+            updateClock();
+            const timeinterval = setInterval(updateClock, 1000);
+        }
+
+        const deadline = new Date(Date.UTC(2024, 7, 31, 4, 0, 0)).toLocaleString("en-US", {timeZone: "America/New_York"});
+        initializeClock('timer', deadline);
+    </script>
+</body>
+</html>
