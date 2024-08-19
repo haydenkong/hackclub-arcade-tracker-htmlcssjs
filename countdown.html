@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arcade Review Stats</title>
+    <title>Arcade countdown | Arcade tools</title>
 
     <!-- SEO meta tags -->
     <meta name="description" content="Track real-time stats updated every 15 minutes for the Hack Club Arcade Review stats.">
@@ -77,6 +77,11 @@
             font-family: 'Gaegu', cursive;
         }
 
+        .font-3 {
+            font-family: 'Slackey', cursive;
+            color: #000000;
+        }
+
         .heading {
             font-size: 2.5rem;
             margin-bottom: 0px;
@@ -86,6 +91,7 @@
             font-size: 1.4rem;
             text-align: center;
             margin: 0px;
+            margin-bottom: 50px;
         }
 
         a {
@@ -108,47 +114,110 @@
             margin-top: 20px;
             border-radius: 5px;
         }
-
-
-
-
-        .countdown {
-            text-align: center;
-            background-color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 2rem;
-        }
+        
         #timer {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
+            gap: 60px; 
         }
         .time-section {
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100px; 
         }
         .time-amount {
             font-size: 3rem;
             font-weight: bold;
-            color: #4a4a4a;
+            height: 3.5rem; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .time-label {
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            color: #888;
+            font-size: 1.2rem;
             margin-top: 0.5rem;
+        }
+        .congrats{
+            font-size: 2rem;
+            text-align: center;
+            font-weight: bold;
+            color: #ef3553;
+        }
+
+
+
+        /* Live Chat Form */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            font-family: 'Gaegu', cursive;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: 'Gaegu', cursive;
+            outline: none;
+            background-color: #ede5d3;
+        }
+
+        .form-input:focus, .form-input:hover {
+            background-color: rgb(214, 208, 192);
+        }
+
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: 0.2s;
+            border: none;
+            font-family: 'Slackey', cursive;
+        }
+
+        .btn-primary {
+            background-color: #00afb3;
+            color: #fbefd6;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
         }
     </style>
 </head>
 <body>
     <div class="content-container">
-        <h1>Countdown till Arcade ends!</h1>
+        <h1 class="font-1 heading">Countdown till Arcade ends!</h1>
+        <p class="font-2 description">The countdown till the <a href="https://hackclub.com/arcade">Hack Club Arcade</a> 2024 official ends!!!!!</p>
         <div id="timer"></div>
+        <form>
+            <p>Live chat</p>
+            <p>Live chat is powered by Nest and is currently in beta. If you experience any inappropriate or harmful messages, please contact @Hayden Kong on slack immediately.</p>
+            <div class="form-group">
+                <label class="form-label" for="name">Name</label>
+                <input type="text" id="name" class="form-input" placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="email">Email</label>
+                <input type="email" id="email" class="form-input" placeholder="Enter your email">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
 
     <script>
@@ -170,41 +239,56 @@
 
         function initializeClock(id, endtime) {
             const clock = document.getElementById(id);
+            const daysSpan = clock.querySelector('.days');
+            const hoursSpan = clock.querySelector('.hours');
+            const minutesSpan = clock.querySelector('.minutes');
+            const secondsSpan = clock.querySelector('.seconds');
 
             function updateClock() {
                 const t = getTimeRemaining(endtime);
 
-                clock.innerHTML = `
-                    <div class="time-section">
-                        <span class="time-amount">${t.days}</span>
-                        <span class="time-label">Days</span>
-                    </div>
-                    <div class="time-section">
-                        <span class="time-amount">${t.hours.toString().padStart(2, '0')}</span>
-                        <span class="time-label">Hours</span>
-                    </div>
-                    <div class="time-section">
-                        <span class="time-amount">${t.minutes.toString().padStart(2, '0')}</span>
-                        <span class="time-label">Minutes</span>
-                    </div>
-                    <div class="time-section">
-                        <span class="time-amount">${t.seconds.toString().padStart(2, '0')}</span>
-                        <span class="time-label">Seconds</span>
-                    </div>
-                `;
-
                 if (t.total <= 0) {
-                    clearInterval(timeinterval);
-                    clock.innerHTML = "<div class='time-amount'>The countdown is over!</div>";
+                    clock.innerHTML = "<div class='time-amount font-3'>The countdown is over!</div>";
+                    return;
                 }
+
+                daysSpan.innerHTML = t.days;
+                hoursSpan.innerHTML = t.hours.toString().padStart(2, '0');
+                minutesSpan.innerHTML = t.minutes.toString().padStart(2, '0');
+                secondsSpan.innerHTML = t.seconds.toString().padStart(2, '0');
             }
 
             updateClock();
             const timeinterval = setInterval(updateClock, 1000);
         }
 
-        const deadline = new Date(Date.UTC(2024, 7, 31, 4, 0, 0)).toLocaleString("en-US", {timeZone: "America/New_York"});
-        initializeClock('timer', deadline);
+        const deadline = new Date(Date.UTC(2024, 7, 31, 4, 0, 0));
+        const now = new Date();
+
+        if (now >= deadline) {
+            document.getElementById('timer').innerHTML = "<div class='time-amount font-3'>The countdown is over!</div>";
+        } else {
+            const timerHtml = `
+                <div class="time-section">
+                    <span class="time-amount font-3 days"></span>
+                    <span class="time-label font-2">Days</span>
+                </div>
+                <div class="time-section">
+                    <span class="time-amount font-3 hours"></span>
+                    <span class="time-label font-2">Hours</span>
+                </div>
+                <div class="time-section">
+                    <span class="time-amount font-3 minutes"></span>
+                    <span class="time-label font-2">Minutes</span>
+                </div>
+                <div class="time-section">
+                    <span class="time-amount font-3 seconds"></span>
+                    <span class="time-label font-2">Seconds</span>
+                </div>
+            `;
+            document.getElementById('timer').innerHTML = timerHtml;
+            initializeClock('timer', deadline);
+        }
     </script>
 </body>
 </html>
