@@ -249,7 +249,7 @@
                 const t = getTimeRemaining(endtime);
 
                 if (t.total <= 0) {
-                    clock.innerHTML = "<div class='time-amount font-3'>The countdown is over!</div>";
+                    clock.innerHTML = "<div class='time-amount font-3'>Thank you to all the volunteers and staff for making Hack Club's biggest ever event, Arcade 2024 possible!! Congrats to everyone to participated!</div>";
                     return;
                 }
 
@@ -263,7 +263,7 @@
             const timeinterval = setInterval(updateClock, 1000);
         }
 
-        const deadline = new Date(Date.UTC(2024, 7, 31, 4, 0, 0));
+        const deadline = new Date('August 31, 2024 11:59:00 GMT-4:00');
         const now = new Date();
 
         if (now >= deadline) {
