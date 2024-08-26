@@ -205,20 +205,22 @@
         <h1 class="font-1 heading">Countdown till Arcade ends!</h1>
         <p class="font-2 description">The countdown till the <a href="https://hackclub.com/arcade">Hack Club Arcade</a> 2024 official ends!!!!!</p>
         <div id="timer"></div>
-        <p style="margin-top: 50px;">Live chat coming soon!!!</p>
-        <!-- <form>
-            <p>Live chat</p>
-            <p>Live chat is powered by Nest and is currently in beta. If you experience any inappropriate or harmful messages, please contact @Hayden Kong on slack immediately.</p>
+        <!-- <p style="margin-top: 50px;">Live chat coming soon!!!</p> -->
+        <form style="margin-top: 50px;">
+            <h2 class="font-1">Live Chat</h2>
             <div class="form-group">
                 <label class="form-label" for="name">Name</label>
                 <input type="text" id="name" class="form-input" placeholder="Enter your name">
             </div>
             <div class="form-group">
-                <label class="form-label" for="email">Email</label>
-                <input type="email" id="email" class="form-input" placeholder="Enter your email">
+                <label class="form-label" for="message">Message</label>
+                <input type="text" id="message" class="form-input" placeholder="Enter your message">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form> -->
+            <button id="livechatBtn" type="submit" class="btn btn-primary">Submit</button>
+            <p>Live chat is currently in beta. If you experience any inappropriate or harmful messages, please contact @Hayden Kong on slack immediately.</p>
+        </form>
+
+
     </div>
 
     <script>
@@ -228,7 +230,7 @@
             const minutes = Math.floor((total / 1000 / 60) % 60);
             const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
             const days = Math.floor(total / (1000 * 60 * 60 * 24));
-            
+
             return {
                 total,
                 days,
@@ -270,26 +272,64 @@
             document.getElementById('timer').innerHTML = "<div class='time-amount font-3'>The countdown is over!</div>";
         } else {
             const timerHtml = `
-                <div class="time-section">
-                    <span class="time-amount font-3 days"></span>
-                    <span class="time-label font-2">Days</span>
-                </div>
-                <div class="time-section">
-                    <span class="time-amount font-3 hours"></span>
-                    <span class="time-label font-2">Hours</span>
-                </div>
-                <div class="time-section">
-                    <span class="time-amount font-3 minutes"></span>
-                    <span class="time-label font-2">Minutes</span>
-                </div>
-                <div class="time-section">
-                    <span class="time-amount font-3 seconds"></span>
-                    <span class="time-label font-2">Seconds</span>
-                </div>
-            `;
+                    <div class="time-section">
+                        <span class="time-amount font-3 days"></span>
+                        <span class="time-label font-2">Days</span>
+                    </div>
+                    <div class="time-section">
+                        <span class="time-amount font-3 hours"></span>
+                        <span class="time-label font-2">Hours</span>
+                    </div>
+                    <div class="time-section">
+                        <span class="time-amount font-3 minutes"></span>
+                        <span class="time-label font-2">Minutes</span>
+                    </div>
+                    <div class="time-section">
+                        <span class="time-amount font-3 seconds"></span>
+                        <span class="time-label font-2">Seconds</span>
+                    </div>
+                `;
             document.getElementById('timer').innerHTML = timerHtml;
             initializeClock('timer', deadline);
         }
+
+
+
+        const livechatBtn = document.getElementById('livechatBtn');
+
+        livechatBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+
+            if (!name || !message) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            fetch('https://securityshield.vercel.app/chat/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name,
+                    message
+                }),
+                mode: 'cors'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    alert('Message sent successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again later.');
+                });
+        });
+
     </script>
 </body>
 </html>
