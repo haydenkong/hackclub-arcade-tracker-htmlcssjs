@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arcade countdown | Arcade tools</title>
+    <title>Arcade Countdown | Arcade tools</title>
 
     <!-- SEO meta tags -->
     <meta name="description" content="Track real-time stats updated every 15 minutes for the Hack Club Arcade Review stats.">
@@ -47,6 +47,8 @@
             justify-content: center;
             align-items: center;
             padding: 2rem;
+            max-width: 800px;
+            margin: auto;
         }
 
         .container {
@@ -119,6 +121,10 @@
             display: flex;
             justify-content: center;
             gap: 60px; 
+            background-color: #00afb3;
+            color: #fbefd6;
+            padding: 40px;
+            border-radius: 5px;
         }
         .time-section {
             display: flex;
@@ -133,6 +139,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            color: #fbefd6;
         }
         .time-label {
             font-size: 1.2rem;
@@ -160,7 +167,7 @@
         }
 
         .form-input {
-            width: 100%;
+            width: 98%;
             padding: 0.5rem;
             border: none;
             border-radius: 5px;
@@ -198,16 +205,29 @@
         .btn:active {
             transform: scale(0.97);
         }
+        
+
+        .liveFeed{
+            background-color: #fb8b3c;
+            color: #fbefd6;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="content-container">
-        <h1 class="font-1 heading">Countdown till Arcade ends!</h1>
+        <h1 class="font-1 heading">The Arcade Countdown!</h1>
         <p class="font-2 description">The countdown till the <a href="https://hackclub.com/arcade">Hack Club Arcade</a> 2024 official ends!!!!!</p>
         <div id="timer"></div>
 
         <form style="margin-top: 50px;">
-            <h2 class="font-1">Live Chat</h2>
+            <h2 class="font-1" >Live Chat</h2>
+            <p style="text-align: left;" class="font-2">Live chat is currently in beta.
+                Ensure messages are align with the <a href="https://hackclub.com/conduct/">Hack Club Code of Conduct</a> or else
+                they will be deleted.
+            </p>
             <div class="form-group">
                 <label class="form-label" for="name">Name</label>
                 <input type="text" id="name" class="form-input" placeholder="Enter your name">
@@ -216,17 +236,16 @@
                 <label class="form-label" for="message">Message</label>
                 <input type="text" id="message" class="form-input" placeholder="Enter your message">
             </div>
-            <button id="livechatBtn" type="submit" class="btn btn-primary">Submit</button>
-            <p>Live chat is currently in beta. 
-           Ensure messages are align with the <a href="https://hackclub.com/conduct/">Hack Club Code of Conduct</a> or else they will be deleted.
-            </p>
+            <button id="livechatBtn" type="submit" class="btn btn-primary">Send!</button>
+            
         </form>
 
-
-        <h2 class="font-1">Live Chat Feed</h2>
-        <div class="livechatfeed">
+        <div class="liveFeed">
+            <h2 class="font-1" style="color: #fbefd6; text-align: center;">Live Chat Feed</h2>
+            <div class="livechatfeed font-2" style="font-size: 1.2rem;">
+            </div>
+            <p class="font-2" style="margin-top: 50px;">If you encounter any bullying or inappropriate messages, please report them by sending a direct message to @Hayden Kong on Slack.</p>
         </div>
-
 
     </div>
 
@@ -330,32 +349,17 @@
                 .then(data => {
                     console.log(data);
                     livechatBtn.disabled = false;
-                    livechatBtn.innerHTML = 'Submit';
+                    livechatBtn.innerHTML = 'Sent!!!';
+                    setTimeout(() => {
+                        livechatBtn.innerHTML = 'Send!';
+                    }, 1000);
+                    document.getElementById('message').value = '';
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('An error occurred. Please try again later.');
+                    alert('An error occurred. Please try again later or ping @Hayden Kong on Hack Club Slack.');
                 });
         });
-
-        // fetch('https://securityshield.vercel.app/chat/messages')
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log(data);
-        //         const livechatFeed = document.querySelector('.livechatfeed');
-
-        //         data.forEach(message => {
-        //             const chatMessage = document.createElement('div');
-        //             chatMessage.classList.add('chatMessage');
-        //             chatMessage.innerHTML = `
-        //                 <p><span style="font-weight: bold;">${message.name}:</span> ${message.message} <span style="color: gray; font-size: 0.8rem; font-style: italic; ">${message.timestamp}</span></p>
-        //             `;
-        //             livechatFeed.appendChild(chatMessage);
-        //         });
-        //     })
-        //     .catch(error => {
-        //         console.error('Error:', error);
-        //     });
 
     // function to reload messages
     function reloadMessages(){
@@ -365,11 +369,13 @@
                 console.log(data);
                 const livechatFeed = document.querySelector('.livechatfeed');
                 livechatFeed.innerHTML = "";
+                data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // sort messages by newest at the top
                 data.forEach(message => {
                     const chatMessage = document.createElement('div');
                     chatMessage.classList.add('chatMessage');
+                    const timestamp = getTimeAgo(message.timestamp); // get the time ago string
                     chatMessage.innerHTML = `
-                        <p><span style="font-weight: bold;">${message.name}:</span> ${message.message} <span style="color: gray; font-size: 0.8rem; font-style: italic; ">${message.timestamp}</span></p>
+                        <p><span style="font-weight: bold;">${message.name}:</span> ${message.message} <span style="color: #gray; font-size: 0.7rem; font-style: italic; ">(${timestamp})</span></p>
                     `;
                     livechatFeed.appendChild(chatMessage);
                 });
@@ -377,6 +383,27 @@
             .catch(error => {
                 console.error('Error:', error);
             });
+    }
+
+    // function to get time ago string
+    function getTimeAgo(timestamp) {
+        const now = new Date();
+        const messageTime = new Date(timestamp);
+        const diff = now - messageTime;
+        const seconds = Math.floor(diff / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+
+        if (days > 0) {
+            return `${days} day${days > 1 ? 's' : ''} ago`;
+        } else if (hours > 0) {
+            return `${hours} hour${hours > 1 ? 's' : ''} ${minutes % 60} minutes ago`;
+        } else if (minutes > 0) {
+            return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+        } else {
+            return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
+        }
     }
 
     // reload messages every 2 seconds
