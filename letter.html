@@ -229,6 +229,19 @@
             padding-left: 5px;
             letter-spacing: 0.2rem;
         }
+
+        .signature{
+            font-size: 3rem;
+            font-weight: bold;
+            color: #000000;
+            background-color: #fbefd6;
+            border: none;
+            border-bottom: 1px solid #000000;
+            font-family: 'CUSTOM-SIG', sans-serif;
+            outline-style: none;
+            padding-left: 5px;
+            letter-spacing: 0.2rem;
+        }
         
         /* .sign:placeholder-shown{
             font-size: 1.5rem;
@@ -240,6 +253,19 @@
             border: 5px dashed #00afb3;
             margin-top: 50px;
             padding: 15px;
+        }
+
+        .journal{
+            border: 1px solid #000000;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .journalHeader{
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
     </style>
@@ -269,6 +295,9 @@
                 <p style="text-align: left;" class="font-2">Journal is currently in beta.
                     Ensure that your messages align with the <a href="https://hackclub.com/conduct/">Hack Club Code of Conduct</a> and
                     is kind and respectful! We reserve the right to remove any messages that are inappropriate.
+                </p>
+                <p style="text-align: left;" class="font-2">
+                   <b>Let's aim for kind, thoughtful and meaningful messages! If you want to chat, you can go <a href="/countdown.html">here</a>!</b>
                 </p>
                 <!-- Slack handle -->
                 <div class="form-group">
@@ -302,11 +331,21 @@ Thank you Hack Club!
         </div>
         
 
-        <div class="liveFeed">
-            <h2 class="font-1" style="color: #fbefd6; text-align: center;">Live Chat Feed</h2>
-            <div class="livechatfeed font-2" style="font-size: 1.2rem;">
+        <div class="journalEntries">
+            <h2 class="font-1">Journal Entries</h2>
+            <!-- example -->
+            <div class="journal">
+                <div class="journalHeader">
+                    <img src="https://ca.slack-edge.com/T0266FRGM-U078WRY8MLH-g27a6437aed3-72" alt="Profile Picture" style="border-radius: 50%; width: 50px; height: 50px;">
+                    <p class="font-2" style="font-weight: bold;">@Hayden Kong</p>
+                </div>
+                <p class="font-2">something</p>
+                <p class="signature">Hayden Kong</p>
             </div>
-            <p class="font-2" style="margin-top: 50px;">If you encounter any bullying or inappropriate messages, please report them by sending a direct message to @Hayden Kong on Slack.</p>
+
+            <style>
+                
+            </style>
         </div>
 
     </div>
@@ -381,92 +420,7 @@ Thank you Hack Club!
             initializeClock('timer', deadline);
         }
 
-        const livechatBtn = document.getElementById('livechatBtn');
-
-        livechatBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            livechatBtn.disabled = true;
-            livechatBtn.innerHTML = 'Sending...';
-
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message').value;
-
-            if (!name || !message) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            fetch('https://securityshield.vercel.app/chat/send', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name,
-                    message
-                }),
-                mode: 'cors'
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    livechatBtn.disabled = false;
-                    livechatBtn.innerHTML = 'Send!';
-                    document.getElementById('message').value = '';
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred. Please try again later or ping @Hayden Kong on Hack Club Slack.');
-                });
-        });
-
-    // function to reload messages
-    function reloadMessages(){
-        fetch('https://securityshield.vercel.app/chat/messages')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                const livechatFeed = document.querySelector('.livechatfeed');
-                livechatFeed.innerHTML = "";
-                data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // sort messages by newest at the top
-                data.forEach(message => {
-                    const chatMessage = document.createElement('div');
-                    chatMessage.classList.add('chatMessage');
-                    const timestamp = getTimeAgo(message.timestamp); // get the time ago string
-                    chatMessage.innerHTML = `
-                        <p><span style="font-weight: bold;">${message.name}:</span> ${message.message} <span style="color: #gray; font-size: 0.7rem; font-style: italic; ">(${timestamp})</span></p>
-                    `;
-                    livechatFeed.appendChild(chatMessage);
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
-
-    // function to get time ago string
-    function getTimeAgo(timestamp) {
-        const now = new Date();
-        const messageTime = new Date(timestamp);
-        const diff = now - messageTime;
-        const seconds = Math.floor(diff / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
-        const days = Math.floor(hours / 24);
-
-        if (days > 0) {
-            return `${days} day${days > 1 ? 's' : ''} ago`;
-        } else if (hours > 0) {
-            return `${hours} hour${hours > 1 ? 's' : ''} ${minutes % 60} minutes ago`;
-        } else if (minutes > 0) {
-            return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-        } else {
-            return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
-        }
-    }
-
-
-    onload = reloadMessages;
+        
 
     </script>
 </body>
