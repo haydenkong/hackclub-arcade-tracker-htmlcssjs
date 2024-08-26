@@ -205,7 +205,7 @@
         <h1 class="font-1 heading">Countdown till Arcade ends!</h1>
         <p class="font-2 description">The countdown till the <a href="https://hackclub.com/arcade">Hack Club Arcade</a> 2024 official ends!!!!!</p>
         <div id="timer"></div>
-        <!-- <p style="margin-top: 50px;">Live chat coming soon!!!</p> -->
+
         <form style="margin-top: 50px;">
             <h2 class="font-1">Live Chat</h2>
             <div class="form-group">
@@ -217,8 +217,15 @@
                 <input type="text" id="message" class="form-input" placeholder="Enter your message">
             </div>
             <button id="livechatBtn" type="submit" class="btn btn-primary">Submit</button>
-            <p>Live chat is currently in beta. If you experience any inappropriate or harmful messages, please contact @Hayden Kong on slack immediately.</p>
+            <p>Live chat is currently in beta. 
+           Ensure messages are align with the <a href="https://hackclub.com/conduct/">Hack Club Code of Conduct</a> or else they will be deleted.
+            </p>
         </form>
+
+
+        <h2 class="font-1">Live Chat Feed</h2>
+        <div class="livechatfeed">
+        </div>
 
 
     </div>
@@ -265,7 +272,7 @@
             const timeinterval = setInterval(updateClock, 1000);
         }
 
-        const deadline = new Date('August 31, 2024 11:59:00 GMT-4:00');
+        const deadline = new Date('August 31, 2024 23:59:00 GMT-4:00');
         const now = new Date();
 
         if (now >= deadline) {
@@ -293,12 +300,12 @@
             initializeClock('timer', deadline);
         }
 
-
-
         const livechatBtn = document.getElementById('livechatBtn');
 
         livechatBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            livechatBtn.disabled = true;
+            livechatBtn.innerHTML = 'Sending...';
 
             const name = document.getElementById('name').value;
             const message = document.getElementById('message').value;
@@ -322,13 +329,58 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
-                    alert('Message sent successfully!');
+                    livechatBtn.disabled = false;
+                    livechatBtn.innerHTML = 'Submit';
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     alert('An error occurred. Please try again later.');
                 });
         });
+
+        // fetch('https://securityshield.vercel.app/chat/messages')
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log(data);
+        //         const livechatFeed = document.querySelector('.livechatfeed');
+
+        //         data.forEach(message => {
+        //             const chatMessage = document.createElement('div');
+        //             chatMessage.classList.add('chatMessage');
+        //             chatMessage.innerHTML = `
+        //                 <p><span style="font-weight: bold;">${message.name}:</span> ${message.message} <span style="color: gray; font-size: 0.8rem; font-style: italic; ">${message.timestamp}</span></p>
+        //             `;
+        //             livechatFeed.appendChild(chatMessage);
+        //         });
+        //     })
+        //     .catch(error => {
+        //         console.error('Error:', error);
+        //     });
+
+    // function to reload messages
+    function reloadMessages(){
+        fetch('https://securityshield.vercel.app/chat/messages')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const livechatFeed = document.querySelector('.livechatfeed');
+                livechatFeed.innerHTML = "";
+                data.forEach(message => {
+                    const chatMessage = document.createElement('div');
+                    chatMessage.classList.add('chatMessage');
+                    chatMessage.innerHTML = `
+                        <p><span style="font-weight: bold;">${message.name}:</span> ${message.message} <span style="color: gray; font-size: 0.8rem; font-style: italic; ">${message.timestamp}</span></p>
+                    `;
+                    livechatFeed.appendChild(chatMessage);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    // reload messages every 2 seconds
+    setInterval(reloadMessages, 2000);
 
     </script>
 </body>
