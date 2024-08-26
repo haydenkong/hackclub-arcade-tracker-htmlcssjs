@@ -324,7 +324,9 @@
         livechatBtn.addEventListener('click', (e) => {
             e.preventDefault();
             livechatBtn.disabled = true;
-            livechatBtn.innerHTML = 'Sending...';
+            SetTimeout(() => {
+                livechatBtn.innerHTML = 'Sending...';
+            }, 2000);
 
             const name = document.getElementById('name').value;
             const message = document.getElementById('message').value;
@@ -349,10 +351,7 @@
                 .then(data => {
                     console.log(data);
                     livechatBtn.disabled = false;
-                    livechatBtn.innerHTML = 'Sent!!!';
-                    setTimeout(() => {
-                        livechatBtn.innerHTML = 'Send!';
-                    }, 1000);
+                    livechatBtn.innerHTML = 'Sent!';
                     document.getElementById('message').value = '';
                 })
                 .catch(error => {
