@@ -324,9 +324,7 @@
         livechatBtn.addEventListener('click', (e) => {
             e.preventDefault();
             livechatBtn.disabled = true;
-            SetTimeout(() => {
-                livechatBtn.innerHTML = 'Sending...';
-            }, 2000);
+            livechatBtn.innerHTML = 'Sending...';
 
             const name = document.getElementById('name').value;
             const message = document.getElementById('message').value;
@@ -351,7 +349,7 @@
                 .then(data => {
                     console.log(data);
                     livechatBtn.disabled = false;
-                    livechatBtn.innerHTML = 'Sent!';
+                    livechatBtn.innerHTML = 'Send!';
                     document.getElementById('message').value = '';
                 })
                 .catch(error => {
@@ -407,6 +405,8 @@
 
     // reload messages every 2 seconds
     setInterval(reloadMessages, 2000);
+
+    onload = reloadMessages;
 
     </script>
 </body>
