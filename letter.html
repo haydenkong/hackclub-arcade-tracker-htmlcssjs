@@ -339,11 +339,12 @@ Thank you Hack Club!
         <div class="alreadySubmitted">
             <h2 class="font-1" style="text-align: center;">Thank you for submitting!</h2>
             <p class="font-2">Thank you for submitting a message! Your message will be displayed below!</p>
-            <!-- edit button-->
-            <button id="editBtn" class="btn btn-primary">Edit</button>
-            <!-- text area for editing message -->
-            <textarea type="text" id="editMessage" class="form-input" style="height: 200px; display: none;" placeholder="Edit your message here" required></textarea>
-            <button id="saveEditBtn" class="btn btn-primary" style="display: none;">Save</button>
+            <!-- edit button -->
+            <button id="editButton" class="btn btn-primary">Edit</button>
+            <!-- textarea -->
+            <textarea type="text" id="editMessage" class="form-input" style="height: 200px; display: none;" placeholder="" required></textarea>
+            <!-- submit button -->
+            <button id="editSave" type="submit" style="display: none;" class="btn btn-primary">Update!</button>
         </div>
         
 
@@ -369,14 +370,20 @@ Thank you Hack Club!
 
     <script>
 
-        // inital checks for submission status
-        function checkSubmitted() {
+        function setSubmitted(){
+            document.querySelector('.newJournal').style.display = 'none';
+            document.querySelector('.alreadySubmitted').style.display = 'block';
+            localStorage.setItem('submitted', 'true');
+            loadMessages();
+        }
+
+        // if submitted, show the submitted message instead.if not submitted, show the form. on page load as well
+        function checkSubmitted(){
             const submitted = localStorage.getItem('submitted');
-            if (submitted) {
+            if(submitted){
                 document.querySelector('.newJournal').style.display = 'none';
                 document.querySelector('.alreadySubmitted').style.display = 'block';
-                loadMessages();
-            } else {
+            }else{
                 document.querySelector('.newJournal').style.display = 'block';
                 document.querySelector('.alreadySubmitted').style.display = 'none';
             }
@@ -457,155 +464,176 @@ Thank you Hack Club!
 
         // Journal Features
 
-        // Send journal
-        document.addEventListener('DOMContentLoaded', function () {
-            const livechatBtn = document.getElementById('livechatBtn');
+        const form = document.querySelector('form');
+        const livechatBtn = document.getElementById('livechatBtn');
 
-            livechatBtn.addEventListener('click', async (e) => {
-                e.preventDefault();
-                livechatBtn.disabled = true;
-                livechatBtn.innerHTML = 'Sending...';
+        // edit function
+        
 
-                const slackHandle = document.getElementById('slackHandle').value;
-                const profileUrl = document.getElementById('profileUrl').value;
-                const message = document.getElementById('message').value;
-                const name = document.getElementById('name').value;
-
-                if (!slackHandle || !profileUrl || !message || !name) {
-                    alert('Please fill in all the fields!');
-                    livechatBtn.disabled = false;
-                    livechatBtn.innerHTML = 'Send!';
-                    return;
-                }
-
-                const data = {
-                    slack_handle: slackHandle,
-                    profile_url: profileUrl,
-                    message: message,
-                    name: name
-                };
-
-                try {
-                    const response = await fetch('https://securityshield.vercel.app/chat/journal', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    });
-
-                    const result = await response.json();
-                    console.log(result);
-                    livechatBtn.disabled = false;
-                    livechatBtn.innerHTML = 'Send!';
-                    setSubmitted()
-                    document.getElementById('message').value = '';
-
-                    // save the message and editID to localstorage
-                    localStorage.setItem('message', message);
-                    localStorage.setItem('editID', result.editID);
-
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('An error occurred. Please try again later or ping @Hayden Kong on Hack Club Slack.');
-                    livechatBtn.disabled = false;
-                    livechatBtn.innerHTML = 'Send!';
-                }
-            });
-        });
-
-        // editing an existing message
-        const editBtn = document.getElementById('editBtn');
-        const saveEditBtn = document.getElementById('saveEditBtn');
+        // if edit button clicked, http PUT the api with the editID and the new message. also add loading text for the button
+        const editBtn = document.getElementById('editButton');
+        const saveEditBtn = document.getElementById('editSave');
         const editMessage = document.getElementById('editMessage');
 
-        editBtn.addEventListener('click', () => {
-            const savedMessage = localStorage.getItem('message');
-            editMessage.value = savedMessage || '';
-            document.querySelector('.alreadySubmitted').style.display = 'block';
+        editBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            editBtn.style.display = 'none';
             editMessage.style.display = 'block';
             saveEditBtn.style.display = 'block';
         });
 
-        saveEditBtn.addEventListener('click', async () => {
-            const newMessage = editMessage.value;
+        // api call to update the message
+        saveEditBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            saveEditBtn.disabled = true;
+            saveEditBtn.innerHTML = 'Saving...';
+        
             const editID = localStorage.getItem('editID');
-
-            if (!newMessage || !editID) {
-                alert('No message to edit or editID not found.');
+            const message = editMessage.value;
+        
+            if (!message) {
+                alert('Please fill in all the fields! If you have any issues, please ping @Hayden Kong on Hack Club Slack.');
+                saveEditBtn.disabled = false;
+                saveEditBtn.innerHTML = 'Update!';
                 return;
             }
-
+        
+            const data = {
+                message: message,
+                editID: editID
+            };
+        
             try {
-                const response = await fetch('https://securityshield.vercel.app/chat/journal', {
+                const response = await fetch(`https://securityshield.vercel.app/chat/journal/`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ editID, message: newMessage })
+                    body: JSON.stringify(data)
                 });
-
+        
                 const result = await response.json();
                 console.log(result);
-
-                // save updated message to localstorage
-                localStorage.setItem('message', newMessage);
-                alert('Your message has been updated successfully!');
+                saveEditBtn.disabled = false;
+                saveEditBtn.innerHTML = 'Update!';
+                alert('Message updated successfully!');
+                editBtn.style.display = 'block';
+                editMessage.style.display = 'none';
+                saveEditBtn.style.display = 'none';
+                const journalEntries = document.querySelector('.journalEntries');
+                journalEntries.innerHTML = '<h2 class="font-1">Journal Entries</h2>';
+                loadMessages();
             } catch (error) {
                 console.error('Error:', error);
-                alert('An error occurred while updating the message.');
+                alert('An error occurred. Please try again later or ping @Hayden Kong on Hack Club Slack.');
+                saveEditBtn.disabled = false;
+                saveEditBtn.innerHTML = 'Update!';
+                loadMessages();
             }
         });
 
-        // load messages
-        async function loadMessages() {
-            const response = await fetch('https://securityshield.vercel.app/chat/journal');
-            const data = await response.json();
-            console.log(data);
-            const journalEntries = document.querySelector('.journalEntries');
-            data.forEach(entry => {
-                const journal = document.createElement('div');
-                journal.classList.add('journal');
 
-                const journalHeader = document.createElement('div');
-                journalHeader.classList.add('journalHeader');
 
-                const img = document.createElement('img');
-                img.src = entry.profile_url || 'https://assets.hackclub.com/icon-square.png';
-                img.alt = 'Profile Picture';
-                img.style.borderRadius = '10%';
-                img.style.width = '50px';
-                img.style.height = '50px';
+        livechatBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            livechatBtn.disabled = true;
+            livechatBtn.innerHTML = 'Sending...';
+        
+            const slackHandle = document.getElementById('slackHandle').value;
+            const profileUrl = document.getElementById('profileUrl').value;
+            const message = document.getElementById('message').value;
+            const name = document.getElementById('name').value;
+        
+            if (!slackHandle || !profileUrl || !message || !name) {
+                alert('Please fill in all the fields!');
+                livechatBtn.disabled = false;
+                livechatBtn.innerHTML = 'Send!';
+                return;
+            }
+        
+            const data = {
+                slack_handle: slackHandle,
+                profile_url: profileUrl,
+                message: message,
+                name: name
+            };
+        
+            try {
+                const response = await fetch('https://securityshield.vercel.app/chat/journal', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+        
+                const result = await response.json();
+                console.log(result);
+                livechatBtn.disabled = false;
+                livechatBtn.innerHTML = 'Send!';
+                setSubmitted();
+                document.getElementById('message').value = '';
+                
+                // Save the editID to browser storage
+                localStorage.setItem('editID', result.editID);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later or ping @Hayden Kong on Hack Club Slack.');
+                livechatBtn.disabled = false;
+                livechatBtn.innerHTML = 'Send!';
+            }
+        });
 
-                const userName = document.createElement('p');
-                userName.textContent = entry.slack_handle;
-                userName.classList.add('font-2');
 
-                const msg = document.createElement('p');
-                msg.textContent = entry.message;
-                msg.classList.add('msg', 'font-2');
+        // load the messages
+            async function loadMessages() {
+                const response = await fetch('https://securityshield.vercel.app/chat/journal');
+                const data = await response.json();
+                console.log(data);
+                const journalEntries = document.querySelector('.journalEntries');
+                data.forEach(entry => {
+                    const journal = document.createElement('div');
+                    journal.classList.add('journal');
 
-                const signature = document.createElement('p');
-                signature.textContent = entry.name;
-                signature.classList.add('signature');
+                    const journalHeader = document.createElement('div');
+                    journalHeader.classList.add('journalHeader');
 
-                journalHeader.appendChild(img);
-                journalHeader.appendChild(userName);
+                    const img = document.createElement('img');
+                    img.src = entry.profile_url || 'https://assets.hackclub.com/icon-square.png';
+                    img.alt = 'Profile Picture';
+                    img.style.borderRadius = '10%';
+                    img.style.width = '50px';
+                    img.style.height = '50px';
 
-                journal.appendChild(journalHeader);
-                journal.appendChild(msg);
-                journal.appendChild(signature);
+                    const p = document.createElement('p');
+                    p.classList.add('font-2');
+                    p.style.fontWeight = 'bold';
+                    p.textContent = entry.slack_handle;
 
-                journalEntries.appendChild(journal);
-            });
-        }
+                    journalHeader.appendChild(img);
+                    journalHeader.appendChild(p);
 
-        function setSubmitted() {
-            document.querySelector('.newJournal').style.display = 'none';
-            document.querySelector('.alreadySubmitted').style.display = 'block';
-            localStorage.setItem('submitted', 'true');
-            loadMessages();
-        }
+                    const message = document.createElement('p');
+                    message.classList.add('font-2', 'msg');
+                    message.innerHTML = entry.message.replace(/\n/g, '<br>'); // line breaks
+
+                    const signature = document.createElement('p');
+                    signature.classList.add('signature');
+                    signature.textContent = entry.name;
+
+                    journal.appendChild(journalHeader);
+                    journal.appendChild(message);
+                    journal.appendChild(signature);
+
+                    journalEntries.appendChild(journal);
+                });
+            }
+
+        loadMessages();
+        checkSubmitted();
+
+        // Todo: EditID returned and displayed and saved to local storage and then way to update message based on unique EditID
+
 
     </script>
 </body>
