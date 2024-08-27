@@ -619,14 +619,12 @@ Thank you Hack Club!
                 const message = document.createElement('p');
                 message.classList.add('font-2', 'msg');
                 
-                // message content
-                const sanitizedMessage = sanitizeHTML(entry.message);
+                // decode message if it's pre-encoded - then sanitize
+                const decodedMessage = decodeHTMLEntities(entry.message);
+                const sanitizedMessage = sanitizeHTML(decodedMessage);
                 
-                // textcontent to set the content to escape html
-                message.textContent = sanitizedMessage;
-                
-                // replace newlines with <br>
-                message.innerHTML = message.innerHTML.replace(/\n/g, '<br>');
+                // set content and replace newlines with <br> 
+                message.innerHTML = sanitizedMessage.replace(/\n/g, '<br>');
 
                 const signature = document.createElement('p');
                 signature.classList.add('signature');
@@ -640,7 +638,14 @@ Thank you Hack Club!
             });
         }
 
-        // sanitize HTML content
+        // decode html entities
+        function decodeHTMLEntities(text) {
+            const textArea = document.createElement('textarea');
+            textArea.innerHTML = text;
+            return textArea.value;
+        }
+
+        // sanitize html content
         function sanitizeHTML(str) {
             const temp = document.createElement('div');
             temp.textContent = str;
@@ -649,9 +654,6 @@ Thank you Hack Club!
 
         loadMessages();
         checkSubmitted();
-
-        // Todo: EditID returned and displayed and saved to local storage and then way to update message based on unique EditID
-
 
     </script>
 </body>
