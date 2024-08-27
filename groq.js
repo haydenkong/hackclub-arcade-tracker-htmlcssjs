@@ -1,1 +1,0 @@
-APITOKEN = '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'
