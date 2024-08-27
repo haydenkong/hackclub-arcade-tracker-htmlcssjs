@@ -250,6 +250,7 @@
             border-radius: 10px;
             border: 5px dashed #00afb3;
             margin-top: 50px;
+            margin-bottom: 50px;
             padding: 15px;
         }
 
@@ -275,7 +276,6 @@
             font-size: 1.4rem;
             font-weight: bold;
         }
-
 
         /* Signigture Font */
         @font-face {
@@ -303,7 +303,7 @@
                     is kind and respectful! We reserve the right to remove any messages that are inappropriate.
                 </p>
                 <p style="text-align: left;" class="font-2">
-                   <b>Let's aim for kind, thoughtful and meaningful messages! If you want to chat, you can go <a href="/countdown.html">here</a>! You can only submit this once!</b>
+                   <b>Let's aim for kind, <span style="text-decoration: underline;">thoughtful and meaningful</span> messages! If you want to chat, you can go <a href="/countdown.html">here</a>! You can only submit this once (you will be able to edit your message)!</b>
                 </p>
                 <!-- Slack handle -->
                 <div class="form-group">
@@ -340,11 +340,13 @@ Thank you Hack Club!
             <h2 class="font-1" style="text-align: center;">Thank you for submitting!</h2>
             <p class="font-2">Thank you for submitting a message! Your message will be displayed below!</p>
             <!-- edit button -->
-            <button id="editButton" class="btn btn-primary">Edit</button>
+            <div class="editBtn" style="display: flex; justify-content: center;">
+                <button id="editButton" class="btn btn-primary">Edit</button>
+            </div>
             <!-- textarea -->
-            <textarea type="text" id="editMessage" class="form-input" style="height: 200px; display: none;" placeholder="" required></textarea>
+            <textarea type="text" id="editMessage" class="form-input editBtn" style="height: 200px; display: none;" placeholder="" required></textarea>
             <!-- submit button -->
-            <button id="editSave" type="submit" style="display: none;" class="btn btn-primary">Update!</button>
+            <button id="editSave" type="submit" style="display: none;" class="btn btn-primary editBtn">Update!</button>
         </div>
         
 
@@ -601,6 +603,7 @@ Thank you Hack Club!
                     const img = document.createElement('img');
                     img.src = entry.profile_url || 'https://assets.hackclub.com/icon-square.png';
                     img.alt = 'Profile Picture';
+                    img.style.objectFit = 'cover';
                     img.style.borderRadius = '10%';
                     img.style.width = '50px';
                     img.style.height = '50px';
