@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Arcade Journal | Arcade tools</title>
 
-    
-
     <!-- SEO meta tags -->
-    <meta name="description" content="Track real-time stats updated every 15 minutes for the Hack Club Arcade Review stats.">
+    <meta name="description" content="The Arcade Journal, write thank you notes to the Hack Club team for making Arcade possible!">
     <meta name="keywords" content="hack club, hack club arcade, arcade, hack club arcade stats, hack club arcade review stats, arcade review stats">
 
     <!-- Google fonts - Official Arcade fonts-->
@@ -240,11 +238,6 @@
             margin-top: 0px;
             margin-bottom: 0px;
         }
-        
-        /* .sign:placeholder-shown{
-            font-size: 1.5rem;
-            font-family: 'Gaegu', cursive;
-        } */
 
         .newJournal{
             border-radius: 10px;
@@ -282,15 +275,14 @@
             font-size: 1.4rem;
             font-weight: bold;
         }
-    </style>
 
-    <style>
+
+        /* Signigture Font */
         @font-face {
             font-family: 'CUSTOM-SIG';
             src: url('Creattion-Demo.otf') format('opentype');
         }
 
-        /* Use the custom font */
         body {
             font-family: 'CUSTOM-SIG', sans-serif;
         }
@@ -376,6 +368,7 @@ Thank you Hack Club!
             document.querySelector('.newJournal').style.display = 'none';
             document.querySelector('.alreadySubmitted').style.display = 'block';
             localStorage.setItem('submitted', 'true');
+            loadMessages();
         }
 
         // if submitted, show the submitted message instead.if not submitted, show the form. on page load as well
@@ -391,8 +384,6 @@ Thank you Hack Club!
         }
 
         checkSubmitted();
-        
-
 
 
         function getTimeRemaining(endtime) {
@@ -464,6 +455,9 @@ Thank you Hack Club!
             initializeClock('timer', deadline);
         }
 
+
+        // Journal Features
+
         const form = document.querySelector('form');
         const livechatBtn = document.getElementById('livechatBtn');
 
@@ -515,8 +509,6 @@ Thank you Hack Club!
         });
 
 
-        
-
         // load the messages
             async function loadMessages() {
                 const response = await fetch('https://securityshield.vercel.app/chat/journal');
@@ -531,7 +523,7 @@ Thank you Hack Club!
                     journalHeader.classList.add('journalHeader');
 
                     const img = document.createElement('img');
-                    img.src = entry.profile_url;
+                    img.src = entry.profile_url || 'https://assets.hackclub.com/icon-square.png';
                     img.alt = 'Profile Picture';
                     img.style.borderRadius = '10%';
                     img.style.width = '50px';
@@ -563,6 +555,8 @@ Thank you Hack Club!
 
         loadMessages();
         checkSubmitted();
+
+        // Todo: EditID returned and displayed and saved to local storage and then way to update message based on unique EditID
 
 
     </script>
