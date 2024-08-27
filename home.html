@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcade Tracker</title>
+
+    <!-- SEO meta tags -->
+    <meta name="description" content="Track your progress towards your goal for the Hack Club Arcade.">
+    <meta name="keywords" content="Arcade Tracker, Hack Club Arcade, progress tracker, goal tracker, Hack Club Arcade Progress, Arcade progress, hack club arcade">
+
+    <!-- Google fonts - Official Arcade fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Slackey&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZD8ZCNJRQQ"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZD8ZCNJRQQ');
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #fbefd6;
+        }
+        .container {
+            max-width: 750px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.4rem;
+            transition: background-color 0.3s ease;
+        }
+        .about {
+            background-color: #00afb3;
+            color: #fbefd6;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        .font-1{
+            font-family: 'Slackey';
+            color: #fb8b3c;
+        }
+        .font-2{
+            font-family: 'Gaegu';
+        }
+        .heading{
+            font-size: 2.5rem;
+            margin-bottom: 0px;
+        }
+        .description{
+            font-size: 1.4rem;
+            text-align: center;
+            margin: 0px;
+            margin-bottom: 60px;
+        }
+        a{
+            color: #ef3553;
+            text-decoration: underline;
+            text-underline-position: under;
+            cursor: pointer;
+        }
+        a:hover{
+            color: #ef3553;
+            text-decoration: underline wavy;
+        }
+        .about-listed{
+            letter-spacing: 0.01px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+    	
+<a href="https://hackclub.com/">
+    <img style="position: absolute; top: -10px; left: 10px; border: 0; width: 200px; z-index: 999; transition: transform 0.3s ease;" src="https://assets.hackclub.com/flag-orpheus-top.svg" alt="Hack Club" onmouseover="this.style.transform = 'rotate(-5deg) translateY(-10px)';" onmouseout="this.style.transform = 'rotate(0deg) translateY(0px)';"/>
+</a></a>
+
+    <div class="container">
+        <h1 class="font-1 heading">Arcade Tools</h1>
+        <p class="font-2 description">Cool tools for the <a href="https://hackclub.com/arcade">Hack Club Arcade</a>! By Hayden Kong.</p>
+        
+        <a href="" style="text-decoration: none; color: #fbefd6;">
+            <div class="about">
+                <h3 class="font-1" style="color: #fbefd6; font-size: 1.5rem; margin-bottom: 0px; text-align: center;">The Arcade Journal</h3>
+                <p class="font-2">Write thank-you notes to the team of staff and volunteers who made Hack Club Arcade possible! Collectely we can make a huge thank-you card!!</p>
+            </div>
+        </a>
+
+        <a href="" style="text-decoration: none; color: #fbefd6;">
+            <div class="about">
+                <h3 class="font-1" style="color: #fbefd6; font-size: 1.5rem; margin-bottom: 0px; text-align: center;">The Arcade Tracker</h3>
+                <p class="font-2">Input your ticket goal, how many tickets you currently have, plus how many hours you can work and it will automatically calculate how many hours you need to complete per day to reach your goal! It also provides useful insights such as a progress bar showing your progress towards your goal.</p>
+            </div>
+        </a>
+        
+        <a href="" style="text-decoration: none; color: #fbefd6;">
+            <div class="about">
+                <h3 class="font-1" style="color: #fbefd6; font-size: 1.5rem; margin-bottom: 0px; text-align: center;">The Arcade Countdown</h3>
+                <p class="font-2">The countdown until Arcade is over! *with live chat!</p>
+            </div>
+        </a>
+
+        <a href="" style="text-decoration: none; color: #fbefd6;">
+            <div class="about">
+                <h3 class="font-1" style="color: #fbefd6; font-size: 1.5rem; margin-bottom: 0px; text-align: center;">Arcade AI-powered Idea Generator</h3>
+                <p class="font-2">Stuck with what project you want to make? This idea-generator can give you great ideas based on your interests!</p>
+            </div>
+        </a>
+
+        <a href="" style="text-decoration: none; color: #fbefd6;">
+            <div class="about">
+                <h3 class="font-1" style="color: #fbefd6; font-size: 1.5rem; margin-bottom: 0px; text-align: center;">Arcade Review Stats</h3>
+                <p class="font-2">View the latest review stats, as well as a graph that updates every 5 minutes to see how the backlog is doing! (its decreasing, hopefully)</p>
+            </div>
+        </a>
+
+        <div class="about">
+            <h3 class="font-1" style="color: #fbefd6; font-size: 1.5rem; margin-bottom: 0px; text-align: center;">How it works</h3>
+            <ol class="font-2">
+                <li class="about-listed"><b>Work on projects</b> - Hack on something cool! Try this AI-powered <a style="color: #fbefd6" href="https://arcade-tools.vercel.app/ideagen.html">idea generator</a> if you need some help!</li>
+                <li class="about-listed"><b>Bank your hours</b> - Join the <a style="color: #fbefd6" href="https://hackclub.com/slack">Hack Club Slack</a> and use /hack in #arcade to log your hours! Wondering how long it might take? Check out the live <a style="color: #fbefd6" href="stats.html">Arcade Review Stats</a>!</li>
+                <li class="about-listed"><b>Redeem your Prizes</b> - Use your tickets to buy prizes for your next project! <a style="color: #fbefd6" href="https://hackclub.com/arcade/shop/">Check out the shop!</a></li>
+            </ol>    
+        </div>
+
+        <h2 class="font-1" style="font-size: 2rem; text-align: center;">Faq</h2>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-bottom: 0px;"><b>When does Arcade end? When does the shop close?</b></p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-top: 0px;">Hack Club Arcade ends on Aug 31st. You will NOT be able to EARN tickets after that date. The shop <a href="https://hackclub.slack.com/archives/C07C3NHRVDJ/p1722766522802619?thread_ts=1722726192.574699&cid=C07C3NHRVDJ">will remain open a few days after Aug 31st</a>. Shipments for prizes may occur after the end date. Any unreviewed sessions will get reviewed.</p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-bottom: 0px;"><b>What are some helpful tools?</b></p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-top: 0px;">You can try this <a href="stats.html">live arcade review stats website</a> to see the review backlog or this <a href="https://arcade-tools.vercel.app/ideagen.html">AI powered idea generator</a>. More stuff coming soon!</p>
+        <p class="font-2" style="text-align: center;">-------------------</p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem;">I am still working on the FAQ, but in the meantime, you can have a look at the <a href="https://docs.google.com/document/d/1RXCe1nNrFdiolKCknkR5Ho1AG7Kf_2LsTAKTHxQodic/">official FAQ</a>, <a href="https://github.com/hackclub/arcade-constitution">Arcade Constitution</a>, or message the #arcade-help channel on the <a href="https://hackclub.com/slack">Hack Club Slack</a>! Alternatively, you can visit the FAQ section of the <a href="https://hackclub.com/arcade/">Hack Club Arcade Website</a>.</p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem;">If you have any suggestions or issues, please <a href="https://forms.fillout.com/t/hSJMTXtGshus">fill out this form</a>, or contact me on the Hack Club Slack: @Hayden Kong. <a href="https://github.com/PixelVerseIT/hackclub-arcade-tracker-htmlcssjs">Open source on GitHub</a>.</p>
+
+        <p class="font-2" style="font-size: 1.2rem; margin-top: 55px; color: grey; text-align: center;">&copy; 2024 Hayden Kong. All rights reserved.</p>
+    </div>
+    
+</body>
+</html>
