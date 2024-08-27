@@ -588,49 +588,64 @@ Thank you Hack Club!
 
 
         // load the messages
-            async function loadMessages() {
-                const response = await fetch('https://securityshield.vercel.app/chat/journal');
-                const data = await response.json();
-                console.log(data);
-                const journalEntries = document.querySelector('.journalEntries');
-                data.forEach(entry => {
-                    const journal = document.createElement('div');
-                    journal.classList.add('journal');
+        async function loadMessages() {
+            const response = await fetch('https://securityshield.vercel.app/chat/journal');
+            const data = await response.json();
+            console.log(data);
+            const journalEntries = document.querySelector('.journalEntries');
+            data.forEach(entry => {
+                const journal = document.createElement('div');
+                journal.classList.add('journal');
 
-                    const journalHeader = document.createElement('div');
-                    journalHeader.classList.add('journalHeader');
+                const journalHeader = document.createElement('div');
+                journalHeader.classList.add('journalHeader');
 
-                    const img = document.createElement('img');
-                    img.src = entry.profile_url || 'https://assets.hackclub.com/icon-square.png';
-                    img.alt = 'Profile Picture';
-                    img.style.objectFit = 'cover';
-                    img.style.borderRadius = '10%';
-                    img.style.width = '50px';
-                    img.style.height = '50px';
+                const img = document.createElement('img');
+                img.src = entry.profile_url || 'https://assets.hackclub.com/icon-square.png';
+                img.alt = 'Profile Picture';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '10%';
+                img.style.width = '50px';
+                img.style.height = '50px';
 
-                    const p = document.createElement('p');
-                    p.classList.add('font-2');
-                    p.style.fontWeight = 'bold';
-                    p.textContent = entry.slack_handle;
+                const p = document.createElement('p');
+                p.classList.add('font-2');
+                p.style.fontWeight = 'bold';
+                p.textContent = entry.slack_handle;
 
-                    journalHeader.appendChild(img);
-                    journalHeader.appendChild(p);
+                journalHeader.appendChild(img);
+                journalHeader.appendChild(p);
 
-                    const message = document.createElement('p');
-                    message.classList.add('font-2', 'msg');
-                    message.innerHTML = entry.message.replace(/\n/g, '<br>'); // line breaks
+                const message = document.createElement('p');
+                message.classList.add('font-2', 'msg');
+                
+                // message content
+                const sanitizedMessage = sanitizeHTML(entry.message);
+                
+                // textcontent to set the content to escape html
+                message.textContent = sanitizedMessage;
+                
+                // replace newlines with <br>
+                message.innerHTML = message.innerHTML.replace(/\n/g, '<br>');
 
-                    const signature = document.createElement('p');
-                    signature.classList.add('signature');
-                    signature.textContent = entry.name;
+                const signature = document.createElement('p');
+                signature.classList.add('signature');
+                signature.textContent = entry.name;
 
-                    journal.appendChild(journalHeader);
-                    journal.appendChild(message);
-                    journal.appendChild(signature);
+                journal.appendChild(journalHeader);
+                journal.appendChild(message);
+                journal.appendChild(signature);
 
-                    journalEntries.appendChild(journal);
-                });
-            }
+                journalEntries.appendChild(journal);
+            });
+        }
+
+        // sanitize HTML content
+        function sanitizeHTML(str) {
+            const temp = document.createElement('div');
+            temp.textContent = str;
+            return temp.innerHTML;
+        }
 
         loadMessages();
         checkSubmitted();
