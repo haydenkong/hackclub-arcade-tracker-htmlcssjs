@@ -66,6 +66,7 @@
             padding: 15px;
             margin-top: 20px;
             border-radius: 5px;
+            text-align: center;
         }
         .font-1{
             font-family: 'Slackey';
@@ -98,6 +99,30 @@
             letter-spacing: 0.01px;
             font-size: 1.2rem;
         }
+
+        /* Button */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: 0.2s;
+            border: none;
+            font-family: 'Slackey', cursive;
+        }
+
+        .btn-primary {
+            background-color: #fb8b3c;
+            color: #fbefd6;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
     </style>
 </head>
 <body>
@@ -115,6 +140,9 @@
             <div class="about">
                 <h3 class="font-1" style="color: #fbefd6; font-size: 1.5rem; margin-bottom: 0px; text-align: center;">The Arcade Journal</h3>
                 <p class="font-2">Write thank-you notes to the team of staff and volunteers who made Hack Club Arcade possible! Collectely we can make a huge thank-you card!!</p>
+                <div style="text-align: center;">
+                    <a href="letter.html"><button class="btn btn-primary">Leave a note!</button></a>
+                </div>
             </div>
         </a>
 
