@@ -116,6 +116,15 @@
             margin-top: 20px;
             border-radius: 5px;
         }
+
+        .notice{
+            color: #000000;
+            font-size: 1.2rem;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            border: 5px dashed #ef3553;
+        }
         
         #timer {
             display: flex;
@@ -221,6 +230,17 @@
         <h1 class="font-1 heading">The Arcade Countdown!</h1>
         <p class="font-2 description">The countdown till the <a href="https://hackclub.com/arcade">Hack Club Arcade</a> 2024 official ends!!!!!</p>
         <div id="timer"></div>
+
+        <div class="notice">
+            <p class="font-2">hey! did you like Arcade? if you did (that should be you), 
+                please <a style="color: #ef3553;" href="letter.html">leave a thank you message here</a> so we can collectely make a
+                thank you card for all the volunteers and staff who made this event possible! 
+                (p.s you also might get featured on the official arcade website!)</p>
+
+            <div style="text-align: center;">
+                <a href="letter.html"><button class="btn btn-primary">Leave a note!</button></a>
+            </div>
+        </div>
 
         <form style="margin-top: 50px;">
             <h2 class="font-1" >Live Chat</h2>
@@ -359,27 +379,39 @@
         });
 
     // function to reload messages
-    function reloadMessages(){
-        fetch('https://securityshield.vercel.app/chat/messages')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                const livechatFeed = document.querySelector('.livechatfeed');
-                livechatFeed.innerHTML = "";
-                data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // sort messages by newest at the top
-                data.forEach(message => {
-                    const chatMessage = document.createElement('div');
-                    chatMessage.classList.add('chatMessage');
-                    const timestamp = getTimeAgo(message.timestamp); // get the time ago string
-                    chatMessage.innerHTML = `
-                        <p><span style="font-weight: bold;">${message.name}:</span> ${message.message} <span style="color: #gray; font-size: 0.7rem; font-style: italic; ">(${timestamp})</span></p>
-                    `;
-                    livechatFeed.appendChild(chatMessage);
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
+    function reloadMessages() {
+    fetch('https://securityshield.vercel.app/chat/messages')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            const livechatFeed = document.querySelector('.livechatfeed');
+            livechatFeed.innerHTML = "";
+            data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            data.forEach(message => {
+                const chatMessage = document.createElement('div');
+                chatMessage.classList.add('chatMessage');
+                const timestamp = getTimeAgo(message.timestamp);
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = message.name + ': ';
+                nameSpan.style.fontWeight = 'bold';
+                const messageText = document.createTextNode(message.message + ' ');
+                const timeSpan = document.createElement('span');
+                timeSpan.textContent = `(${timestamp})`;
+                timeSpan.style.color = '#gray';
+                timeSpan.style.fontSize = '0.7rem';
+                timeSpan.style.fontStyle = 'italic';
+                const paragraph = document.createElement('p');
+                paragraph.appendChild(nameSpan);
+                paragraph.appendChild(messageText);
+                paragraph.appendChild(timeSpan);
+                chatMessage.appendChild(paragraph);
+                livechatFeed.appendChild(chatMessage);
             });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again later or ping @Hayden Kong on Hack Club Slack.');
+        });
     }
 
     // function to get time ago string
