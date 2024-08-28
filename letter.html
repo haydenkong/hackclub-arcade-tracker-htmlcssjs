@@ -287,8 +287,14 @@
             font-family: 'CUSTOM-SIG', sans-serif;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
 </head>
 <body>
+
+    <a href="https://hackclub.com/">
+        <img style="position: fixed; top: -10px; left: 10px; border: 0; width: 200px; z-index: 999; transition: transform 0.3s ease;" src="https://assets.hackclub.com/flag-orpheus-top.svg" alt="Hack Club" onmouseover="this.style.transform = 'rotate(-5deg) translateY(-10px)';" onmouseout="this.style.transform = 'rotate(0deg) translateY(0px)';"/>
+    </a>
+
     <div class="content-container">
         <h1 class="font-1 heading">The Arcade Journal</h1>
         <p class="font-2 description">A place to leave down messages for the amazing team of volunteers and staff running <a href="https://hackclub.com/arcade">Hack Club Arcade</a> 2024!</p>
@@ -327,7 +333,7 @@ Thank you Hack Club!
                 </div>
     
                 <div class="form-group">
-                    <label class="form-label" for="name">Sign(Your Name)</label>
+                    <label class="form-label" for="name">Sign (Your Name)</label>
                     <input type="text" id="name" class="sign" placeholder="Hayden Kong" required>
                 </div>
     
@@ -371,6 +377,8 @@ Thank you Hack Club!
     </div>
 
     <script>
+
+        let hasRun = false;
 
         function setSubmitted(){
             document.querySelector('.newJournal').style.display = 'none';
@@ -420,8 +428,49 @@ Thank you Hack Club!
             function updateClock() {
                 const t = getTimeRemaining(endtime);
 
-                if (t.total <= 0) {
-                    clock.innerHTML = "<div class='time-amount font-3'>Thank you to all the volunteers and staff for making Hack Club's biggest ever event, Arcade 2024 possible!! Congrats to everyone to participated!</div>";
+                if (t.total <= 0 && !hasRun) {
+                    hasRun = true;
+                    clock.innerHTML = "<div class='font-3' style='color: #fbefd6;'>Thank you to all the volunteers and staff for making Hack Club's biggest ever event, Arcade 2024 possible!! Congrats to everyone to participated!</div>";
+
+                    // import
+                    const canvas = document.getElementById('canvas');
+                    const jsConfetti = new JSConfetti({ canvas })
+                    jsConfetti.addConfetti({
+                    emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
+                    confettiColors: [
+                        '#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7',
+                    ],
+                    confettiNumber: 100,
+                    confettiRadius: 3,
+                    })
+                    jsConfetti.addConfetti();
+
+                    // wait 1 sec
+                    setTimeout(() => {
+                        jsConfetti.addConfetti({
+                        emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
+                        confettiColors: [
+                            '#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7',
+                        ],
+                        confettiNumber: 100,
+                        confettiRadius: 3,
+                        })
+                        jsConfetti.addConfetti();
+                    }, 1000);
+
+                    // wait 2 sec
+                    setTimeout(() => {
+                        jsConfetti.addConfetti({
+                        emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
+                        confettiColors: [
+                            '#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7',
+                        ],
+                        confettiNumber: 100,
+                        confettiRadius: 3,
+                        })
+                        jsConfetti.addConfetti();
+                    }, 2000);
+
                     return;
                 }
 
