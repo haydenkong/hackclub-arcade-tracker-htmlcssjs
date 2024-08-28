@@ -249,7 +249,7 @@
                 they will be deleted.
             </p>
             <div class="form-group">
-                <label class="form-label" for="name">Name</label>
+                <label class="form-label" for="name">Name (Slack handle or your name - it will be saved!)</label>
                 <input type="text" id="name" class="form-input" placeholder="Enter your name">
             </div>
             <div class="form-group">
@@ -354,6 +354,9 @@
                 return;
             }
 
+            // save to local storage
+            localStorage.setItem('chatName', name);
+
             fetch('https://securityshield.vercel.app/chat/send', {
                 method: 'POST',
                 headers: {
@@ -439,6 +442,17 @@
     setInterval(reloadMessages, 2000);
 
     onload = reloadMessages;
+
+    // load name from local storage
+    window.onload = function() {
+        const savedName = localStorage.getItem('chatName');
+        if (savedName) {
+            const nameInput = document.getElementById('name');
+            nameInput.value = savedName;
+            nameInput.disabled = true; // disable name input if there is a name
+        }
+        reloadMessages();
+    };
 
     </script>
 </body>
