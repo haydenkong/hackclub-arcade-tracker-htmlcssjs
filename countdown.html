@@ -306,7 +306,7 @@
                 const t = getTimeRemaining(endtime);
 
                 // CHANGE TO 1
-                if (t.total <= 100000 && !hasRun) {
+                if (t.total <= 1 && !hasRun) {
                     hasRun = true;
                     clock.innerHTML = "<div class='font-3' style='color: #fbefd6;'>Thank you to all the volunteers and staff for making Hack Club's biggest ever event, Arcade 2024 possible!! Congrats to everyone to participated!</div>";
 
@@ -366,7 +366,47 @@
         const now = new Date();
 
         if (now >= deadline) {
-            document.getElementById('timer').innerHTML = "<div class='time-amount font-3'>The countdown is over!</div>";
+            const clock = document.getElementById('timer');
+            clock.innerHTML = "<div class='font-3' style='color: #fbefd6;'>Thank you to all the volunteers and staff for making Hack Club's biggest ever event, Arcade 2024 possible!! Congrats to everyone to participated!</div>";
+            
+                    // import
+                    const canvas = document.getElementById('canvas');
+                    const jsConfetti = new JSConfetti({ canvas })
+                    jsConfetti.addConfetti({
+                    emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
+                    confettiColors: [
+                        '#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7',
+                    ],
+                    confettiNumber: 100,
+                    confettiRadius: 3,
+                    })
+                    jsConfetti.addConfetti();
+
+                    // wait 1 sec
+                    setTimeout(() => {
+                        jsConfetti.addConfetti({
+                        emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
+                        confettiColors: [
+                            '#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7',
+                        ],
+                        confettiNumber: 100,
+                        confettiRadius: 3,
+                        })
+                        jsConfetti.addConfetti();
+                    }, 1000);
+
+                    // wait 2 sec
+                    setTimeout(() => {
+                        jsConfetti.addConfetti({
+                        emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
+                        confettiColors: [
+                            '#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7',
+                        ],
+                        confettiNumber: 100,
+                        confettiRadius: 3,
+                        })
+                        jsConfetti.addConfetti();
+                    }, 2000);
         } else {
             const timerHtml = `
                     <div class="time-section">
