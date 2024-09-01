@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcade Tracker</title>
+
+    <!-- SEO meta tags -->
+    <meta name="description" content="Track your progress towards your goal for the Hack Club Arcade.">
+    <meta name="keywords" content="Arcade Tracker, Hack Club Arcade, progress tracker, goal tracker, Hack Club Arcade Progress, Arcade progress, hack club arcade">
+
+    <!-- Google fonts - Official Arcade fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Slackey&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZD8ZCNJRQQ"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZD8ZCNJRQQ');
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #fbefd6;
+        }
+        .container {
+            max-width: 650px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+        }
+        input[type="number"], input[type="date"] {
+            max-width: 150px;
+            background-color: #ede5d3;
+            border-radius: 0px;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            font-size: 1.4rem;
+            padding: 5px;
+        }
+        .inline-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .inline-container label {
+            margin: 0;
+        }
+        .inline-container input[type="number"], .inline-container input[type="date"] {
+            flex: 2;
+            padding: 8px;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 10px;
+            padding: 3px;
+            position: relative;
+            height: 22px;
+            border-radius: 5px;
+        }
+        .progress {
+            border-radius: 5px;
+            position: absolute;
+            height: 100%;
+            transition: width 200ms ease-in-out;
+            top: 0;
+            left: 0;
+        }
+        .actual-progress {
+            background-color: #00afb3;
+        }
+        .ideal-progress {
+            background-color: #fb8b3c;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.4rem;
+            transition: background-color 0.3s ease;
+        }
+        #addOneHour {
+            background-color: #ff5c16;
+            color: #fbefd6;
+            transition: 0.2s;
+            border: #fb8b3c 1px solid;
+        }
+        #addOneHour:hover {
+            transform: scale(1.05);
+        }
+        #addOneHour:active {
+            transform: scale(0.95);
+        }
+        #removeOneHour {
+            background-color: #fbefd6;
+            color: #fb8b3c;
+            border: #fb8b3c 1px solid;
+            transition: 0.2s;
+        }
+        #removeOneHour:hover {
+            transform: scale(1.05);
+        }
+        #removeOneHour:active {
+            transform: scale(0.95);
+        }
+        .about {
+            background-color: #00afb3;
+            color: #fbefd6;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        .ticket-count {
+            font-size: 4rem;
+            text-align: center;
+            margin: 5px 0;
+        }
+        .font-1{
+            font-family: 'Slackey';
+            color: #fb8b3c;
+        }
+        .font-2{
+            font-family: 'Gaegu';
+        }
+        .heading{
+            font-size: 2.5rem;
+            margin-bottom: 0px;
+        }
+        .description{
+            font-size: 1.4rem;
+            text-align: center;
+            margin: 0px;
+            margin-bottom: 60px;
+        }
+        a{
+            color: #ef3553;
+            text-decoration: underline;
+            text-underline-position: under;
+            cursor: pointer;
+        }
+        a:hover{
+            color: #ef3553;
+            text-decoration: underline wavy;
+        }
+        .about-listed{
+            letter-spacing: 0.01px;
+            font-size: 1.2rem;
+        }
+        .progress-bar-header{
+            margin-top: 25px;
+            font-size: 1.5rem;
+            margin-bottom: 0px;
+        }
+        .progress-bar-text{
+            font-size: 1.0rem;
+            margin-top: 0px;
+            margin-bottom: 4px;
+        }
+        .days-remaining{
+            font-size: 1.4rem;
+            text-align: center;
+            margin: 5px 0px;
+        }
+        .required-daily{
+            font-size: 1.8rem;
+            text-align: center;
+            margin: 0px 0px;
+        }
+        .progressbar-color{
+            min-width: 20px;
+            min-height: 20px;
+            max-width: 20px;
+            max-height: 20px;
+            background-color: #00afb3;
+            margin-top: 3px;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+        .idealprogressbar-color{
+            min-width: 20px;
+            min-height: 20px;
+            max-width: 20px;
+            max-height: 20px;
+            background-color: #fb8b3c;
+            margin-top: 3px;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+        .remainingprogressbar-color{
+            min-width: 20px;
+            min-height: 20px;
+            max-width: 20px;
+            max-height: 20px;
+            background-color: #e0e0e0;
+            margin-top: 3px;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+        .spanText{
+            font-size: 1.2rem;
+            /* font-weight: bold; */
+        }
+        .stats-info{
+            text-decoration: underline;
+            text-underline-position: under;
+        }
+        .addOne{
+            background: none;
+            font-size: 4rem;
+            border: none;
+            padding: 0px !important;
+        }
+        .addOne:hover{
+            transform: scale(1.05) ;
+            animation: ease 0.5s;
+        }
+
+        .addOne:active{
+            animation: pulse 0.3s linear 1;
+        }
+
+        @keyframes pulse{
+        25%  {transform: scale(0.8);}
+        75%  {transform: scale(1.3);}
+        }
+
+        /* popup styles */
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border: 3px solid #fb8b3c;
+            border-radius: 5px;
+            background-color: #fbefd6;
+            padding: 20px;
+            z-index: 100;
+            text-align: center;
+            box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.5);
+        }
+        .popup h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .popup label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .popup input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .popup button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            background-color: #fb8b3c;
+            color: #fbefd6;
+            cursor: pointer;
+        }
+        .hoursperday{
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="font-1 heading">The Arcade Tracker</h1>
+        <p class="font-2 description">Track your progress towards your goal for the <a href="https://hackclub.com/arcade">Hack Club Arcade</a>!</p>
+            
+        <div style="text-align: center;">
+            <div class="inline-container font-2">
+                <label style="font-size: 1.4rem;" for="ticketGoal">Ticket Goal:</label>
+                <input type="number" class="font-2" id="ticketGoal" value="100">
+            </div>  
+        </div>  
+
+        <div style="text-align: center;">
+            <div class="inline-container font-2 hoursperday">
+                <label style="font-size: 1.4rem;" for="hoursPerDay">Hours per day:</label>
+                <input type="number" class="font-2" id="hoursPerDay" value="1">
+            </div>
+        </div>
+
+        <div class="ticket-count font-1">
+            <span id="currentTickets" style="color: #00afb3;">0</span> 
+            <button class="addOne" id="addOne">🎟️</button>
+           
+        </div>
+        <div style="text-align: center;">
+            <a id="enterTicketsLink" class="font-2">Enter Current Tickets</a>
+        </div>
+
+        <div style="text-align: center;">
+            <a id="setStartDateLink" class="font-2">Set Start Date</a>
+        </div>
+        
+        <div>
+            <p class="progress-bar-header font-2">Your Progress:</p>
+            <div class="progress-bar">
+                <div class="progress actual-progress" id="progressBar"></div>
+                <div class="progress ideal-progress" id="idealProgressBar"></div>
+            </div>
+
+            <div style="display: flex;">
+                <div class="progressbar-color"></div>
+                <p id="progressText" class="progress-bar-text"></p>
+            </div>
+
+            <div style="display: flex;">
+                <div class="idealprogressbar-color"></div>
+                <p id="idealProgressText" class="progress-bar-text"></p>
+            </div>
+
+            <div style="display: flex;">
+                <div class="remainingprogressbar-color"></div>
+                <p id="remainingProgressText" class="progress-bar-text"></p>
+            </div>
+
+        </div>
+
+        <div style="text-align: center; cursor:default;">
+        <p class="ticket-count font-1" style="color: #2eb774; margin: 30px;" onmouseenter="requiredDaily()" onmouseleave="resetRequiredDaily()" id="required-daily"></p>
+        </div>
+        <p class="required-daily font-2" style="color: #000000; margin-top: -25px;" id="">Required Daily Tickets</p>
+        <p class="days-remaining font-2" style="color: #000000; margin-top: 30px;" id="daysLeft"></p>
+        <p class="days-remaining font-2" style="color: #000000; margin-bottom: 50px;" id="tickets-left"></p>
+        <p class="days-remaining font-2" style="color: #000000; margin-bottom: 50px;" id="estimated-goal-date"></p>
+
+        
+        <div class="button-container">
+            <button class="font-1" id="addOneHour">Add 1 Hour</button>
+            <button class="font-1" id="removeOneHour">Oops, remove 1 ticket</button>
+        </div>
+        <div class="about">
+            <h3 class="font-1" style="color: #fbefd6; font-size: 1.5rem; margin-bottom: 0px; text-align: center;">How it works</h3>
+            <ol class="font-2">
+                <li class="about-listed"><b>Work on projects</b> - Hack on something cool! Try this AI-powered <a style="color: #fbefd6" href="https://arcade-tools.vercel.app/ideagen.html">idea generator</a> if you need some help!</li>
+                <li class="about-listed"><b>Bank your hours</b> - Join the <a style="color: #fbefd6" href="https://hackclub.com/slack">Hack Club Slack</a> and use /hack in #arcade to log your hours! Wondering how long it might take? Check out the live <a style="color: #fbefd6" href="stats.html">Arcade Review Stats</a>!</li>
+                <li class="about-listed"><b>Redeem your Prizes</b> - Use your tickets to buy prizes for your next project! <a style="color: #fbefd6" href="https://hackclub.com/arcade/shop/">Check out the shop!</a></li>
+            </ol>    
+        </div>
+
+        <h2 class="font-1" style="font-size: 2rem; text-align: center;">Faq</h2>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-bottom: 0px;"><b>When does Arcade end? When does the shop close?</b></p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-top: 0px;">Hack Club Arcade ends on Aug 31st. You will NOT be able to EARN tickets after that date. The shop <a href="https://hackclub.slack.com/archives/C07C3NHRVDJ/p1722766522802619?thread_ts=1722726192.574699&cid=C07C3NHRVDJ">will remain open a few days after Aug 31st</a>. Shipments for prizes may occur after the end date. Any unreviewed sessions will get reviewed.</p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-bottom: 0px;"><b>What are some helpful tools?</b></p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem; margin-top: 0px;">You can try this <a href="stats.html">live arcade review stats website</a> to see the review backlog or this <a href="https://arcade-tools.vercel.app/ideagen.html">AI powered idea generator</a>. More stuff coming soon!</p>
+        <p class="font-2" style="text-align: center;">-------------------</p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem;">I am still working on the FAQ, but in the meantime, you can have a look at the <a href="https://docs.google.com/document/d/1RXCe1nNrFdiolKCknkR5Ho1AG7Kf_2LsTAKTHxQodic/">official FAQ</a>, <a href="https://github.com/hackclub/arcade-constitution">Arcade Constitution</a>, or message the #arcade-help channel on the <a href="https://hackclub.com/slack">Hack Club Slack</a>! Alternatively, you can visit the FAQ section of the <a href="https://hackclub.com/arcade/">Hack Club Arcade Website</a>.</p>
+        <p class="font-2" style="text-align: center; font-size: 1.2rem;">If you have any suggestions or issues, please <a href="https://forms.fillout.com/t/hSJMTXtGshus">fill out this form</a>, or contact me on the Hack Club Slack: @Hayden Kong. <a href="https://github.com/PixelVerseIT/hackclub-arcade-tracker-htmlcssjs">Open source on GitHub</a>.</p>
+
+        <p class="font-2" style="font-size: 1.2rem; margin-top: 55px; color: grey; text-align: center;">&copy; 2024 Hayden Kong. All rights reserved.</p>
+    </div>
+    
+    
+
+    <!-- date popoup -->
+    <div id="startDatePopup" class="popup">
+        <h2>Set Start Date</h2>
+        <label for="startDateInput">Enter Start Date:</label>
+        <input type="date" id="startDateInput" value="2024-06-18" style="min-width: 250px;">
+        <br>
+        <button id="saveStartDate">Save</button>
+    </div>
+    
+
+    
+    <script>
+        const ticketGoalInput = document.getElementById('ticketGoal');
+        const currentTicketsElement = document.getElementById('currentTickets');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const idealProgressBar = document.getElementById('idealProgressBar');
+        const idealProgressText = document.getElementById('idealProgressText');
+        const daysLeftElement = document.getElementById('daysLeft');
+        const addOneHourButton = document.getElementById('addOneHour');
+        const removeOneHourButton = document.getElementById('removeOneHour');
+        const addOneButton = document.getElementById('addOne');
+        const ticketsLeftElement = document.getElementById('tickets-left');
+        const enterTicketsLink = document.getElementById('enterTicketsLink');
+        const setStartDateLink = document.getElementById('setStartDateLink');
+        const startDatePopup = document.getElementById('startDatePopup');
+        const startDateInput = document.getElementById('startDateInput');
+        const saveStartDateButton = document.getElementById('saveStartDate');
+        const requiredDailyElement = document.getElementById('required-daily');
+        const remainingProgressText = document.getElementById('remainingProgressText');
+        const estimatedGoalDateElement = document.getElementById('estimated-goal-date');
+
+        const endDate = new Date('2024-08-31');
+
+        function loadFromStorage() {
+            ticketGoalInput.value = localStorage.getItem('ticketGoal') || '100';
+            currentTicketsElement.textContent = localStorage.getItem('currentTickets') || '0';
+            startDateInput.value = localStorage.getItem('startDate') || '2024-06-18';
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('ticketGoal', ticketGoalInput.value);
+            localStorage.setItem('currentTickets', currentTicketsElement.textContent);
+            localStorage.setItem('startDate', startDateInput.value);
+        }
+
+        
+        function updateProgress() {
+            const ticketGoal = parseInt(ticketGoalInput.value) || 0;
+            const currentTickets = parseInt(currentTicketsElement.textContent) || 0;
+            const startDate = new Date(startDateInput.value);
+            const now = new Date();
+            
+            const progress = (currentTickets / ticketGoal) * 100;
+            const cappedProgress = Math.min(progress, 100);
+
+            progressBar.style.width = `${cappedProgress}%`;
+            progressText.innerHTML = `You are <span class="font-2 spanText">${cappedProgress.toFixed(1)}%</span> complete to your goal of ${ticketGoal} tickets.`;
+
+            const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+            const passedDays = Math.max(Math.ceil((now - startDate) / (1000 * 60 * 60 * 24)), 0);
+            const remainingDays = Math.max(Math.ceil((endDate - now) / (1000 * 60 * 60 * 24)), 0);
+
+            const idealProgress = (passedDays / totalDays) * 100;
+            const cappedIdealProgress = Math.min(idealProgress, 100);
+
+            if (cappedProgress >= cappedIdealProgress) {
+                progressBar.style.zIndex = 1;
+                idealProgressBar.style.zIndex = 2;
+            } else {
+                progressBar.style.zIndex = 2;
+                idealProgressBar.style.zIndex = 1;
+            }
+
+            idealProgressBar.style.width = `${cappedIdealProgress}%`;
+            idealProgressText.innerHTML = `You should be <span class="font-2 spanText">${cappedIdealProgress.toFixed(1)}%</span> complete.`;
+
+            const ticketsLeft = Math.max(ticketGoal - currentTickets, 0);
+            const requiredDaily = Math.ceil(ticketsLeft / remainingDays);
+
+            ticketsLeftElement.innerHTML = `You have <span class="stats-info">${ticketsLeft}</span> tickets left to earn`;
+            daysLeftElement.innerHTML = `<span class="stats-info">${remainingDays}</span> Days Left`;
+            requiredDailyElement.textContent = requiredDaily;
+            remainingProgressText.innerHTML = `<span class="font-2 spanText">${(100 - cappedProgress).toFixed(1)}%</span> left until you reach your goal!`;
+
+            saveToStorage();
+        }
+
+        ticketGoalInput.addEventListener('input', updateProgress);
+        startDateInput.addEventListener('change', updateProgress);
+
+        addOneHourButton.addEventListener('click', () => {
+            currentTicketsElement.textContent = parseInt(currentTicketsElement.textContent) + 1;
+            updateProgress();
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 300, spread: 300 });
+            }
+        });
+
+        addOneButton.addEventListener('click', () => {
+            currentTicketsElement.textContent = parseInt(currentTicketsElement.textContent) + 1;
+            updateProgress();
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 300, spread: 300 });
+            }
+        });
+
+        removeOneHourButton.addEventListener('click', () => {
+            const currentTickets = parseInt(currentTicketsElement.textContent);
+            if (currentTickets > 0) {
+                currentTicketsElement.textContent = currentTickets - 1;
+                updateProgress();
+            }
+        });
+
+        enterTicketsLink.addEventListener('click', () => {
+            const tickets = prompt('Enter the number of tickets you currently have:');
+            if (tickets !== null && !isNaN(tickets) && tickets >= 0) {
+                currentTicketsElement.textContent = tickets;
+                updateProgress();
+            }
+        });
+
+        setStartDateLink.addEventListener('click', () => {
+            startDatePopup.style.display = 'block';
+        });
+
+        saveStartDateButton.addEventListener('click', () => {
+            startDatePopup.style.display = 'none';
+            updateProgress();
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!startDatePopup.contains(event.target) && event.target !== setStartDateLink) {
+                startDatePopup.style.display = 'none';
+            }
+        });
+
+        loadFromStorage();
+        updateProgress();
+    </script>
+</body>
+</html>
