@@ -428,7 +428,9 @@ Thank you Hack Club!
             function updateClock() {
                 const t = getTimeRemaining(endtime);
 
-                if (t.total <= 0 && !hasRun) {
+
+                // CHANGE TO 1
+                if (t.total <= 100000 && !hasRun) {
                     hasRun = true;
                     clock.innerHTML = "<div class='font-3' style='color: #fbefd6;'>Thank you to all the volunteers and staff for making Hack Club's biggest ever event, Arcade 2024 possible!! Congrats to everyone to participated!</div>";
 
