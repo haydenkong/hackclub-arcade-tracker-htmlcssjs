@@ -342,6 +342,8 @@ Thank you Hack Club!
             </form>
         </div>
 
+        
+
         <div class="alreadySubmitted">
             <h2 class="font-1" style="text-align: center;">Thank you for submitting!</h2>
             <p class="font-2">Thank you for submitting a message! Your message will be displayed below!</p>
@@ -354,10 +356,16 @@ Thank you Hack Club!
             <!-- submit button -->
             <button id="editSave" type="submit" style="display: none;" class="btn btn-primary editBtn">Update!</button>
         </div>
+
+        <div>
+            <h1 class="font-1" style="text-align: left;">Dear Hack Club,</h1>
+            <p class="font-2" style="text-align: left; font-size: 1.4rem;">To everyone who made Arcade possible, from the volunteers to the hq staff (and even the sponsors! - framework, github & flipper), thank you so much for making such an amazing event possible. Arcade had over 10,000+ participants and empowered them with tools to help them hack and develop even more! Please have a look at what the Arcade community has to say!</p>
+            <p class="font-2" style="text-align: left;">psst... want to submit a thank you note? <a href="#" onclick="showNote()">add a note!</a></p>
+        </div>
         
 
         <div class="journalEntries">
-            <h2 class="font-1">Journal Entries</h2>
+            <!-- <h2 class="font-1">Journal Entries</h2> -->
             <!-- example -->
             <!-- <div class="journal">
                 <div class="journalHeader">
@@ -369,10 +377,9 @@ Thank you Hack Club!
             </div> -->
             <!-- end example -->
 
-            <style>
-                
-            </style>
         </div>
+
+        <p class="font-2" style="font-size: 1.2rem; margin-top: 55px; color: grey; text-align: center;">Made by the Hack Club Arcade community! Pls <a href="https://github.com/PixelVerseIT/hackclub-arcade-tracker-htmlcssjs">star the repo</a> if you liked my project! Thank you!!</p>
 
     </div>
 
@@ -436,6 +443,8 @@ Thank you Hack Club!
 
                     // import
                     const canvas = document.getElementById('canvas');
+
+
                     const jsConfetti = new JSConfetti({ canvas })
                     jsConfetti.addConfetti({
                     emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
@@ -448,30 +457,30 @@ Thank you Hack Club!
                     jsConfetti.addConfetti();
 
                     // wait 1 sec
-                    setTimeout(() => {
-                        jsConfetti.addConfetti({
-                        emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
-                        confettiColors: [
-                            '#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7',
-                        ],
-                        confettiNumber: 100,
-                        confettiRadius: 3,
-                        })
-                        jsConfetti.addConfetti();
-                    }, 1000);
+                    // setTimeout(() => {
+                    //     jsConfetti.addConfetti({
+                    //     emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
+                    //     confettiColors: [
+                    //         '#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7',
+                    //     ],
+                    //     confettiNumber: 100,
+                    //     confettiRadius: 3,
+                    //     })
+                    //     jsConfetti.addConfetti();
+                    // }, 1000);
 
                     // wait 2 sec
-                    setTimeout(() => {
-                        jsConfetti.addConfetti({
-                        emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
-                        confettiColors: [
-                            '#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7',
-                        ],
-                        confettiNumber: 100,
-                        confettiRadius: 3,
-                        })
-                        jsConfetti.addConfetti();
-                    }, 2000);
+                    // setTimeout(() => {
+                    //     jsConfetti.addConfetti({
+                    //     emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
+                    //     confettiColors: [
+                    //         '#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7',
+                    //     ],
+                    //     confettiNumber: 100,
+                    //     confettiRadius: 3,
+                    //     })
+                    //     jsConfetti.addConfetti();
+                    // }, 2000);
 
                     return;
                 }
@@ -506,31 +515,6 @@ Thank you Hack Club!
                     })
                     jsConfetti.addConfetti();
 
-                    // wait 1 sec
-                    setTimeout(() => {
-                        jsConfetti.addConfetti({
-                        emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
-                        confettiColors: [
-                            '#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7',
-                        ],
-                        confettiNumber: 100,
-                        confettiRadius: 3,
-                        })
-                        jsConfetti.addConfetti();
-                    }, 1000);
-
-                    // wait 2 sec
-                    setTimeout(() => {
-                        jsConfetti.addConfetti({
-                        emojis: ['🌈', '⚡️', '💥', '✨', '💫', '🌸'],
-                        confettiColors: [
-                            '#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7',
-                        ],
-                        confettiNumber: 100,
-                        confettiRadius: 3,
-                        })
-                        jsConfetti.addConfetti();
-                    }, 2000);
         } else {
             const timerHtml = `
                     <div class="time-section">
@@ -684,49 +668,71 @@ Thank you Hack Club!
             const data = await response.json();
             console.log(data);
             const journalEntries = document.querySelector('.journalEntries');
-            data.forEach(entry => {
-                const journal = document.createElement('div');
-                journal.classList.add('journal');
+            // Shuffle the array to randomize the order of messages
+            const shuffledData = shuffleArray(data);
+            shuffledData.forEach(entry => {
+            const journal = document.createElement('div');
+            journal.classList.add('journal');
 
-                const journalHeader = document.createElement('div');
-                journalHeader.classList.add('journalHeader');
+            const journalHeader = document.createElement('div');
+            journalHeader.classList.add('journalHeader');
 
-                const img = document.createElement('img');
-                img.src = entry.profile_url || 'https://assets.hackclub.com/icon-square.png';
-                img.alt = 'Profile Picture';
-                img.style.objectFit = 'cover';
-                img.style.borderRadius = '10%';
-                img.style.width = '50px';
-                img.style.height = '50px';
+            const img = document.createElement('img');
+            img.src = entry.profile_url || 'https://assets.hackclub.com/icon-square.png';
+            img.alt = 'Profile Picture';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '10%';
+            img.style.width = '50px';
+            img.style.height = '50px';
 
-                const p = document.createElement('p');
-                p.classList.add('font-2');
-                p.style.fontWeight = 'bold';
-                p.textContent = entry.slack_handle;
+            const p = document.createElement('p');
+            p.classList.add('font-2');
+            p.style.fontWeight = 'bold';
+            p.textContent = entry.slack_handle;
 
-                journalHeader.appendChild(img);
-                journalHeader.appendChild(p);
+            journalHeader.appendChild(img);
+            journalHeader.appendChild(p);
 
-                const message = document.createElement('p');
-                message.classList.add('font-2', 'msg');
-                
-                // decode message if it's pre-encoded - then sanitize
-                const decodedMessage = decodeHTMLEntities(entry.message);
-                const sanitizedMessage = sanitizeHTML(decodedMessage);
-                
-                // set content and replace newlines with <br> 
-                message.innerHTML = sanitizedMessage.replace(/\n/g, '<br>');
+            const message = document.createElement('p');
+            message.classList.add('font-2', 'msg');
+            
+            // decode message if it's pre-encoded - then sanitize
+            const decodedMessage = decodeHTMLEntities(entry.message);
+            const sanitizedMessage = sanitizeHTML(decodedMessage);
+            
+            // set content and replace newlines with <br> 
+            message.innerHTML = sanitizedMessage.replace(/\n/g, '<br>');
 
-                const signature = document.createElement('p');
-                signature.classList.add('signature');
-                signature.textContent = entry.name;
+            const signature = document.createElement('p');
+            signature.classList.add('signature');
+            signature.textContent = entry.name;
 
-                journal.appendChild(journalHeader);
-                journal.appendChild(message);
-                journal.appendChild(signature);
+            journal.appendChild(journalHeader);
+            journal.appendChild(message);
+            journal.appendChild(signature);
 
-                journalEntries.appendChild(journal);
+            journalEntries.appendChild(journal);
             });
+        }
+
+        function showNote() {
+            // function to show the add new entry note:
+            const submitted = localStorage.getItem('submitted');
+            if (submitted) {
+            alert('You have already submitted a note.');
+            } else {
+            document.querySelector('.newJournal').style.display = 'block';
+            document.querySelector('.alreadySubmitted').style.display = 'none';
+            }
+        }
+
+        // Function to shuffle an array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
         }
 
         // decode html entities
@@ -745,6 +751,8 @@ Thank you Hack Club!
 
         loadMessages();
         checkSubmitted();
+
+        document.querySelector('.newJournal').style.display = 'none';
 
     </script>
 
