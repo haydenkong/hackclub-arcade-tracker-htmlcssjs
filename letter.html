@@ -296,9 +296,15 @@
     </a>
 
     <div class="content-container">
-        <h1 class="font-1 heading">The Arcade Journal</h1>
-        <p class="font-2 description">A place to leave down messages for the amazing team of volunteers and staff running <a href="https://hackclub.com/arcade">Hack Club Arcade</a> 2024!</p>
-        <div id="timer"></div>
+        <!-- <h1 class="font-1 heading">The Arcade Journal</h1>
+        <p class="font-2 description">A place to leave down messages for the amazing team of volunteers and staff running <a href="https://hackclub.com/arcade">Hack Club Arcade</a> 2024!</p> -->
+        <div id="timer" style="display: none;"></div>
+
+        <div style="margin-top: 100px;">
+            <h1 class="font-1" style="text-align: left;">Dear Hack Club,</h1>
+            <p class="font-2" style="text-align: left; font-size: 1.4rem;">To everyone who made Arcade possible, from the volunteers to the hq staff (and even the sponsors! - framework, github & flipper), thank you so much for making such an amazing event possible. Arcade had over 10,000+ participants and empowered them with tools to help them hack and develop even more! Please have a look at what the Arcade community has to say!</p>
+            <p class="font-2" style="text-align: left;">psst... want to submit a thank you note? <a href="#" onclick="showNote()">add a note!</a></p>
+        </div>
 
         <div class="newJournal">
             <form>
@@ -357,11 +363,7 @@ Thank you Hack Club!
             <button id="editSave" type="submit" style="display: none;" class="btn btn-primary editBtn">Update!</button>
         </div>
 
-        <div>
-            <h1 class="font-1" style="text-align: left;">Dear Hack Club,</h1>
-            <p class="font-2" style="text-align: left; font-size: 1.4rem;">To everyone who made Arcade possible, from the volunteers to the hq staff (and even the sponsors! - framework, github & flipper), thank you so much for making such an amazing event possible. Arcade had over 10,000+ participants and empowered them with tools to help them hack and develop even more! Please have a look at what the Arcade community has to say!</p>
-            <p class="font-2" style="text-align: left;">psst... want to submit a thank you note? <a href="#" onclick="showNote()">add a note!</a></p>
-        </div>
+        
         
 
         <div class="journalEntries">
